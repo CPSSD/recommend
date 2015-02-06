@@ -1,2 +1,2 @@
-# recommend
-CA110 Recommendation project
+# Recommend
+CA110 Project.
