@@ -2,11 +2,7 @@
 require_once('connect.php');
 
 $conn = new DatabaseConnection();
-class getFilm{
 
-
-
-}
 $id = $_GET["id"];
 
 //makes array of the query string
