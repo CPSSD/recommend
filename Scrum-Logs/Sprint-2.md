@@ -6,3 +6,4 @@
 ###### 25/05/2015
     - Decided on v2.0 of API
     - Decided on table layout for Tv Shows.
+    - Added a basic Tv Scraper (Requires links to be manually provided to work)
