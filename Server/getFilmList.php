@@ -1,22 +1,14 @@
 <?php
+require_once('connect.php');
 
-$servername = 'localhost';
-$user = 'root';
-$password = '';
-$database = 'movies';
-$conn = mysql_connect($servername,$user,$password);
-if(!$conn)
-{
-  die('Could not connect: ' . mysql_error());
-}
-
-mysql_select_db($database);
+$conn = new DatabaseConnection();
 
 $organiseParam = $_GET["organise"];
 $pageParam = $_GET["page"];
 
 $page = intval($pageParam);
 $offset = $page * 24; 
+
 
 switch($organiseParam){
     case 0:
@@ -40,11 +32,11 @@ $maxID = intval($maxID["id"]);
 $maxPage = floor($maxID / 24);
 
 if (!isset($organiseParam) || !isset($pageParam)){
-    echo json_encode(array("status" => "error", "code" => "101", "message" => "Missing parameter in request"));
+    echo json_encode(array("status" => "error", "code" => 101, "message" => "Missing parameter in request"));
 }else if ($organiseParam > 2 || $organiseParam == "" || $pageParam > $maxPage || $pageParam = ""){
-    echo json_encode(array("status" => "error","code" => "102", "message" => "Incorrect code in parameter"));
+    echo json_encode(array("status" => "error","code" => 102, "message" => "Incorrect code in parameter"));
 }else if (count($paramArray) > 2){
-    echo json_encode(array("status" => "error","code" => "103", "message" => "Unknown parameter in request"));
+    echo json_encode(array("status" => "error","code" => 103, "message" => "Unknown parameter in request"));
 }else {
     $sql = "SELECT name,image,date,rating,id FROM `films` ORDER BY $organise LIMIT 24 OFFSET $offset";
 }
@@ -61,11 +53,10 @@ while($row = mysql_fetch_assoc($retval)){
                          "name" => $row["name"],
                          "date" => $row["date"],
                          "rating" => $row["rating"],
-						 "id" => $row["id"],
+			 "id" => $row["id"],
 			 "image" => $row["image"]));
 }
 echo "]}";
 
 mysql_close($conn);
-
 ?>

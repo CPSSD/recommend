@@ -1,18 +1,11 @@
 <?php
+require_once('connect.php');
 
-$servername = 'localhost';
-$user = 'root';
-$password = '';
-$database = 'movies';
-$conn = mysql_connect($servername,$user,$password);
-if(!$conn)
-{
-  die('Could not connect: ' . mysql_error());
-}
-
-mysql_select_db($database);
+$conn = new DatabaseConnection();
 
 $id = $_GET["id"];
+
+//makes array of the query string
 $paramArray = explode('&',$_SERVER["QUERY_STRING"]);
 
 $maxID = 'SELECT * FROM films ORDER BY id DESC LIMIT 1';
@@ -22,12 +15,13 @@ $maxID = mysql_fetch_assoc($result);
 $maxID = intval($maxID["id"]);
 $idInt = intval($id);
 
+//checks for valid input, if valid - selects id.
 if(!isset($id)){
-    echo json_encode(array("status" => "error", "code" => "101", "message" => "Missing parameter in request"));
+    echo json_encode(array("status" => "error", "code" => 101, "message" => "Missing parameter in request"));
 }else if( $idInt < 1 || $idInt > $maxID ){
-    echo json_encode(array("status" => "error","code" => "102", "message" => "Incorrect code in parameter"));
+    echo json_encode(array("status" => "error","code" => 102, "message" => "Incorrect code in parameter"));
 }else if(count($paramArray) > 1){
-    echo json_encode(array("status" => "error","code" => "103", "message" => "Unknown parameter in request"));
+    echo json_encode(array("status" => "error","code" => 103, "message" => "Unknown parameter in request"));
 }else{
     $sql = "SELECT * FROM `films` WHERE id = '".$id."'";
 }
