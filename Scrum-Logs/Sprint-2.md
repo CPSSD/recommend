@@ -1,1 +1,8 @@
 # Scrum Logs - Sprint 2 #
+
+###### 24/02/2015
+    - Added crawler saving to SQLite databases.
+
+###### 25/05/2015
+    - Decided on v2.0 of API
+    - Decided on table layout for Tv Shows.
