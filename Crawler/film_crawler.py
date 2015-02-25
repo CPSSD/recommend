@@ -8,8 +8,6 @@ from util import util
 database_type = "sqlite"
 database_layout = "name, director, date, runtime, rating, starring, synopsis, image, age"
 table_schema = "id INTEGER PRIMARY KEY, name VARCHAR, date VARCHAR, runtime VARCHAR, rating VARCHAR, starring VARCHAR, director VARCHAR, synopsis TEXT, image VARCHAR, age VARCHAR"
-filmLimit = 4
-filmCount = 0
 
 # Chooses which database to use.
 # Defaults to sqlite.
@@ -217,22 +215,15 @@ def save_to_database(data):
 
 if __name__ == "__main__":
     print("Starting Film Crawler...")
-    film_list = crawl_wikipedia(2014, 2014)
+    film_list = crawl_wikipedia(2013, 2013)
     print(len(film_list))
 
     global table_schema
     db.open_database_connection(table_schema, "films")
     for film in film_list:
-    #    try:
-        global filmCount
-        global filmLimit
-        filmCount += 1;
-        if filmCount < filmLimit:
+        try:
             save_to_database(scrape_wikipedia("http://en.wikipedia.org" + film))
-        else:
-            print("Got enough films")
-            break
-    # except:
-    #     print("Error with %s" % film)
+        except:
+            print("Error with %s" % film)
     db.close_database_connection()
     print("Exiting Film Crawler...")

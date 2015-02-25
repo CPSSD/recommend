@@ -5,11 +5,11 @@ connection = None
 table_name = None
 tick = 0
 
-def open_database_connection(table_schema, table):
+def open_database_connection(table_schema, database, table):
     global connection
     global table_name
     table_name = table
-    connection = lite.connect('database/%s.db' % table_name)
+    connection = lite.connect('database/%s.db' % database)
 
     cur = connection.cursor()
     cur.execute("DROP TABLE IF EXISTS temp_%s;" % table_name)
@@ -38,7 +38,6 @@ def write_to_database(data, database_layout):
             data_values += ", " + data_type % data[data_name]
     
     global tick;
-    print("%d\t| Writing movie to database => '%s'" % (tick, data['name']))
     tick += 1;
     
     # Opens connection to the database. (host, username, password, database)

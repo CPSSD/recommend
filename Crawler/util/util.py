@@ -53,3 +53,30 @@ def remove_accents(input):
     input = unicode(input)
     decoded_string = unicodedata.normalize('NFKD', input).encode('ASCII', 'ignore')
     return decoded_string
+
+# Compares the 2 dates.
+# Returns true if date_1 is bigger than or equal to date_2.
+# Returns false if date_2 is bigger.
+def compare_dates(date_1, date_2):
+    if date_1 == "-   NA   -" and date_2 != "-   NA   -":
+        return True
+    elif date_1 != "-   NA   -" and date_2 == "-   NA   -":
+        return False
+    elif date_1 == "-   NA   -" and date_2 == "-   NA   -":
+        return True
+
+    date_1 = date_1.split("-")
+    date_2 = date_2.split("-")
+
+    # 2015 5 3 | 2015 6 2
+    if date_1[0] > date_2[0]:
+        return True
+    elif date_1[0] == date_2[0]:
+
+        if date_1[1] > date_2[1]:
+            return True
+        elif date_1[1] == date_2[1]:
+
+            if date_1[2] >= date_2[2]:
+                return True
+    return False
