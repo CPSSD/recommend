@@ -10,3 +10,5 @@
     
 ###### 26/05/2015
     - Added Config file for the crawlers.
+    - Added basic crawling functionality to Tv Scraper
+    - VM Setup
