@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+#-*- coding: latin-1 -*-
+
 import unicodedata
 
 debug = False
@@ -54,6 +57,15 @@ def remove_accents(input):
     decoded_string = unicodedata.normalize('NFKD', input).encode('ASCII', 'ignore')
     return decoded_string
 
+# Creates a valid table name for the databases based on the input string.
+def create_table_name(name):
+    banned_chars = ['\'', '"', '*', ';', '-', '+', '/', '\\', '|', '!', '£', '$', '% ', '^', '&', '(', ')', '[', ']', ':', ';', '?', ',', '.', '`', '@']
+    table_name = name.replace(" ", "_")
+    for char in banned_chars:
+        table_name = table_name.replace(char, "")
+    table_name = "_%s" % table_name
+    return table_name
+
 # Compares the 2 dates.
 # Returns true if date_1 is bigger than or equal to date_2.
 # Returns false if date_2 is bigger.
@@ -67,6 +79,9 @@ def compare_dates(date_1, date_2):
 
     date_1 = date_1.split("-")
     date_2 = date_2.split("-")
+
+    if len(list(date_1)) < 3 or len(list(date_2)) < 3:
+        return True
 
     # 2015 5 3 | 2015 6 2
     if date_1[0] > date_2[0]:

@@ -3,16 +3,20 @@
 
 import requests
 from bs4 import BeautifulSoup
+from util import file_handler as file
 from util import util
 
 database_type = "sqlite"
 database_layout = "name, director, date, runtime, rating, starring, synopsis, image, age"
 table_schema = "id INTEGER PRIMARY KEY, name VARCHAR, date VARCHAR, runtime VARCHAR, rating VARCHAR, starring VARCHAR, director VARCHAR, synopsis TEXT, image VARCHAR, age VARCHAR"
 
+# Loads in all config settings.
+config = file.get_config_data("crawler.config")
+
 # Chooses which database to use.
 # Defaults to sqlite.
 from util import sqlite_connector as db
-if database_type.lower() == 'mysql':
+if config['database_type'] == 'mysql':
     from util import mysql_connector as db
 
 # Crawls through a 'YEAR_in_film' wikipedia page.
@@ -215,7 +219,9 @@ def save_to_database(data):
 
 if __name__ == "__main__":
     print("Starting Film Crawler...")
-    film_list = crawl_wikipedia(2013, 2013)
+    global config
+
+    film_list = crawl_wikipedia(config['stat_year'], config['end_year'])
     print(len(film_list))
 
     global table_schema
