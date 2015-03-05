@@ -1,0 +1,45 @@
+body {
+	background-color: rgb(150, 200, 200);
+	font-family: "Open Sans", sans-serif;
+}
+
+div.navigation{
+	Display:inline;
+	text-align:center;
+	margin-bottom:10px;
+	margin-left:175px;
+}
+
+div.show_container{
+	background-color:rgb(255, 255, 255);
+	align:center;
+	padding-top:20px;
+	padding-left:16px;
+	border-radius:20px;
+	width:892px;
+	height:500px;
+	margin:0px auto;
+}
+
+div.image{
+	display:inline-block;
+	align:center;
+	width:223px;
+	height:10px;
+	color:rgb(100, 140, 40);
+}
+
+
+div.episode{
+	text-align:left;
+	display:table-row;
+	line-height:18px;
+}
+
+img.cover {
+	width:300;
+	height:350;
+	border-radius:10px;
+	border-style: solid;
+	border-color: rgb(0, 0, 0);
+}
