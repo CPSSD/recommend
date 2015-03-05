@@ -3,12 +3,11 @@ import util
 file = None
 
 def open_file(file_name, type):
-    print("Opening %s" % file_name)
+    print("* Opening %s" % file_name)
     global file
     file = open(file_name, type)
     
 def close_file():
-    print("Closing file")
     global file
     file.close()
     
@@ -16,13 +15,16 @@ def output(output):
     file.write("%s\n" % output)
 
 def read_config():
-    print("Reading File...")
     global file
     data = {}
     for line in file:
-        if not startswith("#"):
+        if (not line.startswith("#")) and (not line.startswith("\n")):
             line = line.split("=")
-            data[util.clean_text(line[0])] = util.clean_text(line[1])
+            section = util.clean_text(line[0])
+            value = util.clean_text(line[1])
+            data[section] = value
+            if value.isdigit():
+                data[section] = util.clean_int(value)
     return data
     
 def get_config_data(file_name):

@@ -3,7 +3,6 @@ import sys
 
 connection = None
 table_name = None
-tick = 0
 table_vartype = ""
 
 def open_database_connection(create_database, table_schema, database, table, vartype):
@@ -30,7 +29,6 @@ def open_database_connection(create_database, table_schema, database, table, var
         data = cur.fetchall()
         variable_names = table_schema.split(", ")
         data_list = []
-        print("Fetching All data..")
         for row in data:
             tick = 0
             section = {}
@@ -38,7 +36,6 @@ def open_database_connection(create_database, table_schema, database, table, var
                 section[var] = row[tick]
                 tick += 1
             data_list.append(section)
-        print("fetched all data!")
         return data_list
     return True
 
@@ -57,9 +54,6 @@ def write_to_database(data, database_layout):
         else:
             data_values += (", \"" + data_type + "\"") % data[data_name]
         tick += 1
-    
-    global tick;
-    tick += 1;
     
     # Opens connection to the database. (host, username, password, database)
     global connection

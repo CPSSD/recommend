@@ -17,6 +17,11 @@ episode_list_vartype = "%d, %d, %s, %s"
 # Loads the config file.
 config = file.get_config_data("crawler.config")
 
+# Sets up the verbose setting in util file.
+util.debug = True
+if config['verbose'] is 0:
+    util.debug = False
+
 # Chooses which database to use.
 # Defaults to sqlite.
 from util import sqlite_connector as db
@@ -53,7 +58,7 @@ def scrape_imdb(url):
     return data
 
 def scrape_wikipedia(url):
-    print("Grabbing Data from '%s'" % url)
+    util.debug_print("Grabbing Data from '%s'" % url)
     #url = '/wiki/List_of_Banshee_episodes'
     html = requests.get("http://en.wikipedia.org%s" % url).text
     bs4 = BeautifulSoup(html)
@@ -64,7 +69,6 @@ def scrape_wikipedia(url):
         name = util.clean_text(name)
     else:
         name = util.clean_text(name.i.text)
-    print(name)
 
     episode_tables = bs4.find_all('table', {'class': 'wikitable plainrowheaders'})
     season_count = 0
@@ -93,8 +97,6 @@ def scrape_wikipedia(url):
                 release_date = "-   NA   -"
 
             if len(episode_list_data) > 2:
-                print episode_list_data
-                print release_date
                 if not util.compare_dates(release_date, episode_list_data[len(episode_list_data)-1]['date']):
                     print("NOT AN EPISODE | %d \t| %d \t| %s \t | %s" % (season_count, episode_count, release_date, title))
                     break # Prevents all of the next episodes from being added to database as they are web-series/mini-series and not the actual show.
@@ -133,25 +135,25 @@ def crawl_wikipedia(base_url, url, link_list):
     if skip_first:
         links.remove(links[0])
     if len(links) == 0:
-        print("All Links Saved...")
+        util.debug_print("All Links Saved...")
         return link_list
     for link in links:
         show_name = util.clean_text(link.a.text)
         link_list[show_name] = (link.a['href'])
-        print link.a['href']
+        util.debug_print(link.a['href'])
 
     last_show_name = links[len(list(links))-1].text
     last_show_name = last_show_name.replace(" ", "+")
     next_url = ("%s&pagefrom=%s" % (base_url, last_show_name))
     if next_url == url:
         return link_list
-    print next_url
+    util.debug_print(next_url)
     link_list = crawl_wikipedia(base_url, next_url, link_list)
 
     return link_list
 
 def grab_show_data(url):
-    print "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\turl: \t\t\t %s" % url
+    util.debug_print("\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\turl: \t\t\t %s" % url)
     html = requests.get("http://en.wikipedia.org%s" % url).text
     bs4 = BeautifulSoup(html)
 
@@ -207,72 +209,76 @@ def grab_show_data(url):
 
 def get_show_list(from_database):
     if from_database:
-        print("Retrieving Show list from database.");
+        print("* Retrieving Show list from database.");
         show_list = db.open_database_connection(False, "name, episode_url, wiki_url, imdb_url", "tv_shows", "tv_shows", None)
         db.connection.close()
         return show_list
     else:
         show_list = {}
-        for year in range(config['start_year'], config['end_year']):
+        for year in range(config['start_year'], config['end_year']+1):
+            print "* Grabbing shows from %s" % year
             show_list = (crawl_wikipedia("http://en.wikipedia.org/w/index.php?title=Category:%s_American_television_series_debuts" % year, "", show_list))
-        tick = 1
         return show_list
 
-def update_show_data():
+def update_show_data(show_limit):
     link_list = get_show_list(False)
 
     db.open_database_connection(True, tv_show_schema, "tv_shows", "tv_shows", tv_show_vartype)
     show_link_data = {}
     file.open_file('failures.txt', 'w')
-    print len(list(link_list))
+    print "* (%d) shows found." % len(list(link_list))
     tick = 0
     show_tick = 0
-    show_limit = 9999999
     for link in link_list:
         show_data = grab_show_data(link_list[link])
         if show_data['keep'] is True:
             show_link_data[show_data['name']] = show_data['episode_url']
-            print "%d: \t %s \t\t %s" % (tick, show_data['name'], link_list[link])
+            util.debug_print("%d: \t %s \t\t %s" % (tick, show_data['name'], link_list[link]))
             show_data['location'] = util.create_table_name(show_data['name'])
             db.write_to_database(show_data, tv_show_layout)
             tick += 1
             show_tick += 1
-            if show_tick > show_limit:
+            print("%d: %s added to show list." % (show_tick, (show_data['name'])))
+            if show_tick >= show_limit and show_limit is not -1:
                 break
         else:
             file.output("%s\t| %s" % (link_list[link], link))
-            print("Invalid Show -> %s" % link)
+            util.debug_print("Invalid Show -> %s" % link)
     db.close_database_connection()
     file.close_file()
 
-def update_show_episodes(index):
+def update_show_episodes(index, limit):
     show_link_data = get_show_list(True)
-    print ("Getting Episode Data for all shows..")
+    print ("* Getting Episode Data for all shows..")
 
     tick = 1
-    print len(list(show_link_data))
+    show_tick = 0
+    print "* (%d) shows found in database." % len(list(show_link_data))
     for show in show_link_data:
         if tick >= index:
             episode_list = scrape_wikipedia(show['episode_url'])
             db.open_database_connection(True, episode_list_schema, "tv_shows", util.create_table_name(episode_list[0]['name']), episode_list_vartype)
             episode_list.remove(episode_list[0])
-            #print episode_list
             for episode in episode_list:
-                print("%d \t | Episode: | %d \t| %d \t| %s \t | %s" % (tick, episode['season'], episode['episode'], episode['date'], episode['title']))
+                util.debug_print("%d \t | Episode: | %d \t| %d \t| %s \t | %s" % (tick, episode['season'], episode['episode'], episode['date'], episode['title']))
                 db.write_to_database(episode, episode_list_layout)
             db.close_database_connection()
             tick += 1
+            if tick >= limit and limit is not -1:
+                break
+            show_tick += 1
+            print("%d: %s added to database." % (show_tick, (show['name'])))
         else:
             tick += 1
-            print "Skipping Episode: %d" % tick
+            util.debug_print("Skipping Episode: %d" % tick)
 
 if __name__ == "__main__":
-    print("Starting TV Crawler...")
+    print("* Starting Crawler...")
 
-    if (config['update_show_indexes']):
-        update_show_data()
-    if (config['update_episode_lists']):
-        update_show_episodes(0)
+    if (config['update_show_indexes'] is 1):
+        update_show_data(config['show_limit'])
+    if (config['update_show_episodes'] is 1):
+        update_show_episodes(config['episode_offset'], config['episode_limit'])
 
-    print("Finished...")
-    print("Exiting TV Crawler...")
+    print("* Finished...")
+    print("* Exiting Crawler...")

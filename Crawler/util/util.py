@@ -2,8 +2,17 @@
 #-*- coding: latin-1 -*-
 
 import unicodedata
+import sqlite_connector as sqlite
+import mysql_connector as mysql
 
 debug = False
+
+def convertToSQLite(table_schema, vartype):
+    print("Converting to sqlite")
+    sqlite.open_database_connection(True, table_schema, "films", "films", vartype)
+
+    mysql.close_database_connection()
+    sqlite.close_database_connection()
 
 # Debug printing. Only outputs when debug mode is on.
 def debug_print(output):
