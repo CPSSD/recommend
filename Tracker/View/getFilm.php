@@ -28,10 +28,10 @@
 				echo "</div>";
 			echo "</div>";
 		?>
+		<!--
 		<div class="navigation">
-			<p>
-			<!-- To be added !-->
-			</p>
+			To be added
 		</div>
+		!-->
 	</body>
 </html>

@@ -4,7 +4,7 @@
 	<title>Tracker - Show</title>
 	<body>
 		<?php
-                        $id = $_GET["id"];
+            $id = $_GET["id"];
 			$season = $_GET["season"];
 			$jsonTable2 = file_get_contents("http://localhost/Tracker/index.php?type=tv_shows&id={$id}&season={$season}"); 
 			//$jsonTable1 = file_get_contents("http://localhost/mvc/index.php?type=tv_shows&");			
@@ -36,7 +36,7 @@
 					echo "</div>";
 					echo "<div style='width:500px;float:right;'>";
 					
-					echo "<h3 class='title'><em> Name: </em></h2>"; //** Get name of Show **
+					echo "<h3 class='title'><em> Name: </em><u>" . $obj['name'] . "</u></h2>";
 					foreach($obj['show'] as $show){
 						echo "<div class='episode'>";
 							echo "<p><em>Episode " .$show['episode']. ":</em> " .$show['tile']. ". " .$show['date']. "<br></p>";

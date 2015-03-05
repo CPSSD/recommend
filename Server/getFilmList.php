@@ -1,5 +1,5 @@
 <?php
-require_once('connect.php');
+require_once($_SERVER['DOCUMENT_ROOT'].'/connect.php');
 
 $conn = new DatabaseConnection();
 

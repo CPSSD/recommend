@@ -1,8 +1,8 @@
 <?php
 
 set_include_path('/var/www/html');
-require_once('Tracker/Model/Film.php');  
-require_once('Tracker/Model/TV.php');
+require_once($_SERVER['DOCUMENT_ROOT'].'/Tracker/Model/Film.php');  
+require_once($_SERVER['DOCUMENT_ROOT'].'/Tracker/Model/TV.php');
 
 class Controller{
 

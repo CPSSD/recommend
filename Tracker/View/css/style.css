@@ -13,6 +13,9 @@ div.navigation{
 	Display:inline;
 	text-align:center;
 	margin-bottom:10px;
+	border-style:solid;
+	border-width:2px;
+	border-color: rgb(0, 0, 0) rgb(0, 0, 0) rgb(255, 255, 255) rgb(0, 0, 0);
 }
 
 div.show_container{
@@ -23,6 +26,9 @@ div.show_container{
 	border-radius:20px;
 	width:892px;
 	margin: 0px auto;
+	border-style:solid;
+	border-width:2px;
+	border-color: rgb(0, 0, 0);
 }
 
 div.image{

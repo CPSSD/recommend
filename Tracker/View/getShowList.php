@@ -3,8 +3,8 @@
 	<title>Tracker - ShowList</title>
 	<body>
 		<?php
-                        $organise = $_GET["organise"];
-                        $page = $_GET["page"];
+            $organise = $_GET["organise"];
+            $page = $_GET["page"];
 			
 			$json = file_get_contents("http://localhost/Tracker/index.php?type=tv_shows&organise={$organise}&page={$page}");
 			$obj = json_decode($json, true);
@@ -53,11 +53,10 @@
 			echo "</div>";
 		?>
 		<div class="navigation">
-			<p><?php
-				echo "<a href='http://localhost/Tracker/View/getShowList.php?organise={$organise}&page=" . ($page-1) . "'>Previous Page</a> |";
-				echo "<a href='http://localhost/Tracker/View/getShowList.php?organise={$organise}&page=" . ($page+1) . "'>Next Page.</a>";
-				?>
-			</p>
+		<?php
+			echo "<a href='http://localhost/Tracker/View/getShowList.php?organise={$organise}&page=" . ($page-1) . "'>Previous Page</a> |";
+			echo "<a href='http://localhost/Tracker/View/getShowList.php?organise={$organise}&page=" . ($page+1) . "'> Next Page.</a>";
+		?>
 		</div>
 	</body>
 </html>
