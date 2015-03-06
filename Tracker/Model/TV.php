@@ -1,7 +1,7 @@
 <?php
 
 set_include_path('/var/www/html');
-require_once($_SERVER['DOCUMENT_ROOT'].'/Tracker/Model/Essentials.php'); 
+require_once('Tracker/Model/Essentials.php'); 
 
 class TV extends SQLite3{
 
@@ -34,7 +34,7 @@ class TV extends SQLite3{
 		                           "tile" => $row["title"],
 		                           "season" => $row["season"],
 		                           "episode" => $row["episode"],
-								   "date" => $row["date"]));
+					   "date" => $row["date"]));
 		}
 		echo "], ";
 		echo '"date":"' . $initial_air_date . '"}';
@@ -43,17 +43,17 @@ class TV extends SQLite3{
 	public function getShowList($organise, $page){
 		$db = new SQLite3('tv_shows.db');
 		if($organise == "2"){
-		    $organise = "rating";
-		    $sql = "SELECT name,image,rating,id FROM `tv_shows` ORDER BY {$organise} DESC LIMIT 24 OFFSET {$page}"; //**rating
+			$organise = "rating";
+			$sql = "SELECT name,image,rating,id FROM `tv_shows` ORDER BY {$organise} DESC LIMIT 24 OFFSET {$page}"; //**rating
 		} else if ($organise == "1"){
-		    $organise = "name";
-		    $sql = "SELECT name,image,rating,id FROM `tv_shows` ORDER BY {$organise} LIMIT 24 OFFSET {$page}"; //**rating
+			$organise = "name";
+			$sql = "SELECT name,image,rating,id FROM `tv_shows` ORDER BY {$organise} LIMIT 24 OFFSET {$page}"; //**rating
 		} else if ($organise == "0"){
-		    $organise = "name";
-		    $sql = "SELECT name,image,rating,id FROM `tv_shows` ORDER BY {$organise} LIMIT 24 OFFSET {$page}"; //**rating
+			$organise = "date";
+			$sql = "SELECT name,image,rating,id FROM `tv_shows` ORDER BY {$organise} LIMIT 24 OFFSET {$page}"; //**rating
 		} else {
 			$organise = "name";
-		    $sql = "SELECT name,image,rating,id FROM `tv_shows` ORDER BY {$organise} LIMIT 24 OFFSET {$page}"; //**rating
+			$sql = "SELECT name,image,rating,id FROM `tv_shows` ORDER BY {$organise} LIMIT 24 OFFSET {$page}"; //**rating
 		}
 		$type = "tv_shows";
 		$essen = new Essentials();

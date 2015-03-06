@@ -4,17 +4,19 @@
 	<title>Tracker - Show</title>
 	<body>
 		<?php
+set_include_path('/var/www/html');
+require_once('Tracker/View/Util.php'); 
             $id = $_GET["id"];
 			$season = $_GET["season"];
-			$jsonTable2 = file_get_contents("http://localhost/Tracker/index.php?type=tv_shows&id={$id}&season={$season}"); 
-			//$jsonTable1 = file_get_contents("http://localhost/mvc/index.php?type=tv_shows&");			
-			$obj = json_decode($jsonTable2, true);
+			$json = file_get_contents("http://localhost/Tracker/index.php?type=tv_shows&id={$id}&season={$season}");
+			$obj = json_decode($json, true);
 			$seasonUp = strval(intval($season)+1); 
 			$seasonDown = strval(intval($season)-1); 
+			$util = new Util();
 
 			echo "<div class='navigation'>";
-				echo "<a href='http://localhost/Tracker/View/getShow.php?id={$id}&season={$seasonDown}'>Previous Season |</a>";
-				echo "<a href='http://localhost/Tracker/View/getShow.php?id={$id}&season={$seasonUp}'> Next Season</a>";
+				echo "<a href=".$util->checkNextSeason($seasonDown,$id).">Previous Season |</a>";
+				echo "<a href=".$util->checkNextSeason($seasonUp,$id)."> Next Season</a>";
 			echo "</div>";
 
 			echo "<div class='organise'>";
