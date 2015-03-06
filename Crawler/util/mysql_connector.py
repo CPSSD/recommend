@@ -2,16 +2,18 @@ import MySQLdb as mdb
 import sys
 
 connection = None
+tick = 0
 
-def open_database_connection():
+def open_database_connection(table_schema):
     global connection
     connection = mdb.connect('localhost', 'test', 'test123', 'movies')
     # Creates a new temporary table to work in.
     cur = connection.cursor()
     cur.execute("DROP TABLE IF EXISTS temp_films;")
-    cur.close()
-    cur = connection.cursor()
-    cur.execute("CREATE TABLE temp_films LIKE films;")
+    connection.commit()
+    cur.execute("DROP TABLE IF EXISTS temp_films")
+    cur.execute("CREATE TABLE temp_films(%s)" % table_schema)
+    cur.execute("CREATE TABLE IF NOT EXISTS films(%s)" % table_schema)
     cur.close()
     connection.commit()
     return True
@@ -31,9 +33,11 @@ def write_to_database(data, database_layout):
             data_values += data_type % data[data_name]
         else:
             data_values += ", " + data_type % data[data_name]
-
-    print("Writing movie to database => '%s'" % data['name'])
-
+    
+    global tick;
+    print("%d\t| Writing movie to database => '%s'" % (tick, data['name']))
+    tick += 1;
+    
     # Opens connection to the database. (host, username, password, database)
     global connection
 
