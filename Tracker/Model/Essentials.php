@@ -3,27 +3,23 @@
 class Essentials{
 
 	public function search($db,$type,$search){
-		if(!isset($search)){
-			$url = 'http://localhost/Tracker/View/getFilmList.php?organise=0&page=0';
-			header("Location: $url");
-		}		
-		$sql = "SELECT name,image,id FROM `{$type}` WHERE name LIKE %{$search}% ORDER BY name DESC LIMIT 24";
+
+		$sql = "SELECT name,image,id,rating FROM `{$type}` WHERE name LIKE '%{$search}%' ORDER BY name DESC LIMIT 24";
 		$retval = $db->query($sql);
-		$toReturn = "{\"{$type}\":[";
+		echo "{\"{$type}\":[";
  		$tick = 0;
  		while($row = $retval->fetchArray()){
  		    if ($tick != 0){
- 			$toReturn = $toReturn + ",";
+ 			echo ",";
  		    }
  		    $tick++;
-		    $toReturn = $toReturn + json_encode(array("status" => "okay",
+		    echo json_encode(array("status" => "okay",
 		                           "name" => $row["name"],
 		                           "rating" => $row["rating"],
 					   "id" => $row["id"],
 					   "image" => $row["image"]));
 		}
- 		$toReturn = $toReturn + "]}";
-		return $toReturn;
+ 		echo "]}";
 	}
 
 
@@ -55,16 +51,22 @@ class Essentials{
 		$pageParam = intval($page);
 		$offset = $pageParam * 24;
 		$maxPage = floor($this->getMaxID() / 24);
-
-		if($organise == "rating"){
-			$sql = "SELECT name,image,rating,id FROM `{$type}` ORDER BY {$organise} DESC LIMIT 24 OFFSET {$offset}";
-		} else if($type == "film"){
-			$sql = "SELECT name,date,rating,image,id FROM `{$type}` ORDER BY {$organise} LIMIT 24 OFFSET {$offset}";
-		} else if($organise == "date"){
-			$sql = "SELECT name,date,rating,image,id FROM `{$type}` ORDER BY {$organise} LIMIT 24 OFFSET {$offset}";
-		} else {
-			$sql = "SELECT name,image,rating,id FROM `{$type}` ORDER BY {$organise} LIMIT 24 OFFSET {$offset}";
-		}		
+		
+		if($type == "films"){
+			if($organise == "rating"){
+				$sql = "SELECT name,date,image,rating,id FROM `{$type}` ORDER BY {$organise} DESC LIMIT 24 OFFSET {$offset}";
+			} else if($organise == "date"){
+				$sql = "SELECT name,date,rating,image,id FROM `{$type}` ORDER BY {$organise} LIMIT 24 OFFSET {$offset}";
+			} else {
+				$sql = "SELECT name,date,image,rating,id FROM `{$type}` ORDER BY {$organise} LIMIT 24 OFFSET {$offset}";
+			}		
+		}else {
+			if($organise == "name"){
+				$sql = "SELECT name,image,rating,id FROM `{$type}` ORDER BY {$organise} LIMIT 24 OFFSET {$offset}";
+			} else{
+				$sql = "SELECT name,image,rating,id FROM `{$type}` ORDER BY {$organise} DESC LIMIT 24 OFFSET {$offset}";
+			}		
+		}	
 
 		$retval = $db->query($sql);
 		echo "{\"{$type}\":[";
