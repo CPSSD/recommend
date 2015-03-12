@@ -8,7 +8,7 @@ from util import util
 
 database_type = "sqlite"
 database_layout = "name, director, date, runtime, rating, starring, synopsis, image, age"
-table_schema = "id INTEGER PRIMARY KEY, name VARCHAR, date VARCHAR, runtime VARCHAR, rating VARCHAR, starring VARCHAR, director VARCHAR, synopsis TEXT, image VARCHAR, age VARCHAR"
+table_schema = "id INTEGER PRIMARY KEY, name VARCHAR(255), date VARCHAR(255), runtime VARCHAR(255), rating VARCHAR(255), starring VARCHAR(255), director VARCHAR(255), synopsis TEXT, image VARCHAR(255),  age VARCHAR(255)"
 table_vartype = "%s, %s, %s, %s, %s, %s, %s, %s, %s"
 
 # Loads in all config settings.
@@ -19,6 +19,7 @@ config = file.get_config_data("crawler.config")
 from util import sqlite_connector as db
 if config['database_type'] == 'mysql':
     from util import mysql_connector as db
+db.config = config
 
 # Crawls through a 'YEAR_in_film' wikipedia page.
 # Returns a list of movies from the year.
@@ -224,7 +225,7 @@ if __name__ == "__main__":
     film_list = crawl_wikipedia(config['start_year'], config['end_year'])
     print(len(film_list))
 
-    db.open_database_connection(True, table_schema, "films", "films", table_vartype)
+    db.open_database_connection(True, table_schema, "movies", "films", table_vartype)
     tick = 0
     for film in film_list:
         if tick < config['film_limit']:

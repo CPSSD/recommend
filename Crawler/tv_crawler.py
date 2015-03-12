@@ -9,10 +9,10 @@ from util import util
 
 database_type = "sqlite"
 tv_show_layout = "name, image, location, rating, wiki_url, imdb_url, episode_url"
-tv_show_schema = "id INTEGER PRIMARY KEY, name VARCHAR, image VARCHAR, location VARCHAR, rating VARCHAR, wiki_url VARCHAR, imdb_url VARCHAR, episode_url VARCHAR"
+tv_show_schema = "id INTEGER PRIMARY KEY, name VARCHAR(255), image VARCHAR(255), location VARCHAR(255), rating VARCHAR(255), wiki_url VARCHAR(255), imdb_url VARCHAR(255), episode_url VARCHAR(255)"
 tv_show_vartype = "%s, %s, %s, %s, %s, %s, %s"
 episode_list_layout = "season, episode, title, date"
-episode_list_schema = "id INTEGER PRIMARY KEY, season INTEGER, episode INTEGER, title VARCHAR, date VARCHAR"
+episode_list_schema = "id INTEGER PRIMARY KEY, season INTEGER, episode INTEGER, title VARCHAR(255), date VARCHAR(255)"
 episode_list_vartype = "%d, %d, %s, %s"
 
 # Loads the config file.
@@ -28,6 +28,7 @@ if config['verbose'] is 0:
 from util import sqlite_connector as db
 if config['database_type'].lower() == 'mysql':
    from util import mysql_connector as db
+db.config = config
 
 def scrape_imdb(url):
     data = {}
@@ -46,7 +47,6 @@ def scrape_imdb(url):
         if image is not None:
             image_url = image['src']
             name = image_url.split("http://ia.media-imdb.com/images/")[1]
-            urllib.urlretrive(image_url, ("/images/%s" % name))
     data['image'] = image_url
 
     # Grabs the rating.
