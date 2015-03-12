@@ -2,6 +2,7 @@
 #-*- coding: latin-1 -*-
 
 import requests
+import urllib
 from bs4 import BeautifulSoup
 from util import file_handler as file
 from util import util
@@ -44,6 +45,8 @@ def scrape_imdb(url):
         image = image.find('img')
         if image is not None:
             image_url = image['src']
+            name = image_url.split("http://ia.media-imdb.com/images/")[1]
+            urllib.urlretrive(image_url, ("/images/%s" % name))
     data['image'] = image_url
 
     # Grabs the rating.

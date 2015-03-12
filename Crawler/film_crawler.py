@@ -9,6 +9,7 @@ from util import util
 database_type = "sqlite"
 database_layout = "name, director, date, runtime, rating, starring, synopsis, image, age"
 table_schema = "id INTEGER PRIMARY KEY, name VARCHAR, date VARCHAR, runtime VARCHAR, rating VARCHAR, starring VARCHAR, director VARCHAR, synopsis TEXT, image VARCHAR, age VARCHAR"
+table_vartype = "%s, %s, %s, %s, %s, %s, %s, %s, %s"
 
 # Loads in all config settings.
 config = file.get_config_data("crawler.config")
@@ -219,17 +220,23 @@ def save_to_database(data):
 
 if __name__ == "__main__":
     print("Starting Film Crawler...")
-    global config
 
-    film_list = crawl_wikipedia(config['stat_year'], config['end_year'])
+    film_list = crawl_wikipedia(config['start_year'], config['end_year'])
     print(len(film_list))
 
-    global table_schema
-    db.open_database_connection(table_schema, "films")
+    db.open_database_connection(True, table_schema, "films", "films", table_vartype)
+    tick = 0
     for film in film_list:
-        try:
-            save_to_database(scrape_wikipedia("http://en.wikipedia.org" + film))
-        except:
-            print("Error with %s" % film)
+        if tick < config['film_limit']:
+            try:
+                print "Saving %s to database." % film
+                save_to_database(scrape_wikipedia("http://en.wikipedia.org" + film))
+                tick += 1
+            except:
+                print("Error with %s" % film)
+        else:
+            print("Got enough films.")
+            break
+
     db.close_database_connection()
     print("Exiting Film Crawler...")
