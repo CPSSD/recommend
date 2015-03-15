@@ -4,11 +4,12 @@
 	<title>Tracker - Show</title>
 	<body>
 		<?php
-set_include_path('/var/www/html');
-require_once('Tracker/View/Util.php'); 
-            $id = $_GET["id"];
+			set_include_path("{$_SERVER['DOCUMENT_ROOT']}");
+			require_once('Tracker/View/Util.php'); 
+			require_once('Tracker/config.php');
+			$id = $_GET["id"];
 			$season = $_GET["season"];
-			$json = file_get_contents("http://localhost/Tracker/index.php?type=tv_shows&id={$id}&season={$season}");
+			$json = file_get_contents("{$GLOBALS["ip"]}Tracker/index.php?type=tv_shows&id={$id}&season={$season}");
 			$obj = json_decode($json, true);
 			$seasonUp = strval(intval($season)+1); 
 			$seasonDown = strval(intval($season)-1); 
@@ -23,8 +24,8 @@ require_once('Tracker/View/Util.php');
 				echo "<div style='float:right;margin-right:175px:'>";
 				echo "<p>Media Type: <select onChange='window.location.href=this.value;'>";
 	 				echo "<option value=''>--</option>";
-					echo "<option value='http://localhost/Tracker/View/getShowList.php?organise=1&page=0'>TV Shows</option>";
-	 				echo "<option value='http://localhost/Tracker/View/getFilmList.php?organise=1&page=0'>Films</option>";
+					echo "<option value='{$GLOBALS["ip"]}Tracker/View/getShowList.php?organise=1&page=0'>TV Shows</option>";
+	 				echo "<option value='{$GLOBALS["ip"]}Tracker/View/getFilmList.php?organise=1&page=0'>Films</option>";
 				echo "</select>";
 				echo "</div>";
 			echo "</div>";
