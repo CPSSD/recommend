@@ -220,7 +220,7 @@ def get_show_list(from_database):
     if from_database:
         print("* Retrieving Show list from database.");
         show_list = db.open_database_connection(False, "name, episode_url, wiki_url, imdb_url, location", config['database_file_name'], "tv_shows", None)
-        #db.connection.close()
+        db.connection.close()
         return show_list
     else:
         show_list = {}
@@ -281,10 +281,9 @@ def update_show_episodes(index, limit):
             tick += 1
             util.debug_print("Skipping Episode: %d" % tick)
 
-if __name__ == "__main__":
-    print("* Starting Crawler...")
-
+def create_template_tables():
     show_list = get_show_list(True)
+    connection = lite.connect('database/%s.db' % config['database_file_name'])
     cur = db.connection.cursor()
     for show in show_list:
         print show['location']
@@ -292,12 +291,15 @@ if __name__ == "__main__":
         db.connection.commit()
     cur.close()
     db.connection.commit()
+    db.connection.close()
 
-    exit(0)
+if __name__ == "__main__":
+    print("* Starting Crawler...")
+
     if (config['update_show_indexes'] is 1):
         update_show_data(config['show_limit'])
     if (config['update_show_episodes'] is 1):
+        create_default_tables()
         update_show_episodes(config['episode_offset'], config['episode_limit'])
-
     print("* Finished...")
     print("* Exiting Crawler...")
