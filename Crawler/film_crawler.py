@@ -225,7 +225,7 @@ if __name__ == "__main__":
     film_list = crawl_wikipedia(config['start_year'], config['end_year'])
     print(len(film_list))
 
-    db.open_database_connection(True, table_schema, "movies", "films", table_vartype)
+    db.open_database_connection(True, table_schema, config['database_file_name'], "films", table_vartype)
     tick = 0
     for film in film_list:
         if tick < config['film_limit']:
