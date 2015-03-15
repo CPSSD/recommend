@@ -26,7 +26,7 @@ def open_database_connection(create_database, table_schema, database, table, var
     else:
         connection = lite.connect('database/%s.db' % database)
         cur = connection.cursor()
-        cur.execute("SELECT %s FROM %s;" % (table_schema, database))
+        cur.execute("SELECT %s FROM %s;" % (table_schema, table))
         data = cur.fetchall()
         variable_names = table_schema.split(", ")
         data_list = []

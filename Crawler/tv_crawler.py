@@ -133,9 +133,15 @@ def crawl_wikipedia(base_url, url, link_list):
     if section is None:
         return link_list
     links = section.find_all('li')
+    tick = 0
+    for link in links:
+        show_name = util.clean_text(link.a.text)
+        if (link_list.__contains__(show_name)):
+            print("Duplicate Found. Removing it. => %s" % link.a.text)
+            links.remove(link)
     if links is None:
         return link_list
-    if skip_first:
+    if skip_first and len(links) is not 0:
         links.remove(links[0])
     if len(links) == 0:
         util.debug_print("All Links Saved...")
@@ -213,8 +219,8 @@ def grab_show_data(url):
 def get_show_list(from_database):
     if from_database:
         print("* Retrieving Show list from database.");
-        show_list = db.open_database_connection(False, "name, episode_url, wiki_url, imdb_url", "tv_shows", "tv_shows", None)
-        db.connection.close()
+        show_list = db.open_database_connection(False, "name, episode_url, wiki_url, imdb_url, location", config['database_file_name'], "tv_shows", None)
+        #db.connection.close()
         return show_list
     else:
         show_list = {}
@@ -226,7 +232,7 @@ def get_show_list(from_database):
 def update_show_data(show_limit):
     link_list = get_show_list(False)
 
-    db.open_database_connection(True, tv_show_schema, "tv_shows", "tv_shows", tv_show_vartype)
+    db.open_database_connection(True, tv_show_schema, config['database_file_name'], "tv_shows", tv_show_vartype)
     show_link_data = {}
     file.open_file('failures.txt', 'w')
     print "* (%d) shows found." % len(list(link_list))
@@ -260,7 +266,7 @@ def update_show_episodes(index, limit):
     for show in show_link_data:
         if tick >= index:
             episode_list = scrape_wikipedia(show['episode_url'])
-            db.open_database_connection(True, episode_list_schema, "tv_shows", util.create_table_name(episode_list[0]['name']), episode_list_vartype)
+            db.open_database_connection(True, episode_list_schema, config['database_file_name'], util.create_table_name(episode_list[0]['name']), episode_list_vartype)
             episode_list.remove(episode_list[0])
             for episode in episode_list:
                 util.debug_print("%d \t | Episode: | %d \t| %d \t| %s \t | %s" % (tick, episode['season'], episode['episode'], episode['date'], episode['title']))
@@ -278,6 +284,16 @@ def update_show_episodes(index, limit):
 if __name__ == "__main__":
     print("* Starting Crawler...")
 
+    show_list = get_show_list(True)
+    cur = db.connection.cursor()
+    for show in show_list:
+        print show['location']
+        cur.execute("CREATE TABLE IF NOT EXISTS %s(%s)" % (show['location'], episode_list_schema))
+        db.connection.commit()
+    cur.close()
+    db.connection.commit()
+
+    exit(0)
     if (config['update_show_indexes'] is 1):
         update_show_data(config['show_limit'])
     if (config['update_show_episodes'] is 1):
