@@ -23,6 +23,7 @@ class TV extends SQLite3{
 		$result = $db->query($sql2);
 		
 		echo '{"name":"' . $show_data['name'] . '",';
+		echo '"id":"' . $show_data['id'] . '",';
 		echo '"rating":"' . $show_data['rating'] . '",';
 		echo '"image":"' . $show_data['image'] . '",';
 		echo '"age":"Unknown",';

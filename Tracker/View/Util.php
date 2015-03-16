@@ -22,4 +22,13 @@ class Util{
 			return '0';				
 		}
 	}
+
+	function checkNextLike($type,$page){
+		$json = file_get_contents("{$GLOBALS["ip"]}Tracker/index.php?type={$type}&page={$page}");
+		if(strpos($json,'okay') !== false){
+			return $page;
+		}else{
+			return '0';				
+		}
+	}
 }

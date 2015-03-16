@@ -1,4 +1,4 @@
-
+<?php session_start();?>
 <html>
 <link rel="stylesheet" type="text/css" href="css/showStyle.css" />
 	<title>Tracker - Show</title>
@@ -14,6 +14,7 @@
 			$seasonUp = strval(intval($season)+1); 
 			$seasonDown = strval(intval($season)-1); 
 			$util = new Util();
+			$type = "tv_shows";
 
 			echo "<div class='navigation'>";
 				echo "<a href=".$util->checkNextSeason($seasonDown,$id).">Previous Season |</a>";
@@ -45,7 +46,15 @@
 							echo "<p><em>Episode " .$show['episode']. ":</em> " .$show['tile']. ". " .$show['date']. "<br></p>";
 						echo "</div>";
 					}
-			echo "</div>"			
+					echo "</div>";
+			echo "</div>";	
+
+		echo "<div style='margin-left:180px';>";
+			echo "<form action='../track.php?type={$type}&id={$id}' method='post'>";
+    				echo "Would you like to track this show? ";
+    				echo "<input type='submit' name='formSubmit' value='Track' />"; 
+			echo "</form>";
+		echo "</div>";		
 		?>
 	</body>
 </html>

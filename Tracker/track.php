@@ -28,24 +28,23 @@ function rowExists($db){
 	$stmt->bindValue(':mediaID',$_GET['id'],SQLITE3_TEXT);
 	$result = $stmt->execute();
 	$row = $result->fetchArray();
-	var_dump($row);
 	if($row){
 		return true;
 	}else return false;
 }
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_SESSION['userID'])){
-	createTrackTable();
-	if(rowExists()){
+	createTrackTable($db);
+	if(rowExists($db)){
 		echo "row exists";
-	}else insert();
+	}else insert($db);
 }
 
 if($_GET['type'] == "films"){
 	$x = "Film";
 }else $x = "Show";
 
-$url = "{$GLOBALS['ip']}/Tracker/View/get{$x}List.php?type={$_GET['type']}&organise=0&page=0";
+$url = "{$GLOBALS['ip']}/Tracker/View/get{$x}List.php?organise=1&page=0";
 header( "Location: $url" );
 
 ?>

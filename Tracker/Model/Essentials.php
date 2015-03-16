@@ -2,7 +2,11 @@
 
 class Essentials{
 
-	public function get100($db,$offset,$type){
+	public function likes($db,$type,$page){
+		$pageParam = intval($page);
+		$offset = $pageParam * 24;
+		$maxPage = floor($this->getMaxID($type) / 24);
+
 		$sql = "SELECT name,id FROM {$type} ORDER BY name LIMIT 100 OFFSET {$offset}";
 		$retval = $db->query($sql);
 		echo "{\"{$type}\":[";
@@ -39,9 +43,9 @@ class Essentials{
 	}
 
 
-	public function getMaxID(){
+	public function getMaxID($type){
 		$db = new SQLite3('database.db');
-		$maxID = 'SELECT id FROM films WHERE id = (SELECT MAX(id) FROM films)';
+		$maxID = "SELECT id FROM `{$type}` WHERE id = (SELECT MAX(id) FROM {$type})";
 		$result = $db->query($maxID);
 		$maxID = $result->fetchArray();
 		$maxID = intval($maxID["id"]);
@@ -66,7 +70,7 @@ class Essentials{
 	public function getList($organise,$page,$type,$db){
 		$pageParam = intval($page);
 		$offset = $pageParam * 24;
-		$maxPage = floor($this->getMaxID() / 24);
+		$maxPage = floor($this->getMaxID($type) / 24);
 		
 		if($type == "films"){
 			if($organise == "rating"){

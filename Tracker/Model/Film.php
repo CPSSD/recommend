@@ -5,6 +5,13 @@ require_once('Tracker/Model/Essentials.php');
 
 class Film extends SQLite3{
 
+	public function filmLikes($page){
+		$db = new SQLite3('database.db');
+		$type = 'films';
+		$essen = new Essentials();
+		$essen->likes($db,$type,$page);
+	}
+
 	public function searchFilm($film){
 		$db = new SQLite3('database.db');
 		$type = "films";

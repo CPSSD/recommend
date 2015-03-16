@@ -25,6 +25,8 @@ class Controller{
 				$this->film->getFilm($_GET["id"]);
 			}else if(isset($_GET['searchFilm'])){
 				$this->film->searchFilm($_GET['searchFilm']);
+			}else if(isset($_GET['page'])){
+				$this->film->filmLikes($_GET['page']);
 			}
 		}else if($_GET["type"] == "tv_shows"){
 			if(isset($_GET["page"]) && isset($_GET["organise"]) && intval($_GET["page"]) >= 0){
