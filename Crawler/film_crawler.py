@@ -7,9 +7,9 @@ from util import file_handler as file
 from util import util
 
 database_type = "sqlite"
-database_layout = "name, director, date, runtime, rating, starring, synopsis, image, age"
-table_schema = "id INTEGER PRIMARY KEY, name VARCHAR(255), date VARCHAR(255), runtime VARCHAR(255), rating VARCHAR(255), starring VARCHAR(255), director VARCHAR(255), synopsis TEXT, image VARCHAR(255),  age VARCHAR(255)"
-table_vartype = "%s, %s, %s, %s, %s, %s, %s, %s, %s"
+database_layout = "name, director, date, runtime, rating, starring, synopsis, image, age, genre"
+table_schema = "id INTEGER PRIMARY KEY, name VARCHAR(255), date VARCHAR(255), runtime VARCHAR(255), rating VARCHAR(255), starring VARCHAR(255), director VARCHAR(255), synopsis TEXT, image VARCHAR(255), age VARCHAR(255), genre VARCHAR(255)"
+table_vartype = "%s, %s, %s, %s, %s, %s, %s, %s, %s, %s"
 
 # Loads in all config settings.
 config = file.get_config_data("crawler.config")
@@ -171,7 +171,8 @@ def scrape_wikipedia(url):
                 'age': data['age_rating'],
                 'image': str(image),
                 'wiki_url': url,
-                'imdb_url': str(imdb_url)}
+                'imdb_url': str(imdb_url),
+                'genre': data['genre']}
     return dictionary
 
 # Scrapes the data from a given IMDB URL.
@@ -202,6 +203,16 @@ def scrape_imdb(url):
     else:
         runtime = "0"
 
+    genre_list = bs4.findAll('span', {'itemprop': 'genre'})
+    genre_text = ""
+    if genre_list != None:
+        for genre in genre_list:
+            if genre_text is not "":
+                genre_text += "+"
+            print genre
+            genre_text += (util.clean_text(genre.text))
+        print "*************** genre: %s" % genre_text
+
     age = bs4.find('span', {'itemprop': 'contentRating'})
     if age != None:
         age = age['content']
@@ -212,7 +223,8 @@ def scrape_imdb(url):
     return {'synopsis': util.clean_text(description),
             'rating': float(rating),
             'runtime': util.clean_int(runtime),
-            'age_rating': util.clean_text(age) }
+            'age_rating': util.clean_text(age),
+            'genre': util.clean_text(genre_text)}
 
 def save_to_database(data):
     global database_layout
@@ -230,9 +242,9 @@ if __name__ == "__main__":
     for film in film_list:
         if tick < config['film_limit']:
             try:
-                print "Saving %s to database." % film
-                save_to_database(scrape_wikipedia("http://en.wikipedia.org" + film))
-                tick += 1
+                 print "Saving %s to database." % film
+                 save_to_database(scrape_wikipedia("http://en.wikipedia.org" + film))
+                 tick += 1
             except:
                 print("Error with %s" % film)
         else:
