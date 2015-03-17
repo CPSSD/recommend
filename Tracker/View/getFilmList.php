@@ -13,7 +13,7 @@
 			
 			$json = file_get_contents("{$GLOBALS["ip"]}Tracker/index.php?type=films&organise={$organise}&page={$page}");
 			$obj = json_decode($json, true);
-			$type = 'film';
+			$type = 'films';
 			
 			$column = 0;
 			$row = 0;

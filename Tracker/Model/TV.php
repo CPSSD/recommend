@@ -21,7 +21,7 @@ class TV extends SQLite3{
 
 	public function getShow($id,$season){
 		$db = new SQLite3('database.db');
-		$retval = $db->query("SELECT name,rating,image,location FROM `tv_shows` WHERE id = {$id}");
+		$retval = $db->query("SELECT name,rating,image,location,id FROM `tv_shows` WHERE id = {$id}");
 		$row = $retval->fetchArray();
 		$table = $row["location"];
 		$show_data = $row;

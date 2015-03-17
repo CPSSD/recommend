@@ -1,4 +1,4 @@
-<?php
+<?php session_start();
 
 set_include_path("{$_SERVER['DOCUMENT_ROOT']}");
 require_once('Tracker/Model/Film.php');  
@@ -27,6 +27,14 @@ class Controller{
 				$this->film->searchFilm($_GET['searchFilm']);
 			}else if(isset($_GET['page'])){
 				$this->film->filmLikes($_GET['page']);
+			}else if (isset($_GET['recommendFilms'])){
+				if(isset($_SESSION['userID'])){
+					$this->film->filmRecommend($_SESSION['userID']);
+				}else{
+					$_SESSION['message'] = "You have to be logged in to get Recommendations!!";
+					$url = "{$GLOBALS['ip']}Tracker/View/displayMessage.php";
+					header( "Location: $url" );				
+				}
 			}
 		}else if($_GET["type"] == "tv_shows"){
 			if(isset($_GET["page"]) && isset($_GET["organise"]) && intval($_GET["page"]) >= 0){
