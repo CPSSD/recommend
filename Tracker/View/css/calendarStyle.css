@@ -1,0 +1,99 @@
+body {
+	background-color: rgb(150, 200, 200);
+	font-family: "Open Sans", sans-serif;
+}
+
+a {
+	text-decoration: None;
+	color: green;
+	Display: inline;
+}
+
+a.empty {
+	color: rgb(220, 220, 200);
+}
+
+div.calendar-week{
+	position:relative;
+	overflow:auto;
+	border-radius: 10px;
+	width: 90%;
+	margin: 0 auto;
+	padding: 5px;
+}
+
+div.calendar-day{
+	float:left;
+	Display: inline-block;
+	width: 13%;
+	margin: 0 auto;
+	margin-left: 0.5%;
+	margin-right: 0.5%;
+	margin-bottom:2%;
+	border-color:blue;
+}
+
+div.calendar-title-default{
+	position:relative;
+	text-align: center;
+	font-size: 11px;
+	background-color: white;
+	border-color: black black rgb(100, 100, 100) black;
+	border-radius: 5px 5px 0px 0px;
+	border-style: solid solid dotted solid;
+	border-width: 2px 2px 1px 2px;
+	width: 70%;
+	height: 12px;
+	margin: 0 auto;
+	padding-top:2px;
+	margin-bottom: -2px;
+	z-index: 1;
+}
+
+div.calendar-title-current{
+	background-color: rgb(245, 245, 245);
+}
+
+div.calendar-content-default{
+	position:relative;
+	background-color: rgb(255, 255, 255);
+	border-color: black black black black;
+	border-style: solid;
+	border-radius: 7px 7px 2px 2px;
+	border-width: 2px;
+	min-height:5%;
+}
+
+div.calendar-content-current{
+	background-color: rgb(245, 245, 245);
+}
+
+ul.calendar-list{
+	padding: 0;
+	list-style-type = None;
+	text-decoration: None;
+	margin-left: 0px;
+	margin-top:5px;
+	margin-bottom:5px;
+}
+
+h1.title{
+	text-align:center;
+}
+
+li {
+	list-style-type: None;
+	text-decoration: None;
+	border-style: None None dotted None;
+	border-width: 1px;
+	border-color: white white rgb(100, 100, 100) white;
+	padding-left: 2%;
+	font-size: 12px;
+}
+
+li.empty {
+	margin-top:5%;
+	border-style: None None None None;
+	text-align:center;
+	color:rgb(200, 200, 200);
+}
