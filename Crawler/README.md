@@ -5,7 +5,8 @@
 * Run `film_crawler.py` to start the film crawler.<br />
     _- Change the `start_year` and `end_year` variables in the `Config/Crawler.config` file to specify the range._
     
-* Run `tv_crawler.py` to start the tv crawler.
+* Run `tv_crawler.py` to start the tv crawler.<br />
+    _- When running the crawler for the first time set `update_show_indexes` to `1`_
 
 ### Database Changing:
 
