@@ -49,6 +49,7 @@ class Film extends SQLite3{
 							"rating" => $row["rating"],					   
 							"starring" => $row["starring"],
 							"director" => $row["director"],
+							"genre" => $row["genre"],
 							"synopsis" => $row["synopsis"],
 							"image" => $row["image"],
 							"age" => $row["age"]));

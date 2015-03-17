@@ -4,10 +4,10 @@ class Essentials{
 
 	public function likes($db,$type,$page){
 		$pageParam = intval($page);
-		$offset = $pageParam * 24;
-		$maxPage = floor($this->getMaxID($type) / 24);
+		$offset = $pageParam * 30;
+		$maxPage = floor($this->getMaxID($type) / 30);
 
-		$sql = "SELECT name,id FROM {$type} ORDER BY name LIMIT 100 OFFSET {$offset}";
+		$sql = "SELECT name,id,image FROM {$type} ORDER BY name LIMIT 30 OFFSET {$offset}";
 		$retval = $db->query($sql);
 		echo "{\"{$type}\":[";
 		$tick = 0;

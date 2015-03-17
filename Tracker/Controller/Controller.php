@@ -1,6 +1,6 @@
 <?php
 
-set_include_path('/var/www/html');
+set_include_path("{$_SERVER['DOCUMENT_ROOT']}");
 require_once('Tracker/Model/Film.php');  
 require_once('Tracker/Model/TV.php');
 require_once('Tracker/config.php');
@@ -18,7 +18,7 @@ class Controller{
 	}
 
 	public function invoke(){
-		if($_GET["type"] == "film"){
+		if($_GET["type"] == "films"){
 			if(isset($_GET["page"]) && isset($_GET["organise"]) && intval($_GET["page"]) >= 0){
 				$this->film->getFilmList($_GET["organise"],$_GET["page"]);
 			}else if (isset($_GET["id"])){
@@ -35,9 +35,11 @@ class Controller{
 				$this->tv_show->getShow($_GET['id'],$_GET["season"]);
 			}else if(isset($_GET['searchShow'])){
 				$this->tv_show->searchShow($_GET['searchShow']);
+			}else if(isset($_GET['page'])){
+				$this->tv_show->showLikes($_GET['page']);
 			}
 		}else{
-			$url = "{$GLOBALS['ip']}Tracker/View/getFilmList.php?type=film&organise=0&page=0";
+			$url = "{$GLOBALS['ip']}Tracker/View/getFilmList.php?type=films&organise=0&page=0";
 			header( "Location: $url" );
 		}
 	}

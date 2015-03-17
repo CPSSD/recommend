@@ -11,7 +11,7 @@
             	$organise = $_GET["organise"];
             	$page = $_GET["page"];
 			
-			$json = file_get_contents("{$GLOBALS["ip"]}Tracker/index.php?type=film&organise={$organise}&page={$page}");
+			$json = file_get_contents("{$GLOBALS["ip"]}Tracker/index.php?type=films&organise={$organise}&page={$page}");
 			$obj = json_decode($json, true);
 			$type = 'film';
 			
@@ -45,7 +45,7 @@
 			echo "</div>";
 			
 			echo "<div class='login'>";
-				if ($_SESSION['userID']){
+				if (isset($_SESSION['userID'])){
 					echo "{$_SESSION['username']} is logged in";
 					echo "<p></p>";
 					echo "<a href='logout.php' >Logout</a>";
@@ -54,7 +54,7 @@
 					echo "<p>Or Login below:</p>";
 					echo "<form name='login' method='POST' action= '../login.php'>";
 					echo "<p>Username: <input type='text' name='username'></p>";
-					echo "<p>Password : <input type='text' name='password'></p>";
+					echo "<p>Password : <input type='password' name='password'></p>";
 					echo "<p><input type='submit' name='submit' value='login'></p>";
 				}
 			echo "</div>";
@@ -81,8 +81,8 @@
 		?>
 		<div class="navigation">
 		<?php
-			echo "<a href='{$GLOBALS["ip"]}Tracker/View/getFilmList.php?organise={$organise}&page=" . $util->checkNextPage('film',$page-1,$organise) . "'>Previous Page</a> |";
-			echo "<a href='{$GLOBALS["ip"]}Tracker/View/getFilmList.php?organise={$organise}&page=" . $util->checkNextPage('film',$page+1,$organise) . "'> Next Page.</a>";
+			echo "<a href='{$GLOBALS["ip"]}Tracker/View/getFilmList.php?organise={$organise}&page=" . $util->checkNextPage('films',$page-1,$organise) . "'>Previous Page</a> |";
+			echo "<a href='{$GLOBALS["ip"]}Tracker/View/getFilmList.php?organise={$organise}&page=" . $util->checkNextPage('films',$page+1,$organise) . "'> Next Page.</a>";
 		?>
 		</div>
 	</body>

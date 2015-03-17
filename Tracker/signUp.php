@@ -1,6 +1,6 @@
 <?php
 
-set_include_path('/var/www/html');
+set_include_path("{$_SERVER['DOCUMENT_ROOT']}");
 require_once('Tracker/config.php');
 $db = new SQLite3('database.db');
 

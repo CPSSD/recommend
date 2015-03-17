@@ -52,7 +52,7 @@
 					echo "<p>Or Login below:</p>";
 					echo "<form name='login' method='POST' action= '../login.php'>";
 					echo "<p>Username: <input type='text' name='username'></p>";
-					echo "<p>Password : <input type='text' name='password'></p>";
+					echo "<p>Password : <input type='password' name='password'></p>";
 					echo "<p><input type='submit' name='submit' value='login'></p>";
 				}
 			echo "</div>";
@@ -61,7 +61,7 @@
 			# Displays info for each show.
 			foreach($obj['tv_shows'] as $show){
 				echo "<div class='image'>";
-				echo "<a href='{$GLOBALS["ip"]}Tracker/View/getShow.php?type=film&id=" . $show['id'] . "&season=1'>";
+				echo "<a href='{$GLOBALS["ip"]}Tracker/View/getShow.php?type=tv_shows&id=" . $show['id'] . "&season=1'>";
 				echo "<img class='cover' src='" . $show['image'] . "'/>";
 				echo "<p><b>Name:</b> " . $show['name'] . "</p>";
 				echo "<p><b>Rating:</b> " . $show['rating'] . " stars.</p>";
@@ -78,7 +78,7 @@
 		<div class="navigation">
 		<?php
 			echo "<a href='{$GLOBALS["ip"]}Tracker/View/getShowList.php?organise={$organise}&page=" . $util->checkNextPage('tv_shows',$page-1,$organise) . "'>Previous Page</a> |";
-			echo "<a href='{$GLOBALS["ip"]}Tracker/View/getShowList.php?organise={$organise}&page=" . $util->checkNextPage('tv_shows',page+1,$organise) . "'> Next Page.</a>";
+			echo "<a href='{$GLOBALS["ip"]}Tracker/View/getShowList.php?organise={$organise}&page=" . $util->checkNextPage('tv_shows',$page+1,$organise) . "'> Next Page.</a>";
 		?>
 		</div>
 	</body>

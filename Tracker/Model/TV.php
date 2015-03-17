@@ -5,6 +5,13 @@ require_once('Tracker/Model/Essentials.php');
 
 class TV extends SQLite3{
 
+	public function showLikes($page){
+		$db = new SQLite3('database.db');
+		$type = 'tv_shows';
+		$essen = new Essentials();
+		$essen->likes($db,$type,$page);
+	}
+
 	public function searchShow($show){
 		$db = new SQLite3('database.db');
 		$type = "tv_shows";
@@ -26,8 +33,6 @@ class TV extends SQLite3{
 		echo '"id":"' . $show_data['id'] . '",';
 		echo '"rating":"' . $show_data['rating'] . '",';
 		echo '"image":"' . $show_data['image'] . '",';
-		echo '"age":"Unknown",';
-		echo '"genre":"Unknown",';
 		echo "\"show\":[";
 		$tick = 0;
 		$initial_air_date = null;

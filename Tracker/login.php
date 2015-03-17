@@ -1,6 +1,6 @@
 <?php
 
-set_include_path('/var/www/html');
+set_include_path("{$_SERVER['DOCUMENT_ROOT']}");
 require_once('Tracker/config.php');
 
 function getNumRows(){
@@ -30,7 +30,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
 		session_start();
 		$_SESSION['userID'] = $id;	
 		$_SESSION['username'] = $username;
-		$url = "{$GLOBALS['ip']}/Tracker/View/getFilmList.php?type=film&organise=0&page=0";
+		$url = "{$GLOBALS['ip']}/Tracker/View/getLikes.php?type=films&page=0";
 		header( "Location: $url" );
 
 	}else{

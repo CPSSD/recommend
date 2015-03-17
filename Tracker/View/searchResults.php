@@ -6,7 +6,7 @@
 		set_include_path("{$_SERVER['DOCUMENT_ROOT']}");
 		require_once('Tracker/config.php');
 		if(isset($_GET['searchFilm'])){
-			$json = file_get_contents("{$GLOBALS["ip"]}Tracker/index.php?type=film&searchFilm={$_GET['searchFilm']}");
+			$json = file_get_contents("{$GLOBALS["ip"]}Tracker/index.php?type=films&searchFilm={$_GET['searchFilm']}");
 			$type = "films";
 		}else if(isset($_GET['searchShow'])){
 			$json = file_get_contents("{$GLOBALS["ip"]}Tracker/index.php?type=tv_shows&searchShow={$_GET['searchShow']}"); 
