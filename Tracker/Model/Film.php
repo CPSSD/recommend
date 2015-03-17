@@ -3,7 +3,16 @@
 set_include_path("{$_SERVER['DOCUMENT_ROOT']}");
 require_once('Tracker/Model/Essentials.php'); 
 
+
+
 class Film extends SQLite3{
+	
+	public function filmRecomend($userID){
+		$db = new SQLite3('database.db');
+		$type = "films";
+		$essen = new Essentials();
+		$essen->mediaRecommend($db,$userID,$type);
+	}
 
 	public function filmLikes($page){
 		$db = new SQLite3('database.db');
