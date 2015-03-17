@@ -7,8 +7,9 @@ from util import file_handler as file
 from util import util
 
 database_type = "sqlite"
-database_layout = "name, director, date, runtime, rating, starring, synopsis, image, age"
-table_schema = "id INTEGER PRIMARY KEY, name VARCHAR, date VARCHAR, runtime VARCHAR, rating VARCHAR, starring VARCHAR, director VARCHAR, synopsis TEXT, image VARCHAR, age VARCHAR"
+database_layout = "name, director, date, runtime, rating, starring, synopsis, image, age, genre"
+table_schema = "id INTEGER PRIMARY KEY, name VARCHAR(255), date VARCHAR(255), runtime VARCHAR(255), rating VARCHAR(255), starring VARCHAR(255), director VARCHAR(255), synopsis TEXT, image VARCHAR(255), age VARCHAR(255), genre VARCHAR(255)"
+table_vartype = "%s, %s, %s, %s, %s, %s, %s, %s, %s, %s"
 
 # Loads in all config settings.
 config = file.get_config_data("crawler.config")
@@ -18,6 +19,7 @@ config = file.get_config_data("crawler.config")
 from util import sqlite_connector as db
 if config['database_type'] == 'mysql':
     from util import mysql_connector as db
+db.config = config
 
 # Crawls through a 'YEAR_in_film' wikipedia page.
 # Returns a list of movies from the year.
@@ -169,7 +171,8 @@ def scrape_wikipedia(url):
                 'age': data['age_rating'],
                 'image': str(image),
                 'wiki_url': url,
-                'imdb_url': str(imdb_url)}
+                'imdb_url': str(imdb_url),
+                'genre': data['genre']}
     return dictionary
 
 # Scrapes the data from a given IMDB URL.
@@ -200,6 +203,15 @@ def scrape_imdb(url):
     else:
         runtime = "0"
 
+    genre_list = bs4.findAll('span', {'itemprop': 'genre'})
+    genre_text = "Unknown"
+    if genre_list != None:
+        genre_text = ""
+        for genre in genre_list:
+            if genre_text is not "Unknown":
+                genre_text += "+"
+            genre_text += (util.clean_text(genre.text))
+
     age = bs4.find('span', {'itemprop': 'contentRating'})
     if age != None:
         age = age['content']
@@ -210,7 +222,8 @@ def scrape_imdb(url):
     return {'synopsis': util.clean_text(description),
             'rating': float(rating),
             'runtime': util.clean_int(runtime),
-            'age_rating': util.clean_text(age) }
+            'age_rating': util.clean_text(age),
+            'genre': util.clean_text(genre_text)}
 
 def save_to_database(data):
     global database_layout
@@ -219,17 +232,23 @@ def save_to_database(data):
 
 if __name__ == "__main__":
     print("Starting Film Crawler...")
-    global config
 
-    film_list = crawl_wikipedia(config['stat_year'], config['end_year'])
+    film_list = crawl_wikipedia(config['start_year'], config['end_year'])
     print(len(film_list))
 
-    global table_schema
-    db.open_database_connection(table_schema, "films")
+    db.open_database_connection(True, table_schema, config['database_file_name'], "films", table_vartype)
+    tick = 0
     for film in film_list:
-        try:
-            save_to_database(scrape_wikipedia("http://en.wikipedia.org" + film))
-        except:
-            print("Error with %s" % film)
+        if tick < config['film_limit']:
+            try:
+                 print "%d: \t Saving %s to database." % (tick, film)
+                 save_to_database(scrape_wikipedia("http://en.wikipedia.org" + film))
+                 tick += 1
+            except:
+                print("Error with %s" % film)
+        else:
+            print("Got enough films.")
+            break
+
     db.close_database_connection()
     print("Exiting Film Crawler...")

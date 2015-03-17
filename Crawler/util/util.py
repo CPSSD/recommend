@@ -2,10 +2,18 @@
 #-*- coding: latin-1 -*-
 
 import unicodedata
+import os
 import sqlite_connector as sqlite
 import mysql_connector as mysql
 
 debug = False
+
+# Creates a directory for the database files to be saved in.
+print "* Creating database firectory..."
+try:
+    os.mkdir("database")
+except OSError:
+    print("* Database directory already exists.")
 
 def convertToSQLite(table_schema, vartype):
     print("Converting to sqlite")

@@ -4,6 +4,7 @@ import sys
 connection = None
 table_name = None
 table_vartype = ""
+config = None
 
 def open_database_connection(create_database, table_schema, database, table, vartype):
     if create_database:
@@ -25,7 +26,7 @@ def open_database_connection(create_database, table_schema, database, table, var
     else:
         connection = lite.connect('database/%s.db' % database)
         cur = connection.cursor()
-        cur.execute("SELECT %s FROM %s;" % (table_schema, database))
+        cur.execute("SELECT %s FROM %s;" % (table_schema, table))
         data = cur.fetchall()
         variable_names = table_schema.split(", ")
         data_list = []
@@ -83,6 +84,5 @@ def close_database_connection():
     cur.execute("ALTER TABLE temp_%s RENAME TO %s;" % (table_name, table_name))
     connection.commit()
     cur.close()
-    connection.commit()
     connection.close()
     return True
