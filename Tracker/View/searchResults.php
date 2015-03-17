@@ -30,7 +30,7 @@
 		echo "<div class='show_container'>";
 			foreach($obj[$type] as $movie){
 				echo "<div class='image'>";
-				echo "<a href='{$GLOBALS["ip"]}Tracker/View/getFilm.php?id=" . $movie['id'] . "'>";
+				echo "<a href='{$GLOBALS["ip"]}Tracker/View/getShow.php?type=tv_show&season=1&id=" . $movie['id'] . "'>";
 				echo "<img class='cover' src='" . $movie['image'] . "'/>";
 				echo "<p><b>Name:</b> " . $movie['name'] . "</p>";
 				echo "<p><b>Rating:</b> " . $movie['rating'] . " stars.</p>";
