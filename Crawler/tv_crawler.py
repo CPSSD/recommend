@@ -299,7 +299,7 @@ if __name__ == "__main__":
     if (config['update_show_indexes'] is 1):
         update_show_data(config['show_limit'])
     if (config['update_show_episodes'] is 1):
-        create_default_tables()
+        create_template_tables()
         update_show_episodes(config['episode_offset'], config['episode_limit'])
     print("* Finished...")
     print("* Exiting Crawler...")

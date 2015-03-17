@@ -204,14 +204,13 @@ def scrape_imdb(url):
         runtime = "0"
 
     genre_list = bs4.findAll('span', {'itemprop': 'genre'})
-    genre_text = ""
+    genre_text = "Unknown"
     if genre_list != None:
+        genre_text = ""
         for genre in genre_list:
-            if genre_text is not "":
+            if genre_text is not "Unknown":
                 genre_text += "+"
-            print genre
             genre_text += (util.clean_text(genre.text))
-        print "*************** genre: %s" % genre_text
 
     age = bs4.find('span', {'itemprop': 'contentRating'})
     if age != None:
@@ -242,7 +241,7 @@ if __name__ == "__main__":
     for film in film_list:
         if tick < config['film_limit']:
             try:
-                 print "Saving %s to database." % film
+                 print "%d: \t Saving %s to database." % (tick, film)
                  save_to_database(scrape_wikipedia("http://en.wikipedia.org" + film))
                  tick += 1
             except:
