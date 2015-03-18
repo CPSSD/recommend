@@ -2,7 +2,8 @@
 
 class Essentials{
 
-	public function mediaRecommend($db,$userID,$type){
+	// function to return all of a particular media a user likes
+	public function mediaLikesToRecommend($db,$userID,$type){
 		$sql = "SELECT mediaName FROM likes WHERE userID={$userID}";
 		
 		$retval = $db->query($sql);
@@ -18,7 +19,8 @@ class Essentials{
 		echo "]}";
 		
 	}
-
+	
+	// returns 30 of a particular media to the View pages to be displayed
 	public function likes($db,$type,$page){
 		$pageParam = intval($page);
 		$offset = $pageParam * 30;
