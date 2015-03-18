@@ -1,7 +1,6 @@
 <?php
 
 //set_include_path('/var/www/html');
-echo $_SERVER['DOCUMENT_ROOT'];
 //require_once("{$_SERVER['DOCUMENT_ROOT']}/Tracker/config.php");
 
 class Util{
