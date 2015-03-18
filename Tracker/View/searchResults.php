@@ -27,8 +27,8 @@
 
 		if( empty($obj[$type]) ){
 			$_SESSION['message'] = "No results for your selected search";
-			//$url = "{$GLOBALS['ip']}Tracker/View/displayMessage.php";
-			//header( "Location: $url" );
+			$url = "{$GLOBALS['ip']}Tracker/View/displayMessage.php";
+			header( "Location: $url" );
 		}
 		$column = 0;
 		$row = 0;
