@@ -47,6 +47,10 @@
 					echo "{$_SESSION['username']} is logged in";
 					echo "<p></p>";
 					echo "<a href='logout.php' >Logout</a>";
+					echo "<br></br>";
+					echo "<p><a href='{$GLOBALS["ip"]}Tracker/View/calendar.php?q=tv'> Personal Calendar</p>";
+					echo "<br></br>";
+					echo "<p><a href='recommendations.php'>Recommendations</p>";
 				}else{
 					echo "<a href='signUp.html'><b>Sign up</b></a>";
 					echo "<p>Or Login below:</p>";
