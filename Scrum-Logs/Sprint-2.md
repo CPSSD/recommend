@@ -32,3 +32,33 @@
 	- Submitted Crawler and Website for Mid-Sprint deadline.
 	- Added Website to the VMs
 	
+###### 09/03/2015
+	- Added Config to website.
+	- Started Search Functionality
+	
+###### 11/03/2015
+	- Added User Registration
+	
+###### 12/03/2015
+	- Updated Config File for Crawlers
+	- Fixed Multiple Bugs in Crawler
+	- Added user Like Gathering for new users
+	- Updated MYSQL Connector
+	
+###### 13/03/2015
+	- Started first version of Calendar
+	- Registration and Login fully integrated with site.
+	
+###### 15/03/2015
+	- Fixed More Bugs in Crawler
+	- Calendar almost finished. Need to integrate with Tracking.
+	
+###### 16/03/2015
+	- Added Genre grabbing for Crawlers.
+	- Started implementing Likes and Tracking for Films/Shows
+	- Integrated Calendar with the film part of Tracking System
+	
+###### 17/03/2015
+	- Integrated Calendar with the Show part of Tracking System
+	- Fixed tons of bugs.
+	
