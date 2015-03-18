@@ -23,10 +23,10 @@ function newUser($db){
 
 function signUp($db){
 	if(!empty($_POST['username'])){
-		$sql = "SELECT * FROM `users`// WHERE username = '{$_POST['username']}'";
+		$sql = "SELECT * FROM `users` WHERE username = '{$_POST['username']}'";
 		$result = $db->query($sql);
-		$rows = count ($result); 
-		if($result == false || $rows == 0){
+		$row = $result->fetchArray();
+		if($row == false || $row == 0){
 			newUser($db);
 		}else{
 			echo "Sorry.. That username is already in use";
