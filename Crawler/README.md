@@ -1,5 +1,14 @@
 # Crawler #
 
+### Installing Dependancies
+
+* In order to have `pip`, Pythons Package Manager:<br />
+   _- If using Python 3 make sure your version is 3.4 or greater._ <br />
+   _- If using Python 2 make sure your version is 2.7.9 or greater._ <br />
+
+* Install Beautiful Soup 4:<br />
+   _- By typing: `pip install beautifulsoup4`_
+
 ### Launching Crawlers:
 
 * Run `film_crawler.py` to start the film crawler.<br />
