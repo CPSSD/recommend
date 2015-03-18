@@ -27,6 +27,34 @@ class Film extends SQLite3{
 		$essen = new Essentials();
 		$essen->search($db,$type,$film);
 	}
+	
+	public function getEpisodes($id_list, $date1) {
+		$db = new SQLite3('database.db');
+		$film_tick = 0;
+		$essen = new Essentials();
+		$date_list = $essen->generateDates($date1);
+		echo "{";
+		foreach($date_list as $date){
+			if ($film_tick != 0){
+				echo ",";
+			}
+			echo "\"{$date}\": {";
+			echo "\"date\":\"{$date}\",";
+			echo '"pretty-date":"'.$essen->getPrettyDate($date).'",';
+			echo "\"movies\": [";
+			$sql = "SELECT * FROM 'films' WHERE date = \"{$date}\"";
+			$result = $db->query($sql);
+			while($row = $result->fetchArray()){
+				if (in_array($row["id"], $id_list)){
+					echo "{\"name\":\"{$row["name"]}\",";
+					echo "\"id\":\"{$row["id"]}\"}";
+				}
+			}
+			echo "]}";
+			$film_tick++;
+		}
+		echo "}";
+	}
 
 	public function getFilmList($organise,$page){
 		$db = new SQLite3('database.db');

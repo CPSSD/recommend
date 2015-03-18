@@ -46,7 +46,36 @@ class Controller{
 			}else if(isset($_GET['page'])){
 				$this->tv_show->showLikes($_GET['page']);
 			}
-		}else{
+		} else if ($_GET["type"] == "calendar"){
+			if(isset($_GET["date"]) && isset($_GET["media"])){
+				$db = new SQLite3('database.db');
+				$type = $_GET["media"];
+				session_start();
+				if (isset($_GET['uid'])){
+					$userID = $_GET['uid'];
+					if($type == "film"){
+						$retval = $db->query("SELECT * FROM 'track' WHERE userID = {$userID} AND mediaTable = \"films\"");
+					} else {
+						$retval = $db->query("SELECT * FROM 'track' WHERE userID = {$userID} AND mediaTable = \"tv_shows\"");
+					}
+					$tick = 0;
+					while($row = $retval->fetchArray()){
+						$tracking[$tick] = $row["mediaID"];
+						$tick++;
+					}
+					if(!isset($tracking)){
+						$tracking = [];
+					}$media_type = $_GET["media"];
+					if ($media_type == "tv"){
+						$this->tv_show->getEpisodes($tracking, $_GET["date"]);
+					} else {
+						$this->film->getEpisodes($tracking, $_GET["date"]);
+					}
+				} else {
+					$this->tv_show->getEpisodes(array(), $_GET["date"]);
+				}
+			}
+		} else {
 			$url = "{$GLOBALS['ip']}Tracker/View/getFilmList.php?type=films&organise=0&page=0";
 			header( "Location: $url" );
 		}
