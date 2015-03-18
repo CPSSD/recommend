@@ -5,16 +5,69 @@ require_once('Tracker/Model/Essentials.php');
 
 class TV extends SQLite3{
 
+	public function showLikes($page){
+		$db = new SQLite3('database.db');
+		$type = 'tv_shows';
+		$essen = new Essentials();
+		$essen->likes($db,$type,$page);
+	}
+
 	public function searchShow($show){
-		$db = new SQLite3('tv_shows.db');
+		$db = new SQLite3('database.db');
 		$type = "tv_shows";
 		$essen = new Essentials();
 		$essen->search($db,$type,$show);
 	}
+	
+	public function getEpisodes($id_list, $date1) {
+		$db = new SQLite3('database.db');
+		$episode_tick = 0;
+		$show_tick = 0;
+		$essen = new Essentials();
+		$date_list = $essen->generateDates($date1);
+		echo "{";
+		foreach($date_list as $date){
+			if ($show_tick != 0){
+				echo ",";
+			}
+			echo '"'.$date.'":{"date":"'.$date.'",';
+			echo '"pretty-date":"'.$essen->getPrettyDate($date).'",';
+			echo '"episodes":[';
+			foreach($id_list as $id){
+				$retval = $db->query("SELECT id,name,location FROM 'tv_shows' WHERE id = {$id}");
+				$row = $retval->fetchArray();
+				$table = $row["location"];
+				$show_data = $row;
+				$retval = $db->query("SELECT season,episode,title FROM '{$table}' WHERE date = \"{$date}\"");
+				$row = $retval->fetchArray();
+				if ($row != null){
+					if ($episode_tick != 0){
+						echo ",";
+					}
+					if($row["season"] < 10 && $row["season"][0] != "0") {
+						$row["season"] = "0".$row["season"];
+					}
+					if($row["episode"] < 10 && $row["episode"][0] != "0") {
+						$row["episode"] = "0".$row["episode"];
+					}
+					echo '{"show":"'.$show_data["name"].'",';
+					echo '"show-id":'.$show_data["id"].',';
+					echo '"season":"'.$row["season"].'",';
+					echo '"episode":"'.$row["episode"].'",';
+					echo '"title":"'.$row["title"].'"}';
+					$episode_tick+=1;
+				}
+			}
+			$show_tick += 1;
+			$episode_tick = 0;
+			echo "]}";
+		}
+		echo "}";
+	}
 
 	public function getShow($id,$season){
-		$db = new SQLite3('tv_shows.db');
-		$retval = $db->query("SELECT name,rating,image,location FROM `tv_shows` WHERE id = {$id}");
+		$db = new SQLite3('database.db');
+		$retval = $db->query("SELECT * FROM `tv_shows` WHERE id = {$id}");
 		$row = $retval->fetchArray();
 		$table = $row["location"];
 		$show_data = $row;
@@ -23,10 +76,9 @@ class TV extends SQLite3{
 		$result = $db->query($sql2);
 		
 		echo '{"name":"' . $show_data['name'] . '",';
+		echo '"id":"' . $show_data['id'] . '",';
 		echo '"rating":"' . $show_data['rating'] . '",';
 		echo '"image":"' . $show_data['image'] . '",';
-		echo '"age":"Unknown",';
-		echo '"genre":"Unknown",';
 		echo "\"show\":[";
 		$tick = 0;
 		$initial_air_date = null;
@@ -48,7 +100,7 @@ class TV extends SQLite3{
 	}
 
 	public function getShowList($organise, $page){
-		$db = new SQLite3('tv_shows.db');
+		$db = new SQLite3('database.db');
 		if($organise == "2"){
 			$organise = "rating";
 			$sql = "SELECT name,image,rating,id FROM `tv_shows` ORDER BY {$organise} DESC LIMIT 24 OFFSET {$page}";

@@ -1,50 +1,70 @@
+<?php session_start();?>
 <html>
 <link rel="stylesheet" type="text/css" href="css/styleList.css" />
 	<title>Tracker - FilmList</title>
 	<body>
 		<?php
 
-set_include_path('/var/www/html');
-require_once('Tracker/View/Util.php'); 
-            $organise = $_GET["organise"];
-            $page = $_GET["page"];
+		set_include_path("{$_SERVER['DOCUMENT_ROOT']}");
+		require_once('Tracker/View/Util.php'); 
+		require_once('Tracker/config.php');
+            	$organise = $_GET["organise"];
+            	$page = $_GET["page"];
 			
-			$json = file_get_contents("http://localhost/Tracker/index.php?type=film&organise={$organise}&page={$page}");
+			$json = file_get_contents("{$GLOBALS["ip"]}Tracker/index.php?type=films&organise={$organise}&page={$page}");
 			$obj = json_decode($json, true);
-			$type = 'film';
+			$type = 'films';
 			
 			$column = 0;
 			$row = 0;
 			$per_row = 4;
 			$util = new Util();
+			?>
 			
-			echo "<div class='organise'>";
-				echo "<div style='float:center;margin-right:175px:'>";
-					echo "<form name='form1' action='searchResults.php' method='get'>";
-					echo "<input id='search' type='text' placeholder='Enter Show'>";
-					echo "<input id='submit' type='submit' value='Search'>";
-					echo "</form>";/* ** To be added ** */
-				echo "</div>";
-				echo "<div style='float:right;margin-right:175px:'>";
+			<div class='organise'>
+				<div style='float:center;margin-right:175px:'>
+					<form action='searchResults.php' method='get'>
+					<input type='text' name='searchFilm' placeholder='Search Films'>
+					<input type='submit'>
+					</form>
+				</div>
+				<div style='float:right;margin-right:175px:'>
+				<?php
 				echo "<p>Media Type: <select onChange='window.location.href=this.value;'>";
  					echo "<option value=''>{$type}</option>";
-					echo "<option value='http://localhost/Tracker/View/getShowList.php?organise=1&page=0'>TV Shows</option>";
- 					echo "<option value='http://localhost/Tracker/View/getFilmList.php?organise=1&page=0'>Films</option>";
+					echo "<option value='{$GLOBALS["ip"]}Tracker/View/getShowList.php?organise=1&page=0'>TV Shows</option>";
+ 					echo "<option value='{$GLOBALS["ip"]}Tracker/View/getFilmList.php?organise=1&page=0'>Films</option>";
 				echo "</select>";
 				echo "</div>";
 				echo "<p>Organise By: <select onChange='window.location.href=this.value;'>";
  					echo "<option value=''>--</option>";
-					echo "<option value='http://localhost/Tracker/View/getFilmList.php?organise=0&page=0'>Name</option>";
- 					echo "<option value='http://localhost/Tracker/View/getFilmList.php?organise=1&page=0'>Release Date</option>";
- 					echo "<option value='http://localhost/Tracker/View/getFilmList.php?organise=2&page=0'>Rating</option>";
+					echo "<option value='{$GLOBALS["ip"]}Tracker/View/getFilmList.php?organise=0&page=0'>Name</option>";
+ 					echo "<option value='{$GLOBALS["ip"]}Tracker/View/getFilmList.php?organise=1&page=0'>Release Date</option>";
+ 					echo "<option value='{$GLOBALS["ip"]}Tracker/View/getFilmList.php?organise=2&page=0'>Rating</option>";
 				echo "</select>";
 			echo "</div>";
+			
+			echo "<div class='login'>";
+				if (isset($_SESSION['userID'])){
+					echo "{$_SESSION['username']} is logged in";
+					echo "<p></p>";
+					echo "<a href='logout.php' >Logout</a>";
+				}else{
+					echo "<a href='signUp.html'><b>Sign up</b></a>";
+					echo "<p>Or Login below:</p>";
+					echo "<form name='login' method='POST' action= '../login.php'>";
+					echo "<p>Username: <input type='text' name='username'></p>";
+					echo "<p>Password : <input type='password' name='password'></p>";
+					echo "<p><input type='submit' name='submit' value='login'></p>";
+				}
+			echo "</div>";
+			
 			
 			echo "<div class='show_container'>";
 			# Displays info for each movie.
 			foreach($obj['films'] as $movie){
 				echo "<div class='image'>";
-				echo "<a href='http://localhost/Tracker/View/getFilm.php?type=film&id=" . $movie['id'] . "'>";
+				echo "<a href='{$GLOBALS["ip"]}Tracker/View/getFilm.php?id=" . $movie['id'] . "'>";
 				echo "<img class='cover' src='" . $movie['image'] . "'/>";
 				echo "<p><b>Name:</b> " . $movie['name'] . "</p>";
 				echo "<p><b>Date:</b> " . $movie['date'] . "</p>";
@@ -60,9 +80,9 @@ require_once('Tracker/View/Util.php');
 			echo "</div>";
 		?>
 		<div class="navigation">
-				<?php
-			echo "<a href='http://localhost/Tracker/View/getFilmList.php?organise={$organise}&page=" . $util->checkNextPage('film',$page-1,$organise) . "'>Previous Page</a> |";
-			echo "<a href='http://localhost/Tracker/View/getFilmList.php?organise={$organise}&page=" . $util->checkNextPage('film',$page+1,$organise) . "'> Next Page.</a>";
+		<?php
+			echo "<a href='{$GLOBALS["ip"]}Tracker/View/getFilmList.php?organise={$organise}&page=" . $util->checkNextPage('films',$page-1,$organise) . "'>Previous Page</a> |";
+			echo "<a href='{$GLOBALS["ip"]}Tracker/View/getFilmList.php?organise={$organise}&page=" . $util->checkNextPage('films',$page+1,$organise) . "'> Next Page.</a>";
 		?>
 		</div>
 	</body>

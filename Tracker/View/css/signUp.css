@@ -1,0 +1,17 @@
+body{ 
+	background-color:rgb(150, 200, 200);
+}
+ 
+div.Sign-Up{ 
+	background-color: rgb(255,255,255);
+	background-size:500px;
+	background-repeat:no-repeat; 
+	background-attachment:fixed; 
+	background-position:center; 
+	margin-top:150px; 
+	margin-bottom:150px; 
+	margin-right:530px; 
+	margin-left:450px; 
+	padding:9px; 
+} 
+
