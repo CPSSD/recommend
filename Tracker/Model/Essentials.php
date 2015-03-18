@@ -42,9 +42,6 @@ class Essentials{
 	public function search($db,$type,$search){
 		if (strpos($search,'%20') !== false){
 			$sub = explode(' ',$search,2);
-			echo $sub[0];
-			echo " "; 
-			echo $sub[1];
 			$sql = "SELECT name,image,id,rating FROM `{$type}` WHERE name LIKE '%{$sub[0]}%' AND name LIKE '%{$sub[1]}%' ORDER BY name DESC LIMIT 24";	
 		}else{
 			$sql = "SELECT name,image,id,rating FROM `{$type}` WHERE name LIKE '%{$search}%' ORDER BY name DESC LIMIT 24";	
