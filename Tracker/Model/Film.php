@@ -1,7 +1,7 @@
 <?php
 
 set_include_path("{$_SERVER['DOCUMENT_ROOT']}");
-require_once('Tracker/Model/Essentials.php'); 
+include_once('Tracker/Model/Essentials.php'); 
 
 class Film extends SQLite3{
 	
