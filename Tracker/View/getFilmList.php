@@ -70,9 +70,9 @@
 				echo "<div class='image'>";
 				echo "<a href='{$GLOBALS["ip"]}Tracker/View/getFilm.php?id=" . $movie['id'] . "'>";
 				echo "<img class='cover' src='" . $movie['image'] . "'/>";
-				echo "<p><b>Name:</b> " . $movie['name'] . "</p>";
-				echo "<p><b>Date:</b> " . $movie['date'] . "</p>";
-				echo "<p><b>Rating:</b> " . $movie['rating'] . " stars.</p>";
+				echo "<p><b>Name:</b> " . $movie['name'] . "<br />";
+				echo "<b>Date:</b> " . $movie['date'] . "<br />";
+				echo "<b>Rating:</b> " . $movie['rating'] . " stars.</p>";
 				echo "</a></div>";
 				$column++;
 				if($column >= $per_row){

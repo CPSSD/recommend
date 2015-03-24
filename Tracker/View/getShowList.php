@@ -67,8 +67,8 @@
 				echo "<div class='image'>";
 				echo "<a href='{$GLOBALS["ip"]}Tracker/View/getShow.php?type=tv_shows&id=" . $show['id'] . "&season=1'>";
 				echo "<img class='cover' src='" . $show['image'] . "'/>";
-				echo "<p><b>Name:</b> " . $show['name'] . "</p>";
-				echo "<p><b>Rating:</b> " . $show['rating'] . " stars.</p>";
+				echo "<p><b>Name:</b> " . $show['name'] . "<br />";
+				echo "<b>Rating:</b> " . $show['rating'] . " stars.</p>";
 				echo "</a></div>";
 				$column++;
 				if($column >= $per_row){

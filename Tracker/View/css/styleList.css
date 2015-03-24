@@ -11,7 +11,11 @@ a {
 
 p{
 	line-height: 110%;
-	display:table-row;
+	display:table;
+}
+
+div.image p {
+	margin-top:0;
 }
 
 div.navigation{
@@ -61,7 +65,7 @@ div.show_container{
 }
 
 div.image{
-	display:table-cell;
+	display:inline-block;
 	align:center;
 	width:223px;
 	height:350px;
