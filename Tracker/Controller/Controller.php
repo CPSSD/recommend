@@ -46,7 +46,6 @@ class Controller{
 			if(isset($_GET["date"]) && isset($_GET["media"])){
 				$db = new SQLite3('database.db');
 				$type = $_GET["media"];
-				session_start();
 				if (isset($_GET['uid'])){
 					$userID = $_GET['uid'];
 					if($type == "film"){

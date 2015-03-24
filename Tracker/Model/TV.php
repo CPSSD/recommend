@@ -39,8 +39,7 @@ class TV extends SQLite3{
 				$table = $row["location"];
 				$show_data = $row;
 				$retval = $db->query("SELECT season,episode,title FROM '{$table}' WHERE date = \"{$date}\"");
-				$row = $retval->fetchArray();
-				if ($row != null){
+				while (($row = $retval->fetchArray()) != null){
 					if ($episode_tick != 0){
 						echo ",";
 					}

@@ -12,8 +12,12 @@
 			session_start();
 			$date1 = date("Y-m-d");
 			$media = $_GET["q"];
-			$uid = $_SESSION['userID'];
-			$json = file_get_contents("{$GLOBALS["ip"]}Tracker/index.php?type=calendar&date={$date1}&media={$media}&uid={$uid}");
+			if (isset($_SESSION['userID'])){
+				$uid = $_SESSION['userID'];
+				$json = file_get_contents("{$GLOBALS["ip"]}Tracker/index.php?type=calendar&date={$date1}&media={$media}&uid={$uid}");
+			} else {
+				$json = file_get_contents("{$GLOBALS["ip"]}Tracker/index.php?type=calendar&date={$date1}&media={$media}");
+			}
 			$data = json_decode($json, true);
 			$tick = 0;
 			foreach ($data as $section){
