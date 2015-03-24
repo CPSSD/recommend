@@ -1,5 +1,8 @@
 <?php
 
+//set_include_path('/var/www/html');
+//require_once("{$_SERVER['DOCUMENT_ROOT']}/Tracker/config.php");
+
 class Util{
 
  	function checkNextSeason($season,$id){

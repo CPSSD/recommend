@@ -49,6 +49,10 @@
 					echo "{$_SESSION['username']} is logged in";
 					echo "<p></p>";
 					echo "<a href='logout.php' >Logout</a>";
+					echo "<br></br>";
+					echo "<p><a href='{$GLOBALS["ip"]}Tracker/View/calendar.php?q=films'> Personal Calendar</p>";
+					echo "<br></br>";
+					echo "<p><a href='recommendations.php'>Recommendations</p>";
 				}else{
 					echo "<a href='signUp.html'><b>Sign up</b></a>";
 					echo "<p>Or Login below:</p>";
@@ -66,9 +70,9 @@
 				echo "<div class='image'>";
 				echo "<a href='{$GLOBALS["ip"]}Tracker/View/getFilm.php?id=" . $movie['id'] . "'>";
 				echo "<img class='cover' src='" . $movie['image'] . "'/>";
-				echo "<p><b>Name:</b> " . $movie['name'] . "</p>";
-				echo "<p><b>Date:</b> " . $movie['date'] . "</p>";
-				echo "<p><b>Rating:</b> " . $movie['rating'] . " stars.</p>";
+				echo "<p><b>Name:</b> " . $movie['name'] . "<br />";
+				echo "<b>Date:</b> " . $movie['date'] . "<br />";
+				echo "<b>Rating:</b> " . $movie['rating'] . " stars.</p>";
 				echo "</a></div>";
 				$column++;
 				if($column >= $per_row){

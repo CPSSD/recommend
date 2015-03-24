@@ -36,7 +36,6 @@ $type = $_GET['type'];
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_SESSION['userID'])){
 	createLikeTable($db);
-	var_dump($_POST['film']);
 	foreach($_POST['film'] as $media){
 		if(!rowExists($db,$media)){
 				var_dump($_POST['film']);

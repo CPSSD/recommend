@@ -1,7 +1,7 @@
 <?php
 
 set_include_path("{$_SERVER['DOCUMENT_ROOT']}");
-require_once('Tracker/Model/Essentials.php'); 
+include_once('Tracker/Model/Essentials.php'); 
 
 class TV extends SQLite3{
 
@@ -63,7 +63,7 @@ class TV extends SQLite3{
 			echo "]}";
 		}
 		echo "}";
-	}	
+	}
 
 	public function getShow($id,$season){
 		$db = new SQLite3('database.db');

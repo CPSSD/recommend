@@ -1,17 +1,63 @@
 <?php
 
 set_include_path("{$_SERVER['DOCUMENT_ROOT']}");
-require_once('Tracker/Model/Essentials.php'); 
-
-
+include_once('Tracker/Model/Essentials.php'); 
 
 class Film extends SQLite3{
 	
-	public function filmRecomend($userID){
+	//returns recommended films to the View Pages to be displayed
+	public function filmRecommendations($userID){
+		$db = new SQLite3('database.db');
+		$type = "films";
+		$json = file_get_contents("{$GLOBALS["ip"]}Tracker/index.php?type=films&filmLikesToRecommend={$userID}");
+		$obj = json_decode($json, true);
+		//gets all liked films and puts them in an array
+		$films = array();
+		foreach($obj['films'] as $movie){
+			$films[] = $movie['mediaName'];	
+		}
+		
+		//gathers the genres of these films
+		$genre = array();
+		foreach($films as $film){
+			$sql = "SELECT genre FROM films WHERE name='{$film}'";
+			$result = $db->query($sql);
+			while($row = $result->fetchArray()){
+				$row = substr($row['genre'],8,-2);
+				$rows = explode("+",$row);
+				foreach($rows as $string){
+					$genre[] = $string;
+				}
+			}
+		}
+		//selects the highest valued genre
+		$genre = array_count_values($genre);
+		$max = max($genre);
+		$key = array_search($max, $genre);	
+
+		$essen = new Essentials();
+		$sql = "SELECT id,synopsis,name,date,rating,starring,director,genre,image,age FROM films WHERE genre LIKE '%{$key}%' ORDER BY rating DESC LIMIT 6";
+		
+		$retval = $db->query($sql);
+		echo "{\"{$type}\":[";
+		$tick = 0;
+		while($row = $retval->fetchArray()){
+		    if ($tick != 0){
+			echo ",";
+		    }
+		    $tick++;
+		    echo json_encode($essen->createArrayFromData($sql, $row));
+		}
+		echo "]}";
+	}
+	
+	
+	
+	public function filmLikesToRecommend($userID){
 		$db = new SQLite3('database.db');
 		$type = "films";
 		$essen = new Essentials();
-		$essen->mediaRecommend($db,$userID,$type);
+		$essen->mediaLikesToRecommend($db,$userID,$type);
 	}
 
 	public function filmLikes($page){

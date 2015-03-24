@@ -2,7 +2,8 @@
 
 class Essentials{
 
-	public function mediaRecommend($db,$userID,$type){
+	// function to return all of a particular media a user likes
+	public function mediaLikesToRecommend($db,$userID,$type){
 		$sql = "SELECT mediaName FROM likes WHERE userID={$userID}";
 		
 		$retval = $db->query($sql);
@@ -18,7 +19,8 @@ class Essentials{
 		echo "]}";
 		
 	}
-
+	
+	// returns 30 of a particular media to the View pages to be displayed
 	public function likes($db,$type,$page){
 		$pageParam = intval($page);
 		$offset = $pageParam * 30;
@@ -42,13 +44,10 @@ class Essentials{
 	public function search($db,$type,$search){
 		if (strpos($search,'%20') !== false){
 			$sub = explode(' ',$search,2);
-			echo $sub[0];
-			echo " "; 
-			echo $sub[1];
 			$sql = "SELECT name,image,id,rating FROM `{$type}` WHERE name LIKE '%{$sub[0]}%' AND name LIKE '%{$sub[1]}%' ORDER BY name DESC LIMIT 24";	
 		}else{
 			$sql = "SELECT name,image,id,rating FROM `{$type}` WHERE name LIKE '%{$search}%' ORDER BY name DESC LIMIT 24";	
-}
+		}
 
 		$retval = $db->query($sql);
 		echo "{\"{$type}\":[";
