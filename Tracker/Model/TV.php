@@ -50,11 +50,13 @@ class TV extends SQLite3{
 					if($row["episode"] < 10 && $row["episode"][0] != "0") {
 						$row["episode"] = "0".$row["episode"];
 					}
-					echo '{"show":"'.$show_data["name"].'",';
-					echo '"show-id":'.$show_data["id"].',';
-					echo '"season":"'.$row["season"].'",';
-					echo '"episode":"'.$row["episode"].'",';
-					echo '"title":"'.$row["title"].'"}';
+					echo json_encode(array(	"status" => "okay",
+											"show" => $show_data["name"],
+											"show-id" => $show_data["id"],
+											"season" => $row["season"],
+											"episode" => $row["episode"],
+											"title" => $row["title"]
+											));
 					$episode_tick+=1;
 				}
 			}

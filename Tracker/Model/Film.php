@@ -92,8 +92,9 @@ class Film extends SQLite3{
 			$result = $db->query($sql);
 			while($row = $result->fetchArray()){
 				if (in_array($row["id"], $id_list)){
-					echo "{\"name\":\"{$row["name"]}\",";
-					echo "\"id\":\"{$row["id"]}\"}";
+					echo json_encode(array( "status" => "okay",
+											"name" => $row["name"],
+											"id" => $row["id"]));
 				}
 			}
 			echo "]}";
