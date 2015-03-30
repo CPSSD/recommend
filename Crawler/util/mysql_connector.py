@@ -82,6 +82,18 @@ def write_to_database(data, database_layout):
     connection.commit()
     return True
 
+def create_template_table(show_list, schema):
+    global connection
+    connection = mdb.connect(config['db_ip'], config['db_username'], config['db_password'], database)
+    cur = connection.cursor()
+    for show in show_list:
+        print show['location']
+        cur.execute("CREATE TABLE IF NOT EXISTS %s(%s)" % (show['location'], schema))
+        connection.commit()
+    cur.close()
+    connection.commit()
+    connection.close()
+
 # Commits changes and closes connection.
 def close_database_connection():
     global connection

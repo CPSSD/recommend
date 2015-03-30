@@ -7,10 +7,9 @@ from bs4 import BeautifulSoup
 from util import file_handler as file
 from util import util
 
-database_type = "sqlite"
-tv_show_layout = "name, image, location, rating, wiki_url, imdb_url, episode_url"
-tv_show_schema = "id INTEGER PRIMARY KEY, name VARCHAR(255), image VARCHAR(255), location VARCHAR(255), rating VARCHAR(255), wiki_url VARCHAR(255), imdb_url VARCHAR(255), episode_url VARCHAR(255)"
-tv_show_vartype = "%s, %s, %s, %s, %s, %s, %s"
+tv_show_layout = "name, image, location, rating, wiki_url, imdb_url, episode_url, genre"
+tv_show_schema = "id INTEGER PRIMARY KEY, name VARCHAR(255), image VARCHAR(255), location VARCHAR(255), rating VARCHAR(255), wiki_url VARCHAR(255), imdb_url VARCHAR(255), episode_url VARCHAR(255), genre VARCHAR(255)"
+tv_show_vartype = "%s, %s, %s, %s, %s, %s, %s, %s"
 episode_list_layout = "season, episode, title, date"
 episode_list_schema = "id INTEGER PRIMARY KEY, season INTEGER, episode INTEGER, title VARCHAR(255), date VARCHAR(255)"
 episode_list_vartype = "%d, %d, %s, %s"
@@ -34,6 +33,7 @@ def scrape_imdb(url):
     data = {}
     data['image'] = ""
     data['rating'] = "0.0"
+    data['genre'] = "Unknown"
     if url == "":
         return data
     html = requests.get(url).text
@@ -48,6 +48,18 @@ def scrape_imdb(url):
             image_url = image['src']
             name = image_url.split("http://ia.media-imdb.com/images/")[1]
     data['image'] = image_url
+
+    # Grabs Genre
+    genre_list = bs4.findAll('span', {'itemprop': 'genre'})
+    genre_text = "Unknown"
+    if genre_list != None:
+        genre_text = ""
+        for genre in genre_list:
+            if genre_text != "Unknown" and genre_text != "":
+                genre_text += "+"
+            genre_text += (util.clean_text(genre.text))
+    print genre_text
+    data['genre'] = genre_text
 
     # Grabs the rating.
     rating = bs4.find('span', {'itemprop': 'ratingValue'})
@@ -210,16 +222,19 @@ def grab_show_data(url):
         return show_data
     show_data['image'] = ""
     show_data['rating'] = "0.0"
+    show_data['genre'] = "Unknown"
+    print imdb_data
     if imdb_data is not None:
         show_data['image'] = imdb_data['image']
         show_data['rating'] = imdb_data['rating']
+        show_data['genre'] = imdb_data['genre']
     show_data['keep'] = True
     return show_data
 
 def get_show_list(from_database):
     if from_database:
         print("* Retrieving Show list from database.");
-        show_list = db.open_database_connection(False, "name, episode_url, wiki_url, imdb_url, location", config['database_file_name'], "tv_shows", None)
+        show_list = db.open_database_connection(False, "name, episode_url, wiki_url, imdb_url, image, location", config['database_file_name'], "tv_shows", None)
         db.connection.close()
         return show_list
     else:
@@ -281,17 +296,6 @@ def update_show_episodes(index, limit):
             tick += 1
             util.debug_print("Skipping Episode: %d" % tick)
 
-def create_template_tables():
-    show_list = get_show_list(True)
-    connection = lite.connect('database/%s.db' % config['database_file_name'])
-    cur = db.connection.cursor()
-    for show in show_list:
-        print show['location']
-        cur.execute("CREATE TABLE IF NOT EXISTS %s(%s)" % (show['location'], episode_list_schema))
-        db.connection.commit()
-    cur.close()
-    db.connection.commit()
-    db.connection.close()
 
 if __name__ == "__main__":
     print("* Starting Crawler...")
@@ -299,7 +303,7 @@ if __name__ == "__main__":
     if (config['update_show_indexes'] is 1):
         update_show_data(config['show_limit'])
     if (config['update_show_episodes'] is 1):
-        create_template_tables()
+        db.create_template_tables(get_show_list(True), episode_list_schema)
         update_show_episodes(config['episode_offset'], config['episode_limit'])
     print("* Finished...")
     print("* Exiting Crawler...")
