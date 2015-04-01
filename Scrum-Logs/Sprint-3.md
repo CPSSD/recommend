@@ -19,8 +19,13 @@
 ###### Monday March 30th
     - API 2.5 written and implemented
     - Added param for Ascending/Descending
+    - Calendar done barring a few bugs
 
 ###### Tuesday March 31st
-    - Ability to ses and delete likes implemented
+    - Ability to see and delete likes implemented
     - Calendar API written
     - Calendar year display fixed
+    
+###### Wednesday April 1st
+    - API Tester done
+    - Calendar integrated with nav bar
