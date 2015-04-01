@@ -13,6 +13,20 @@ a.empty {
 	color: rgb(220, 220, 200);
 }
 
+a.nav{
+	inherit: None;
+	text-decoration: None;
+	color:white;
+	text-shadow:0px 0px 10px black;
+	text-align:center;
+}
+
+div.nav{
+	margin: 0 auto;
+	text-align:center;
+	margin-right:2%;
+}
+
 div.calendar-week{
 	position:relative;
 	overflow:auto;
@@ -31,6 +45,30 @@ div.calendar-day{
 	margin-right: 0.5%;
 	margin-bottom:2%;
 	border-color:blue;
+}
+
+div.calendar-year{
+	position:relative;
+	overflow:auto;
+	border-radius: 10px;
+	width: 50%;
+	margin: 0 auto;
+	padding: 5px;
+}
+
+div.calendar-month{
+	float:left;
+	Display: inline-block;
+	width: 24%;
+	margin: 0 auto;
+	margin-left: 0.5%;
+	margin-right: 0.5%;
+	margin-bottom:2%;
+	border-color:blue;
+}
+
+div.hidden{
+	visibility:hidden;
 }
 
 div.calendar-title-default{
@@ -79,6 +117,10 @@ ul.calendar-list{
 
 h1.title{
 	text-align:center;
+	color:white;
+	text-shadow:0px 0px 10px black;
+	margin-right:2%;
+	margin-top:50px;
 }
 
 li {

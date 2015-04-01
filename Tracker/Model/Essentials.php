@@ -165,16 +165,49 @@ class Essentials{
 		}
 		return $this->cleanDate($date2);
 	}
-
-	public function generateDates($date1){
-		$timestamp = strtotime($date1);
-		$date1 = explode("-", $date1);
-		$dayOffset = date("N", $timestamp)-1+7;
-		$date1 = $this->getDateOffset($date1, $dayOffset, "back");
-		$date2 = $this->getDateOffset($date1, 7*5, "forward");
+	
+	public function generateMonthDates($year){
+		$date1 = explode("-", "{$year}-01-01");
+		$date2 = explode("-", "{$year}-12-31");
 		$date_list = [];
 		$tick = 0;
+				
+		# Add in year support eventually.
+		$tick = 0;
+		$y = $date1[0];
+		for ($m = $date1[1]; $m <= $date2[1]; $m++) {
+			if($m < 10 && $m[0] != "0") {
+				$m = "0".$m;
+			}
+			$timestamp = strtotime("{$date1[0]}-{$m}-1");
+			$endDate = date("t", $timestamp);
+			if($m == $date2[1]){
+				$endDate = $date2[2];
+			}
+			$startDate = 1;
+			if($m == $date1[1]){
+				$startDate = $date1[2];
+			}
+			for ($d = $startDate; $d <= $endDate; $d++){
+					$d = "0".$d;
+				}
+				$date_list[$tick] = "{$y}-{$m}-{$d}";
+				$tick++;
+			}
+		}
+		$date_list[$tick] = "0000-00-00";
 		
+		return $date_list;
+	}
+	public function generateDates($date1, $offset, $backwards_offset, $depth){
+		$timestamp = strtotime($date1);
+		$date1 = explode("-", $date1);
+		$dayOffset = date("N", $timestamp)-1+$backwards_offset;
+		$date1 = $this->getDateOffset($date1, $dayOffset, "back");
+		$date2 = $this->getDateOffset($date1, $offset*$depth, "forward");
+		$date_list = [];
+		$tick = 0;
+				
 		# Add in year support eventually.
 		$tick = 0;
 		$y = $date1[0];
