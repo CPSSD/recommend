@@ -33,7 +33,7 @@ if($query == "films"){
 				    </ul>
 				</li>
 				</li>
-				<li>Entertainment Tracker</li>
+				<li><a href="">Entertainment Tracker</a></li>
 			    <li><a href="">Search</a>
 				    <ul>
 					    <?php echo "<li><form action='searchResults.php?type=films' method='POST'>";
