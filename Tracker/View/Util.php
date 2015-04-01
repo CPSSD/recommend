@@ -1,8 +1,5 @@
 <?php
 
-//set_include_path('/var/www/html');
-//require_once("{$_SERVER['DOCUMENT_ROOT']}/Tracker/config.php");
-
 class Util{
 
  	function checkNextSeason($season,$id){
@@ -10,11 +7,15 @@ class Util{
 		$json = file_get_contents("{$GLOBALS["ip"]}Tracker/index.php?type=tv_shows&id={$id}&season={$season}");		
 
 		if(strpos($json,'okay') !== false){
-			return "{$GLOBALS["ip"]}Tracker/View/getShow.php?id={$id}&season={$season}";
+			return true;
 		}else{
-			return "{$GLOBALS["ip"]}Tracker/View/getShow.php?id={$id}&season=1";
+			return false;
 		}
 	}
+
+    function nextSeason($season,$id){
+        return "{$GLOBALS["ip"]}Tracker/View/getShow.php?id={$id}&season={$season}";
+    }
 
 	function checkNextPage($type,$page,$organise){
 		$json = file_get_contents("{$GLOBALS["ip"]}Tracker/index.php?type={$type}&organise={$organise}&page={$page}");
@@ -33,5 +34,17 @@ class Util{
 		}else{
 			return '0';				
 		}
+	}
+
+	function rowExists($db,$table){
+		$stmt = $db->prepare("SELECT userID, mediaID,mediaTable FROM `{$table}` WHERE userID = :userID AND mediaID = :mediaID AND mediaTable = :mediaTable");
+		$stmt->bindValue(':mediaTable',$_GET['type'],SQLITE3_TEXT);
+		$stmt->bindValue(':userID',$_SESSION['userID'],SQLITE3_INTEGER);
+		$stmt->bindValue(':mediaID',$_GET['id'],SQLITE3_TEXT);
+		$result = $stmt->execute();
+		$row = $result->fetchArray();
+		if($row){
+			return true;
+		}else return false;
 	}
 }

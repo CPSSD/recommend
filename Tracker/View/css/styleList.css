@@ -5,7 +5,7 @@ body {
 
 a {
 	text-decoration:None;
-	Display: inline;
+	display: inline;
 	color: rgb(0,0,0);
 }
 
@@ -14,13 +14,87 @@ p{
 	display:table;
 }
 
-div.image p {
-	margin-top:0;
+nav{
+	display:block;
+	width: 100%; 	
+	margin-top:-50px;
+	height: 40px; 
+	z-index: 99; 
+	position: fixed; 
+	background-color: #366b82;
 }
+
+.navbar	{
+	height: 40px;
+    padding: 0;
+	margin: 0;
+	position: absolute; 
+	border-right: 1px solid #54879d; 
+	}
+
+.navbar li {
+	height: 40px;
+	width: 251px;
+	float: left;
+	text-align: center; 
+	list-style: none; 
+	font: normal bold 12px/1.2em Arial, Verdana, Helvetica;  
+	padding: 0;
+	margin: 0;
+	background-color: #366b82;
+}
+
+.navbar a{							
+	padding: 12px 0;  
+	border-left: 1px solid #54879d; 
+	border-right: 1px solid #1f5065; 
+	text-decoration: none;  
+	color: white; 
+	display: block;
+}
+
+.navbar li:hover, a:hover {
+	background-color: #54879d;
+} 
+
+.navbar li ul 	{
+	display: none;  
+	height:40px;									
+	margin: 0; 
+	padding: 0;		
+}				
+
+.navbar li:hover ul {
+	display: inline-table; 
+}
+
+.navbar li ul li {
+	background-color: #54879d;
+} 
+
+.navbar li ul li a 	{
+	border-left: 1px solid #1f5065; 
+	border-right: 1px solid #1f5065; 
+	border-top: 1px solid #74a3b7; 
+	border-bottom: 1px solid #1f5065; 
+}
+				
+.navbar li ul li a:hover{
+	background-color: #366b82;
+}
+
+.navbar li ul li ul {
+    display:none;
+    float:right;
+    text-align:right;
+}
+
+/*.navbar li ul li ul li a:hover{
+	background-color: #366b82;
+}*/
 
 div.navigation{
 	background-color:rgb(255, 255, 255);
-	align:center;
 	padding-top:5px;
 	text-align:center;
 	padding-bottom:10px;
@@ -34,30 +108,15 @@ div.navigation{
 	border-color: rgb(255, 255, 255) rgb(0, 0, 0) rgb(0, 0, 0)  rgb(0, 0, 0);
 }
 
-a {
-	text-decoration: None;
-}
-
-div.organise{
-	margin-left:250px;
-	color: rgb(0,0,0);
-	margin-right:100px;
-}
-
-div.login{
-	float:left;
-	padding:2px;
-	padding-top:10px;
-}
-
 div.show_container{
 	background-color:rgb(255, 255, 255);
-	align:center;
 	padding-top:16px;
 	padding-left:16px;
 	border-radius:20px;
-	width:892px;
-	margin: 2px auto;
+	width:900px;
+	margin-left:auto;
+	margin-right:auto;
+	margin-top:50px;
 	border-style:solid;
 	border-width:2px;
 	margin-left:250px;
@@ -66,7 +125,6 @@ div.show_container{
 
 div.image{
 	display:inline-block;
-	align:center;
 	width:223px;
 	height:350px;
 	color:rgb(40, 140, 40);

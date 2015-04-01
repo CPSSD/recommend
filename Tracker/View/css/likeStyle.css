@@ -5,7 +5,7 @@ div.show_container{
 	padding-left:16px;
 	border-radius:20px;
 	width:892px;
-	margin: 2px auto;
+    margin-top: 50px;
 	border-style:solid;
 	border-width:2px;
 	margin-left:250px;
@@ -15,6 +15,10 @@ div.show_container{
 body {
 	background-color: rgb(150, 200, 200);
 	font-family: "Open Sans", sans-serif;
+}
+
+:checked {
+  font-weight: bold;
 }
 
 div.navigation{

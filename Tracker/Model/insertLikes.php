@@ -1,18 +1,27 @@
 <?php session_start();
 
-$db = new SQLite3('database.db');
+
 set_include_path("{$_SERVER['DOCUMENT_ROOT']}");
+$db = new SQLite3($_SERVER['DOCUMENT_ROOT'].'/Tracker/database.db');
 require_once('Tracker/config.php');
 
 function createLikeTable($db){
-	$db = new SQLite3('database.db');
-	$sql = "CREATE TABLE IF NOT EXISTS likes(mediaTable TEXT,userID INTEGER,mediaName TEXT)";
+	$sql = "CREATE TABLE IF NOT EXISTS likes(userID INTEGER, mediaTable TEXT, mediaName TEXT, mediaID INTEGER, mediaImage TEXT)";
 	$result = $db->query($sql);
 }
 
-function insert($db,$mediaName){
-	$db = new SQLite3('database.db');	
-	$stmt = $db->prepare('INSERT INTO likes(mediaTable, userID, mediaName) VALUES (:mediaTable, :userID , :mediaName)');
+function insert($db,$mediaName,$mediaID,$mediaImage){	
+	$stmt = $db->prepare('INSERT INTO likes(userID,mediaTable,mediaName,mediaID,mediaImage) VALUES (:userID, :mediaTable, :mediaName, :mediaID, :mediaImage)');
+	$stmt->bindValue(':mediaTable',$_GET['type'],SQLITE3_TEXT);
+	$stmt->bindValue(':userID',$_SESSION['userID'],SQLITE3_INTEGER);
+	$stmt->bindValue(':mediaName',$mediaName,SQLITE3_TEXT);
+	$stmt->bindValue(':mediaID',$mediaID,SQLITE3_INTEGER);
+	$stmt->bindValue(':mediaImage',$mediaImage,SQLITE3_TEXT);
+	$result = $stmt->execute();
+}
+
+function delete($db,$mediaName){
+	$stmt = $db-> prepare('DELETE FROM likes WHERE userID = :userID AND mediaName = :mediaName AND mediaTable = :mediaTable');
 	$stmt->bindValue(':mediaTable',$_GET['type'],SQLITE3_TEXT);
 	$stmt->bindValue(':userID',$_SESSION['userID'],SQLITE3_INTEGER);
 	$stmt->bindValue(':mediaName',$mediaName,SQLITE3_TEXT);
@@ -20,7 +29,6 @@ function insert($db,$mediaName){
 }
 
 function rowExists($db,$mediaName){
-	$db = new SQLite3('database.db');
 	$stmt = $db->prepare('SELECT userID, mediaName,mediaTable FROM `likes` WHERE userID = :userID AND mediaName = :mediaName AND mediaTable = :mediaTable');
 	$stmt->bindValue(':mediaTable',$_GET['type'],SQLITE3_TEXT);
 	$stmt->bindValue(':userID',$_SESSION['userID'],SQLITE3_INTEGER);
@@ -37,10 +45,12 @@ $type = $_GET['type'];
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_SESSION['userID'])){
 	createLikeTable($db);
 	foreach($_POST['film'] as $media){
-		if(!rowExists($db,$media)){
-				var_dump($_POST['film']);
-			insert($db,$media);
-		}	
+        $mediaInfo = explode("&&&",$media);
+		if(!rowExists($db,$mediaInfo[0])){
+			insert($db,$mediaInfo[0],$mediaInfo[1],$mediaInfo[2]);
+		}else{
+            delete($db,$mediaInfo[0]);
+        }	
 	}
 }
 

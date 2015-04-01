@@ -1,8 +1,8 @@
-<?php
+<?php session_start();
 
 set_include_path("{$_SERVER['DOCUMENT_ROOT']}");
 require_once('Tracker/config.php');
-$db = new SQLite3('database.db');
+$db = new SQLite3($_SERVER['DOCUMENT_ROOT'].'/Tracker/database.db');
 
 function createUserTable($db){
 	$sql = "CREATE TABLE IF NOT EXISTS users(Id INTEGER PRIMARY KEY,fullname TEXT,username TEXT,email TEXT,password TEXT)";
@@ -28,17 +28,23 @@ function signUp($db){
 		$row = $result->fetchArray();
 		if($row == false || $row == 0){
 			newUser($db);
+			return true;
 		}else{
-			echo "Sorry.. That username is already in use";
+			return false;
 		}
 	}
 }
 
 if(isset($_POST['submit'])){
 	createUserTable($db);
-	SignUp($db);
-	$url = "{$GLOBALS['ip']}Tracker/View/login.html";
-	header( "Location: $url" );
+	if(SignUp($db)){
+		$url = "{$GLOBALS['ip']}Tracker/View/login.html";
+		header( "Location: $url" );	
+	}else{
+		$_SESSION["message"] = "Username already in use please try another!";
+		$url = "{$GLOBALS['ip']}Tracker/View/displayMessage.php";
+		header( "Location: $url" );
+	}
 }
 
 ?>

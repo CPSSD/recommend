@@ -1,10 +1,10 @@
-<?php
+<?php session_start();
 
 set_include_path("{$_SERVER['DOCUMENT_ROOT']}");
 require_once('Tracker/config.php');
+$db = new SQLite3($_SERVER['DOCUMENT_ROOT'].'/Tracker/database.db');
 
 function getNumRows(){
-	$db = new SQLite3('database.db');
 	$rows = $db->query("SELECT COUNT(*) as count FROM users");
 	$row = $rows->fetchArray();
 	$numRows = $row['count'];
@@ -14,8 +14,6 @@ function getNumRows(){
 if($_SERVER['REQUEST_METHOD'] == 'POST'){
 	$username = $_POST['username'];
 	$password = $_POST['password'];
-
-	$db = new SQLite3('database.db');
 	
 	$stmt = $db->prepare('SELECT Id,username FROM `users` WHERE username = :username AND password = :password');
 	$stmt->bindValue(':password',$password,SQLITE3_TEXT);
@@ -34,7 +32,9 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
 		header( "Location: $url" );
 
 	}else{
-		echo "Incorrect password or username";
+		$_SESSION["message"] = "Incorrect username or password";
+		$url = "{$GLOBALS['ip']}Tracker/View/displayMessage.php";
+		header( "Location: $url" );
 	}
 }
 

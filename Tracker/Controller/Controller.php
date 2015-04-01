@@ -1,46 +1,49 @@
 <?php session_start();
 
 set_include_path("{$_SERVER['DOCUMENT_ROOT']}");
-require_once('Tracker/Model/Film.php');  
-require_once('Tracker/Model/TV.php');
 require_once('Tracker/config.php');
-
-//Class to control what call the server makes to the database
-
+require_once('Tracker/Model/Essentials.php');
+require_once('Tracker/Model/Film.php');
+require_once('Tracker/Model/TV.php');
 
 class Controller{
-	public $film;
-	public $tv_show;
+
+	public $db;
+	public $essen;
+    public $film;
+    public $tv_show;
 
 	public function __construct(){
-		$this->film = new Film('database.db');
-		$this->tv_show = new TV('database.db');
+		$this->essen = new Essentials('database.db');
+		$this->db = new SQLite3('database.db');
+        $this->film = new Film('database.db');
+        $this->tv_show = new TV('database.db');        
 	}
-	
+
 	public function invoke(){
 		if($_GET["type"] == "films"){
 			if(isset($_GET["page"]) && isset($_GET["organise"]) && intval($_GET["page"]) >= 0){
-				$this->film->getFilmList($_GET["organise"],$_GET["page"]); // gets a data of list of 24 films
+				$this->essen->getList($this->db,$_GET["type"],$_GET["organise"],$_GET["page"],$_GET["order"]); // gets a data of list of 24 films
 			}else if (isset($_GET["id"])){
-				$this->film->getFilm($_GET["id"]); // gets all data from 1 film
-			}else if(isset($_GET['searchFilm'])){
-				$this->film->searchFilm($_GET['searchFilm']); // returns up to 10 search results on a film search
-			}else if(isset($_GET['page'])){						         
-				$this->film->filmLikes($_GET['page']); // returns list of films for user to like upon logging in
-			}else if (isset($_GET['filmLikesToRecommend'])){                        
-					$this->film->filmLikesToRecommend($_GET['filmLikesToRecommend']);// gets all the films a logged in user has liked
-			}else if(isset($_GET['filmRecommendations'])){      
-					$this->film->filmRecommendations($_GET['filmRecommendations']); // returns data on recommended films
+				$this->essen->get($this->db,$_GET['type'],$_GET["id"],""); // gets all data from 1 film
+			}else if(isset($_GET['search'])){
+				$this->essen->search($this->db,$_GET['type'],$_GET['search']); // returns up to 10 search results on a film search
+			}else if (isset($_GET['userLikes'])){                        
+					$this->essen->userLikes($this->db,$_GET['type'],$_GET['userLikes']);// gets all the films a logged in user has liked
+			}else if(isset($_GET['recommendations'])){      
+					$this->essen->recommendations($this->db,$_GET['type'],$_GET['recommendations']); // returns data on recommended films
 			}
 		}else if($_GET["type"] == "tv_shows"){
 			if(isset($_GET["page"]) && isset($_GET["organise"]) && intval($_GET["page"]) >= 0){
-				$this->tv_show->getShowList($_GET["organise"],$_GET["page"]); // gets a data of list of 24 tv shows
+				$this->essen->getList($this->db,$_GET['type'],$_GET["organise"],$_GET["page"],$_GET['order']); // gets a data of list of 24 tv shows
 			}else if(isset($_GET['id']) && isset($_GET["season"])){
-				$this->tv_show->getShow($_GET['id'],$_GET["season"]); // gets all data from 1 show
-			}else if(isset($_GET['searchShow'])){
-				$this->tv_show->searchShow($_GET['searchShow']); // returns up to 10 search results on a show
-			}else if(isset($_GET['page'])){
-				$this->tv_show->showLikes($_GET['page']); // returns list of films for user to like upon logging in
+				$this->essen->get($this->db,$_GET['type'],$_GET['id'],$_GET["season"]); // gets all data from 1 show
+			}else if(isset($_GET['search'])){
+				$this->essen->search($this->db,$_GET['type'],$_GET['search']); // returns up to 10 search results on a show
+			}else if (isset($_GET['userLikes'])){                        
+					$this->essen->userLikes($this->db,$_GET['type'],$_GET['userLikes']);// gets all the films a logged in user has liked
+			}else if(isset($_GET['recommendations'])){      
+					$this->essen->recommendations($this->db,$_GET['type'],$_GET['recommendations']); // returns data on recommended films
 			}
 		} else if ($_GET["type"] == "calendar"){
 			if(isset($_GET["date"]) && isset($_GET["media"])){
@@ -72,10 +75,8 @@ class Controller{
 				}
 			}
 		} else {
-			$url = "{$GLOBALS['ip']}Tracker/View/getFilmList.php?type=films&organise=0&page=0";
+			$url = "{$GLOBALS['ip']}Tracker/View/getFilmList.php?type=films&organise=1&page=0";
 			header( "Location: $url" );
 		}
 	}
 }
-
-?>

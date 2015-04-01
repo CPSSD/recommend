@@ -1,11 +1,30 @@
 <?php
+set_include_path("{$_SERVER['DOCUMENT_ROOT']}");
+include_once('Tracker/Model/Film.php'); 
+include_once('Tracker/Model/TV.php'); 
 
 class Essentials{
 
+	public $film;
+	public $tv_show;
+
+	public function __construct(){
+		$this->film = new Film('database.db');
+		$this->tv_show = new TV('database.db');
+	}
+
+	public function get($db,$type,$id,$season){
+		if($type == "films"){
+			$this->film->getFilm($db,$type,$id);
+		}else{
+			$this->tv_show->getShow($db,$type,$id,$season);
+		}
+	}
+
 	// function to return all of a particular media a user likes
-	public function mediaLikesToRecommend($db,$userID,$type){
-		$sql = "SELECT mediaName FROM likes WHERE userID={$userID}";
-		
+	public function userLikes($db,$type,$userID){   
+
+        $sql = "SELECT mediaName,mediaTable,mediaImage,mediaID FROM likes WHERE userID={$userID} AND mediaTable LIKE '%{$type}%'";
 		$retval = $db->query($sql);
 		echo "{\"{$type}\":[";
 		$tick = 0;
@@ -17,58 +36,70 @@ class Essentials{
 		    echo json_encode($this->createArrayFromData($sql, $row));
 		}
 		echo "]}";
-		
 	}
-	
-	// returns 30 of a particular media to the View pages to be displayed
-	public function likes($db,$type,$page){
-		$pageParam = intval($page);
-		$offset = $pageParam * 30;
-		$maxPage = floor($this->getMaxID($type) / 30);
 
-		$sql = "SELECT name,id,image FROM {$type} ORDER BY name LIMIT 30 OFFSET {$offset}";
+    public function recommendations($db,$type,$userID){
+		$json = file_get_contents("{$GLOBALS["ip"]}Tracker/index.php?type={$type}&userLikes={$userID}");
+		$obj = json_decode($json, true);
+
+		//gets all liked films and puts them in an array
+		$films = array();
+		foreach($obj[$type] as $movie){
+			$films[] = $movie['mediaName'];	
+		}
+		//var_dump($films);
+		//gathers the genres of these films
+		$genre = array();
+		foreach($films as $film){
+			$sql = "SELECT genre FROM {$type} WHERE name='{$film}'";
+			$result = $db->query($sql);
+			while($row = $result->fetchArray()){
+                $row = $row['genre'];
+                if($type == "films"){
+	    			$row = substr($row['genre'],8,-2);
+                }		
+    		    $rows = explode("+",$row);
+				foreach($rows as $string){
+					$genre[] = $string;
+				}
+			}
+		}
+
+		//selects the highest valued genre
+		$genre = array_count_values($genre);
+		$max = max($genre);
+		$key = array_search($max, $genre);	
+
+		//$essen = new Essentials();
+        if($type == "films"){
+		    $sql = "SELECT id,synopsis,name,date,rating,starring,director,genre,image,age FROM {$type} WHERE genre LIKE '%{$key}%' ORDER BY rating DESC LIMIT 4";
+		}else {
+            $sql = "SELECT id,name,rating,genre,image FROM {$type} WHERE genre LIKE '%{$key}%' ORDER BY rating DESC LIMIT 4";
+        }
 		$retval = $db->query($sql);
 		echo "{\"{$type}\":[";
 		$tick = 0;
 		while($row = $retval->fetchArray()){
-			if ($tick != 0){
-				echo ",";
-			}
-			$tick++;
-			echo json_encode($this->createArrayFromData($sql, $row));
+		    if ($tick != 0){
+			echo ",";
+		    }
+		    $tick++;
+		    echo json_encode($this->createArrayFromData($sql, $row));
 		}
 		echo "]}";
-	}
-
+    }
 
 	public function search($db,$type,$search){
-		if (strpos($search,'%20') !== false){
-			$sub = explode(' ',$search,2);
-			$sql = "SELECT name,image,id,rating FROM `{$type}` WHERE name LIKE '%{$sub[0]}%' AND name LIKE '%{$sub[1]}%' ORDER BY name DESC LIMIT 24";	
-		}else{
-			$sql = "SELECT name,image,id,rating FROM `{$type}` WHERE name LIKE '%{$search}%' ORDER BY name DESC LIMIT 24";	
-		}
-
-		$retval = $db->query($sql);
-		echo "{\"{$type}\":[";
- 		$tick = 0;
- 		while($row = $retval->fetchArray()){
- 		    if ($tick != 0){
- 			echo ",";
- 		    }
- 		    $tick++;
-		    echo json_encode(array("status" => "okay",
-		                           "name" => $row["name"],
-		                           "rating" => $row["rating"],
-					   "id" => $row["id"],
-					   "image" => $row["image"]));
-		}
- 		echo "]}";
+		$search = str_replace('"','\"',$search);		
+        if($type == "films"){
+            $this->film->searchFilms($db,$type,$search);
+        }else{
+            $this->tv_show->searchShows($db,$type,$search);
+        }
 	}
 
 
-	public function getMaxID($type){
-		$db = new SQLite3('database.db');
+	public function getMaxID($type,$db){
 		$maxID = "SELECT id FROM `{$type}` WHERE id = (SELECT MAX(id) FROM {$type})";
 		$result = $db->query($maxID);
 		$maxID = $result->fetchArray();
@@ -131,7 +162,6 @@ class Essentials{
 			} else {
 				$date2[2] = "" . ($date1[2] + $offset - 1);
 			}
-				
 		}
 		return $this->cleanDate($date2);
 	}
@@ -173,39 +203,14 @@ class Essentials{
 		return $date_list;
 	}
 
-	public function getList($organise,$page,$type,$db){
-		$pageParam = intval($page);
-		$offset = $pageParam * 24;
-		$maxPage = floor($this->getMaxID($type) / 24);
-		
-		if($type == "films"){
-			if($organise == "rating"){
-				$sql = "SELECT name,date,image,rating,id FROM `{$type}` ORDER BY {$organise} DESC LIMIT 24 OFFSET {$offset}";
-			} else if($organise == "date"){
-				$sql = "SELECT name,date,rating,image,id FROM `{$type}` ORDER BY {$organise} LIMIT 24 OFFSET {$offset}";
-			} else {
-				$sql = "SELECT name,date,image,rating,id FROM `{$type}` ORDER BY {$organise} LIMIT 24 OFFSET {$offset}";
-			}		
-		}else {
-			if($organise == "name"){
-				$sql = "SELECT name,image,rating,id FROM `{$type}` ORDER BY {$organise} LIMIT 24 OFFSET {$offset}";
-			} else{
-				$sql = "SELECT name,image,rating,id FROM `{$type}` ORDER BY {$organise} DESC LIMIT 24 OFFSET {$offset}";
-			}		
-		}	
+	public function getList($db,$type,$organise,$page,$order){
+		//$maxPage = floor($this->getMaxID($type,$db) / 24);
 
-		$retval = $db->query($sql);
-		echo "{\"{$type}\":[";
-		$tick = 0;
-		while($row = $retval->fetchArray()){
-		    if ($tick != 0){
-			echo ",";
-		    }
-		    $tick++;
-		    echo json_encode($this->createArrayFromData($sql, $row));
+		if ($type == "films"){
+			$this->film->getFilmList($db,$type,$organise,$page,$order);
+		}else{
+			$this->tv_show->getShowList($db,$type,$organise,$page,$order);
 		}
-		echo "]}";
-
 	}
 
 }

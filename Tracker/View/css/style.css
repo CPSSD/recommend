@@ -24,15 +24,16 @@ div.show_container{
 	padding-top:16px;
 	padding-left:16px;
 	border-radius:20px;
-	width:892px;
-	margin: 0px auto;
+	width:72%;
+	height:390px;
+    margin-top:50px;
+    margin-left:13%;
 	border-style:solid;
 	border-width:2px;
 	border-color: rgb(0, 0, 0);
 }
 
 div.image{
-	display:inline-block;
 	align:center;
 	width:223px;
 	height:375px;

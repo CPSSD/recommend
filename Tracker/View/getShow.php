@@ -11,32 +11,37 @@
 			$season = $_GET["season"];
 			$json = file_get_contents("{$GLOBALS["ip"]}Tracker/index.php?type=tv_shows&id={$id}&season={$season}");
 			$obj = json_decode($json, true);
+            $db = new SQLite3($_SERVER['DOCUMENT_ROOT'].'/Tracker/database.db');
+
+            if(!$obj){
+                $_SESSION["message"] = "No Show with that ID";
+			    $url = "{$GLOBALS['ip']}Tracker/View/displayMessage.php";
+			    header( "Location: $url" );
+            }           
+
 			$seasonUp = strval(intval($season)+1); 
 			$seasonDown = strval(intval($season)-1); 
 			$util = new Util();
 			$type = "tv_shows";
+            $genre = $obj['genre'];
+            $genre = str_replace("+",", ",$genre);
+            include_once("Tracker/View/navbar.php");
 
 			echo "<div class='navigation'>";
-				echo "<a href=".$util->checkNextSeason($seasonDown,$id).">Previous Season |</a>";
-				echo "<a href=".$util->checkNextSeason($seasonUp,$id)."> Next Season</a>";
+                if($util->checkNextSeason($seasonDown,$id)){
+                    echo "<a href=".$util->nextSeason($seasonDown,$id).">Previous Season |</a>";
+                }
+                if($util->checkNextSeason($seasonUp,$id)){
+                    echo "<a href=".$util->nextSeason($seasonUp,$id)."> Next Season</a>";
+                }
 			echo "</div>";
 		?>
-			<div class='organise'>
-				<div style='float:right;margin-right:175px:'>
-				<p>Media Type: <select onChange='window.location.href=this.value;'>
-	 				<option value=''>--</option>
-					<?php echo "<option value='{$GLOBALS["ip"]}Tracker/View/getShowList.php?organise=1&page=0'>TV Shows</option>";
-	 				echo "<option value='{$GLOBALS["ip"]}Tracker/View/getFilmList.php?organise=1&page=0'>Films</option>";?>
-				</select>
-				</div>
-			</div>
 		
 			<div class='show_container'>
 					<div class='image' style='text-align:left'>
 					<?php echo "<img class='cover' src='" . $obj['image'] . "'/>";
 					echo "<p><b>Rating:</b> " . $obj['rating'] . " stars.</p>";
-					echo "<p><b>Age:</b> " . $obj['age'] . ".</p>";
-					echo "<p><b>Genre:</b> " . $obj['genre'] . ".</p>";
+					echo "<p><b>Genre:</b> " . $genre . ".</p>";
 					echo "</div>";
 					echo "<div style='width:500px;float:right;'>";
 					
@@ -49,17 +54,36 @@
 					</div>
 			</div>	
 
-		<div style='margin-left:180px;float:left;';>
-			<?php echo "<form action='../track.php?type={$type}&id={$id}' method='post'>";?>
-    				Would you like to track this show? 
-    				<input type='submit' name='formSubmit' value='Track' /> 
-			</form>
-		</div>	
+		<div style='margin-left:14%;float:left'>
+			<?php if(!$util->rowExists($db,"track"))
+			{
+				echo "<form action='../Model/track.php?type={$type}&id={$id}' method='post'>";
+    					echo "Would you like to track this film?";
+    					echo "<input type='submit' name='formSubmit' value='Track' />";
+				echo "</form>";
+			}else {
+				echo "<form action='../Model/track.php?type={$type}&id={$id}' method='post'>";
+    					echo "Would you like to untrack this show?";
+    					echo "<input type='submit' name='formSubmit' value='Untrack' />";
+				echo "</form>";
+			}?>
+		</div>
 
 		<div style='float:right;margin-right:180px'>
-			<?php echo "<form action='../insertLikes.php?type={$type}&id={$id}' method='post'>";?>
-    				<?php echo "Would you like to use this to get Recommendations?";?>
-    				<?php echo "<input type='checkbox' name='film[]' value='".$obj['name']."' /><input type='submit' value='Submit'>"; ?>
+			<?php if(!$util->rowExists($db,"likes"))
+            {
+                echo "<form action='../Model/insertLikes.php?type={$type}&id={$id}' method='post'>";
+        	        echo "Like Film to use for Recommendations!";
+        			echo "<input type='checkbox' name='film[]' value='".$obj['name']."&&&".$obj['id']."&&&".$obj['image']."'>";
+                    echo "<input type='submit' value='Submit'>";   
+                echo "</form>";  
+            }else{
+                echo "<form action='../Model/insertLikes.php?type={$type}&id={$id}' method='post'>";
+        	        echo "Don't like it anymore?";
+        			echo "<input type='checkbox' name='film[]' value='".$obj['name']."&&&".$obj['id']."&&&".$obj['image']."'>";
+                    echo "<input type='submit' value='Unlike'>"; 
+                echo "</form>"; 
+            }?>
 			</form>
 		</div>		
 	</body>

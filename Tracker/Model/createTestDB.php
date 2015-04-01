@@ -26,12 +26,12 @@ $result = $db->query($sql);
 
 // tv_shows table set up
 
-$db->exec('CREATE TABLE IF NOT EXISTS tv_shows(id INTEGER PRIMARY KEY, name TEXT, image TEXT, location TEXT, rating TEXT)');
+$db->exec('CREATE TABLE IF NOT EXISTS tv_shows(id INTEGER PRIMARY KEY, name TEXT, image TEXT, location TEXT, rating TEXT, genre TEXT)');
 
-$sql = "INSERT INTO tv_shows(name,image,location,rating) VALUES('ShowA','imageA.png','_a','8')";
+$sql = "INSERT INTO tv_shows(name,image,location,rating,genre) VALUES('ShowA','imageA.png','_a','8','Crime')";
 $result = $db->query($sql);
 
-$sql = "INSERT INTO tv_shows(name,image,location,rating) VALUES('ShowB','imageB.png','_b','10')";
+$sql = "INSERT INTO tv_shows(name,image,location,rating,genre) VALUES('ShowB','imageB.png','_b','10','Crime')";
 $result = $db->query($sql);
 
 // individual shows film set up

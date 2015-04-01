@@ -7,35 +7,25 @@
 		set_include_path("{$_SERVER['DOCUMENT_ROOT']}");
 		require_once('Tracker/View/Util.php'); 
 		require_once('Tracker/config.php');
-            	$page = $_GET["page"];
+        $page = $_GET["page"];
 		$type = $_GET['type'];
 		if($type == "films"){
 			$media = "film";
-		} else {$media = "tv_shows";}
+		} else {
+            $media = "tv_shows";
+        }
 
-		$json = file_get_contents("{$GLOBALS["ip"]}Tracker/index.php?type={$type}&page={$page}");
+		$json = file_get_contents("{$GLOBALS["ip"]}Tracker/index.php?type={$type}&organise=1&page={$page}&order=ASC");    
 		$obj = json_decode($json, true);
-			
+		
 		$column = 0;
 		$row = 0;
 		$per_row = 3;
 		$util = new Util();
-	?>
-		<div style='margin-top:20px;float:left'>
-		<p>Media Type: <select onChange='window.location.href=this.value;'>";
- 			<?php echo "<option value=''>{$type}</option>";
-			echo "<option value='{$GLOBALS["ip"]}Tracker/View/getLikes.php?type=tv_shows&page=0'>Like TV Shows</option>";
- 			echo "<option value='{$GLOBALS["ip"]}Tracker/View/getLikes.php?type=films&page=0'>Films</option>";?>
-			</select>
-		</div>
-		<div style='margin-left:275px'>
-			<?php echo "<p>Check the {$type} you like so we can make Recommendations for you!!</p>"?>
-			<?php echo "<p><a href='{$GLOBALS["ip"]}Tracker/View/getFilmList.php?page=0&organise=0'><b>Main Page</b></a>";?>
-		</div>
+        include_once('Tracker/View/navbar.php');	
 
-	<?php
 		echo "<div class='show_container'>";
-			echo "<form method='post' action ='../insertLikes.php?type={$type}&page={$page}'>";
+			echo "<form method='post' action ='../Model/insertLikes.php?type={$type}&page={$page}'>";
 			echo "<table style='width:100%;text-align:left;'>";
 			echo "<tr>";
 			foreach($obj[$type] as $movie){
@@ -45,8 +35,8 @@
 				}
 				echo "<td><img class='cover' src='" . $movie['image'] . "'/><p></p>"; 
 				echo "<div style='text-align:left;max-width:3px; white-space: nowrap;text-overflow: ellipsis;'>" .$name."";
-				echo "<input type='checkbox' name='film[]' value='".$movie['name']."'>";
-				echo "</div>";				
+				echo "<input type='checkbox' name='film[]' value='".$movie['name']."&&&".$movie['id']."&&&".$movie['image']."'>";	
+                echo "</div>";		
 				echo "</td>";
 				$column++;
 				if($column >= $per_row){

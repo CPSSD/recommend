@@ -5,18 +5,33 @@ include_once('Tracker/Model/Essentials.php');
 
 class TV extends SQLite3{
 
-	public function showLikes($page){
-		$db = new SQLite3('database.db');
-		$type = 'tv_shows';
-		$essen = new Essentials();
-		$essen->likes($db,$type,$page);
-	}
+    public function userShowLikes(){
+    
+    }
 
-	public function searchShow($show){
-		$db = new SQLite3('database.db');
-		$type = "tv_shows";
-		$essen = new Essentials();
-		$essen->search($db,$type,$show);
+	public function searchShows($db,$type,$search){
+        if (strpos($search,'%20') !== false){
+			$sub = explode(' ',$search,2);
+			$sql = "SELECT name,image,id,rating FROM `{$type}` WHERE name LIKE '%{$sub[0]}%' AND name LIKE '%{$sub[1]}%' ORDER BY name DESC LIMIT 24";	
+		}else{
+			$sql = "SELECT name,image,id,rating FROM `{$type}` WHERE name LIKE '%{$search}%' ORDER BY name DESC LIMIT 24";	
+		}
+
+		$retval = $db->query($sql);
+		echo "{\"{$type}\":[";
+ 		$tick = 0;
+ 		while($row = $retval->fetchArray()){
+ 		    if ($tick != 0){
+ 			echo ",";
+ 		    }
+ 		    $tick++;
+		    echo json_encode(array("status" => "okay",
+		                           "name" => $row["name"],
+		                           "rating" => $row["rating"],
+					               "id" => $row["id"],
+					               "image" => $row["image"]));
+		}
+ 		echo "]}";
 	}
 	
 	public function getEpisodes($id_list, $date1) {
@@ -50,13 +65,11 @@ class TV extends SQLite3{
 					if($row["episode"] < 10 && $row["episode"][0] != "0") {
 						$row["episode"] = "0".$row["episode"];
 					}
-					echo json_encode(array(	"status" => "okay",
-											"show" => $show_data["name"],
-											"show-id" => $show_data["id"],
-											"season" => $row["season"],
-											"episode" => $row["episode"],
-											"title" => $row["title"]
-											));
+					echo '{"show":"'.$show_data["name"].'",';
+					echo '"show-id":'.$show_data["id"].',';
+					echo '"season":"'.$row["season"].'",';
+					echo '"episode":"'.$row["episode"].'",';
+					echo '"title":"'.$row["title"].'"}';
 					$episode_tick+=1;
 				}
 			}
@@ -67,57 +80,66 @@ class TV extends SQLite3{
 		echo "}";
 	}
 
-	public function getShow($id,$season){
-		$db = new SQLite3('database.db');
-		$retval = $db->query("SELECT * FROM `tv_shows` WHERE id = {$id}");
-		$row = $retval->fetchArray();
-		$table = $row["location"];
-		$show_data = $row;
+	public function getShow($db,$type,$id,$season){
+        $essen = new Essentials();
+        if($essen->getMaxID($type,$db) >= $id && $id > 0){
+		    $retval = $db->query("SELECT * FROM `tv_shows` WHERE id = {$id}");
+		    $row = $retval->fetchArray();
+		    $table = $row["location"];
+		    $show_data = $row;
 
-		$sql2 = "SELECT * FROM {$table} WHERE season = {$season}";
-		$result = $db->query($sql2);
+		    $sql2 = "SELECT * FROM {$table} WHERE season = {$season}";
+		    $result = $db->query($sql2);
 		
-		echo '{"name":"' . $show_data['name'] . '",';
-		echo '"id":"' . $show_data['id'] . '",';
-		echo '"rating":"' . $show_data['rating'] . '",';
-		echo '"image":"' . $show_data['image'] . '",';
-		echo "\"show\":[";
-		$tick = 0;
-		$initial_air_date = null;
-		while($row = $result->fetchArray()){
-		    if ($tick != 0){
-				echo ",";
-		    } else {
-				$initial_air_date = $row['date'];
-			}
-		    $tick++;
-		    echo json_encode(array("status" => "okay",
-		                           "tile" => $row["title"],
-		                           "season" => $row["season"],
-		                           "episode" => $row["episode"],
-					   "date" => $row["date"]));
-		}
-		echo "], ";
-		echo '"date":"' . $initial_air_date . '"}';
+		    echo '{"name":"' . $show_data['name'] . '",';
+		    echo '"id":"' . $show_data['id'] . '",';
+		    echo '"rating":"' . $show_data['rating'] . '",';
+            echo '"genre":"' . $show_data['genre'] . '",';
+		    echo '"image":"' . $show_data['image'] . '",';
+		    echo "\"show\":[";
+		    $tick = 0;
+		    $initial_air_date = null;
+		    while($row = $result->fetchArray()){
+		        if ($tick != 0){
+				    echo ",";
+		        } else {
+				    $initial_air_date = $row['date'];
+			    }
+		        $tick++;
+		        echo json_encode(array("status" => "okay",
+		                               "tile" => $row["title"],
+		                               "season" => $row["season"],
+		                               "episode" => $row["episode"],
+					       "date" => $row["date"]));
+		    }
+		    echo "], ";
+		    echo '"date":"' . $initial_air_date . '"}';
+        }
 	}
 
-	public function getShowList($organise, $page){
-		$db = new SQLite3('database.db');
-		if($organise == "2"){
-			$organise = "rating";
-			$sql = "SELECT name,image,rating,id FROM `tv_shows` ORDER BY {$organise} DESC LIMIT 24 OFFSET {$page}";
-		} else if ($organise == "1"){
-			$organise = "name";
-			$sql = "SELECT name,image,rating,id FROM `tv_shows` ORDER BY {$organise} LIMIT 24 OFFSET {$page}";
-		} else if ($organise == "0"){
-			$organise = "date";
-			$sql = "SELECT name,image,rating,id FROM `tv_shows` ORDER BY {$organise} LIMIT 24 OFFSET {$page}";
-		} else {
-			$organise = "name";
-			$sql = "SELECT name,image,rating,id FROM `tv_shows` ORDER BY {$organise} LIMIT 24 OFFSET {$page}";
-		}
-		$type = "tv_shows";
+	public function getShowList($db,$type,$organise,$page,$order){
+		$pageParam = intval($page);
+		$offset = $pageParam * 24;
+        if($organise == "1"){
+            $organise = "name";
+            $sql = "SELECT name,image,genre,rating,id FROM `{$type}` ORDER BY {$organise} {$order} LIMIT 24 OFFSET {$offset}";
+        }else{
+            $organise = "rating";
+            $sql = "SELECT name,image,genre,rating,id FROM `{$type}` ORDER BY {$organise} {$order} LIMIT 24 OFFSET {$offset}";
+        }
+		
 		$essen = new Essentials();
-		$essen->getList($organise,$page,$type,$db);
+
+		$retval = $db->query($sql);
+		echo "{\"{$type}\":[";
+		$tick = 0;
+		while($row = $retval->fetchArray()){
+		    if ($tick != 0){
+			echo ",";
+		    }
+		    $tick++;
+		    echo json_encode($essen->createArrayFromData($sql, $row));
+		}
+		echo "]}";
 	}
 }

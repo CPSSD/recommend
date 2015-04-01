@@ -1,53 +1,60 @@
 <?php session_start();?>
 <html>
-<link rel="stylesheet" type="text/css" href="css/recommend.css" />
+<link rel="stylesheet" type="text/css" href="css/styleList.css" />
 	<title>Tracker - Recommendations</title>
 	<body>
 		<?php
 			$id = $_SESSION['userID'];
 			set_include_path("{$_SERVER['DOCUMENT_ROOT']}");
 			require_once('Tracker/config.php');
-			$json = file_get_contents("{$GLOBALS["ip"]}Tracker/index.php?type=films&filmRecommendations=$id");
-			//var_dump($json);
-			$obj = json_decode($json, true);
-			$column = 0;
-			$row = 0;
-			$per_row = 1;
+            include_once('Tracker/View/Util.php');
+            $type = $_GET['type'];
+			$json1 = file_get_contents("{$GLOBALS["ip"]}Tracker/index.php?type=films&recommendations=$id");
+            $json2 = file_get_contents("{$GLOBALS["ip"]}Tracker/index.php?type=tv_shows&recommendations=$id");
+			$obj1 = json_decode($json1, true);
+            $obj2 = json_decode($json2, true);
+		    $column = 0;
+		    $row = 0;
+		    $per_row = 4;
+		    $util = new Util();
 		?>
 
-		<?php echo "<div class='show_container'>";
-			echo "<table style='border-spacing:1.5em;top:15px'>"; 
-				echo "<caption><h2>Recommendations</h></caption>";
-					foreach($obj['films'] as $movie){
-						echo "<div class='image'>";
-						echo "<tr><td><a href='{$GLOBALS["ip"]}Tracker/View/getFilm.php?id=" . $movie['id'] . "'>";
-						echo "<img class='cover' src='" . $movie['image'] . "'/></td></a></img>";
-						echo "<td><p><b>Name:</b> " . $movie['name'] . "</p>";
-						echo "<p><b>Date:</b> " . $movie['date'] . "</p>";
-						echo "<p><b>Starring:</b> " . $movie['starring'] . "</p>";
-						echo "<p><b>Rating:</b> " . $movie['rating'] . " stars.</p>";
-						echo "<p><b>Directed By:</b> " . $movie['director'] . "</p>";
-						echo "<p><b>Synopsis:</b>" . $movie['synopsis'] . "</p></tr></td>";
-						$column++;
-						if($column >= $per_row){
-							$column=0;
-							$row++;
-							echo "<br />";
-						}
-					}
-					echo "</div>";
-			echo "</table>";
-		echo "</div";
-						echo "div style='float:left;'";
-						echo "<p>Go to List: <select onChange='window.location.href=this.value;'>";
-		 					echo "<option value=''>--</option>";
-							echo "<option value='{$GLOBALS["ip"]}Tracker/View/getShowList.php?organise=1&page=0'>TV Shows</option>";
-		 					echo "<option value='{$GLOBALS["ip"]}Tracker/View/getFilmList.php?organise=1&page=0'>Films</option>";
-						echo "</select>";
-						echo "</div>";
-					;?>
-				
-			</table>
+        <?php include_once('Tracker/View/navbar.php');?>
+			
+			<?php echo "<div class='show_container'>";
+			# Displays info for each movie.
+			foreach($obj1['films'] as $movie){
+				echo "<div class='image'>";
+				echo "<a href='{$GLOBALS["ip"]}Tracker/View/getFilm.php?type=films&id=" . $movie['id'] . "'>";
+				echo "<img class='cover' src='" . $movie['image'] . "'/>";
+				echo "<p><b>Name:</b> " . $movie['name'] . "<br />";
+				echo "<b>Date:</b> " . $movie['date'] . "<br />";
+				echo "<b>Rating:</b> " . $movie['rating'] . " stars.</p>";
+				echo "</a></div>";
+				$column++;
+				if($column >= $per_row){
+					$column=0;
+					$row++;
+					echo "<br />";
+				}
+            }
+            foreach($obj2['tv_shows'] as $show){
+				echo "<div class='image'>";
+				echo "<a href='{$GLOBALS["ip"]}Tracker/View/getShow.php?type=films&season=1&id=" . $show['id'] . "'>";
+				echo "<img class='cover' src='" . $show['image'] . "'/>";
+				echo "<p><b>Name:</b> " . $show['name'] . "<br />";
+				echo "<b>Date:</b> " . $show['date'] . "<br />";
+				echo "<b>Rating:</b> " . $show['rating'] . " stars.</p>";
+				echo "</a></div>";
+				$column++;
+				if($column >= $per_row){
+					$column=0;
+					$row++;
+					echo "<br />";
+				}             
+            }			
+			echo "</div>";?>
+
 		</div>
 	</body>
 </html>
