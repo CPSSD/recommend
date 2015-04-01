@@ -13,5 +13,5 @@ _- phpunit FilmTest.php runs the film tests_ <br />
 * TV: <br />
 _- phpunit TVTest.php runs the TV tests_ <br />
 
-*API: <br />
+* API: <br />
 _- phpunit APITest.php runs the API Tester_ <br />
