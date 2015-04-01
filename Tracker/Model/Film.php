@@ -94,33 +94,117 @@ class Film extends SQLite3{
  		echo "]}";
 	}
 	
-	public function getEpisodes($db,$id_list, $date1) {
-		$film_tick = 0;
-		$essen = new Essentials();
-		$date_list = $essen->generateDates($date1);
+	public function getFilmsFromDay($id_list, $date, $db){
+		$data = [];
+		$sql = "SELECT * FROM 'films' WHERE date = \"{$date}\"";
+		$result = $db->query($sql);
+		$tick = 0;
+		while($row = $result->fetchArray()){
+			if (in_array($row["id"], $id_list)){
+				$data[$tick] = "{\"name\":\"{$row["name"]}\",\"id\":\"{$row["id"]}\"}";
+				$tick ++;
+			}
+		}
+		return $data;
+	}
+	
+	public function generateCalendarDay($date, $id_list, $db, $essen){
 		echo "{";
-		foreach($date_list as $date){
-			if ($film_tick != 0){
+		for($i = 0; $i <= 2; $i++){
+			echo '"hidden'.$i.'": { "date":"2000-01-01", "pretty-date": "hidden", "episodes": []},';
+		}
+		$show_tick = 0;
+		$episode_data = $this->getFilmsFromDay($id_list, $date, $db);
+		if ($show_tick != 0){
+			echo ",";
+		}
+		echo '"'.$date.'":{"date":"'.$date.'",';
+		echo '"pretty-date":"'.$essen->getPrettyDate($date).'",';
+		echo '"movies":[';
+		$episode_tick = 0;
+		foreach ($episode_data as $episode){
+			if ($episode_tick != 0){
 				echo ",";
 			}
-			echo "\"{$date}\": {";
-			echo "\"date\":\"{$date}\",";
+			echo $episode;
+			$episode_tick += 1;
+		}
+		echo "]}}";
+		$total_episode_count = 0;
+		$show_tick += 1;
+		$episode_tick = 0;
+	}
+	
+	public function generateCalendar($date1, $id_list, $db, $essen, $offset, $offset_backwards, $depth){
+		$date_list = $essen->generateDates($date1, $offset, $offset_backwards, $depth);
+		$episode_tick = 0;
+		$show_tick = 0;
+		echo "{";
+		foreach($date_list as $date){
+			$episode_data = $this->getFilmsFromDay($id_list, $date, $db);
+			if ($show_tick != 0){
+				echo ",";
+			}
+			echo '"'.$date.'":{"date":"'.$date.'",';
 			echo '"pretty-date":"'.$essen->getPrettyDate($date).'",';
-			echo "\"movies\": [";
-			$sql = "SELECT * FROM 'films' WHERE date = \"{$date}\"";
-			$result = $db->query($sql);
-			while($row = $result->fetchArray()){
-				if (in_array($row["id"], $id_list)){
-					echo "{\"name\":\"{$row["name"]}\",";
-					echo "\"id\":\"{$row["id"]}\"}";
+			echo '"movies":[';
+			$episode_tick = 0;
+			foreach ($episode_data as $episode){
+				if ($episode_tick != 0){
+					echo ",";
 				}
+				echo $episode;
+				$episode_tick += 1;
 			}
 			echo "]}";
-			$film_tick++;
+			$total_episode_count = 0;
+			$show_tick += 1;
+			$episode_tick = 0;
 		}
 		echo "}";
 	}
-
+		
+	public function generateYearCalendar($year, $id_list, $db, $essen){
+		echo "{";
+		$total_episode_count = 0;
+		$date_list = $essen->generateMonthDates($year);
+		$m = "01";
+		$total_episode_count = 0;
+		foreach ($date_list as $date){
+			$cur_m = explode("-", $date)[1];
+			if($cur_m == $m){
+				$episode_data = $this->getFilmsFromDay($id_list, $date, $db);
+				$total_episode_count += sizeof($episode_data);
+			} else if($cur_m != "01"){
+				echo "\"{$m}\": {";
+				echo '"date":"'.$m.'",';
+				echo '"pretty-date":"'.date('F', strtotime($year."-".$m."-01")).'",';
+				echo '"status": "okay","count": '.$total_episode_count;
+				echo "}";
+				if($m != "12"){
+					echo ",";
+				}
+				$m = $cur_m;
+				$total_episode_count = 0;
+			}
+		}
+		echo "}";
+	}
+	
+	public function getEpisodes($id_list, $date1, $range) {
+		$db = new SQLite3('database.db');
+		$essen = new Essentials();
+		if ($range == "year"){
+			$this->generateYearCalendar(explode("-", $date1)[0], $id_list, $db, $essen);
+		} else if ($range == "week"){
+			$this->generateCalendar($date1, $id_list, $db, $essen, 7, 0, 1);
+		} else if ($range == "day"){
+			$this->generateCalendarDay($date1, $id_list, $db, $essen);
+		} else {
+			$this->generateCalendar($date1, $id_list, $db, $essen, 7, 7, 5);
+		} 
+	}
+	
 	public function getFilmList($db,$type,$organise,$page,$order){
         $essen = new Essentials();
         $maxPage = floor($essen->getMaxID($type,$db) / 24);

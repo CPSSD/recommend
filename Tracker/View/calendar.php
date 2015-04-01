@@ -48,13 +48,15 @@
 					echo "<div class=\"calendar-title-default{$extraTitle}\">{$section['pretty-date']} - ".explode("-", $date1)[0]."</div>";
 					echo "<div class=\"calendar-content-default{$extraContent}\">";
 						echo "<ul class=\"calendar-list\">";
-							if ($media == "tv"){
-								if ($section["count"] == 0){
-									echo "<li class=\"empty\"><a class=\"empty\"><div>Track More Shows?</div></a></li>";
-								} else {
-									$click_date = explode("-", $date1)[0] . "-" . $section["date"] . "-" . "08";
-									echo "<li class=\"empty\"><a href='{$GLOBALS["ip"]}Tracker/View/calendar.php?q={$media}&range=month&date={$click_date}'><div>{$section['count']} Episodes</div></a></li>";
+							if ($section["count"] == 0){
+								echo "<li class=\"empty\"><a class=\"empty\"><div>Track More Shows?</div></a></li>";
+							} else {
+								$click_date = explode("-", $date1)[0] . "-" . $section["date"] . "-" . "08";
+								$media_display = "Episodes";
+								if ($media == "film"){
+									$media_display = "Films";
 								}
+								echo "<li class=\"empty\"><a href='{$GLOBALS["ip"]}Tracker/View/calendar.php?q={$media}&range=month&date={$click_date}'><div>{$section['count']} {$media_display}</div></a></li>";
 							}
 						echo '</ul>';
 					echo '</div>';
