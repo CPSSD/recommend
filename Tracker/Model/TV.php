@@ -202,10 +202,10 @@ class TV extends SQLite3{
 		$offset = $pageParam * 24;
         if($organise == "1"){
             $organise = "name";
-            $sql = "SELECT name,image,genre,rating,id FROM `{$type}` ORDER BY {$organise} {$order} LIMIT 24 OFFSET {$offset}";
+            $sql = "SELECT name,image,rating,genre,id FROM `{$type}` ORDER BY {$organise} {$order} LIMIT 24 OFFSET {$offset}";
         }else{
             $organise = "rating";
-            $sql = "SELECT name,image,genre,rating,id FROM `{$type}` ORDER BY {$organise} {$order} LIMIT 24 OFFSET {$offset}";
+            $sql = "SELECT name,image,rating,genre,id FROM `{$type}` ORDER BY {$organise} {$order} LIMIT 24 OFFSET {$offset}";
         }
 		
 		$essen = new Essentials();
