@@ -46,6 +46,11 @@ class Controller{
 			if(isset($_GET["date"]) && isset($_GET["media"])){
 				$db = new SQLite3('database.db');
 				$type = $_GET["media"];
+				if (isset($_GET['range'])){
+					$range = $_GET['range'];
+				} else {
+					$range = "month";
+				}
 				if (isset($_GET['uid'])){
 					$userID = $_GET['uid'];
 					if($type == "film"){
@@ -62,12 +67,12 @@ class Controller{
 						$tracking = [];
 					}$media_type = $_GET["media"];
 					if ($media_type == "tv"){
-						$this->tv_show->getEpisodes($tracking, $_GET["date"]);
+						$this->tv_show->getEpisodes($tracking, $_GET["date"], $range);
 					} else {
-						$this->film->getEpisodes($tracking, $_GET["date"]);
+						$this->film->getEpisodes($tracking, $_GET["date"], $range);
 					}
 				} else {
-					$this->tv_show->getEpisodes(array(), $_GET["date"]);
+					$this->tv_show->getEpisodes(array(), $_GET["date"], $range);
 				}
 			}
 		} else {

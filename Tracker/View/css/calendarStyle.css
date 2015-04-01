@@ -33,6 +33,10 @@ div.calendar-day{
 	border-color:blue;
 }
 
+div.hidden{
+	visibility:hidden;
+}
+
 div.calendar-title-default{
 	position:relative;
 	text-align: center;

@@ -19,51 +19,110 @@ class TV extends SQLite3{
 		$essen->search($db,$type,$show);
 	}
 	
-	public function getEpisodes($id_list, $date1) {
-		$db = new SQLite3('database.db');
+	public function getEpisodesFromDay($id_list, $date, $db){
+		$data = [];
+		$episode_tick = 0;
+		foreach($id_list as $id){
+			$retval = $db->query("SELECT id,name,location FROM 'tv_shows' WHERE id = {$id}");
+			$row = $retval->fetchArray();
+			$table = $row["location"];
+			$show_data = $row;
+			$retval = $db->query("SELECT season,episode,title FROM '{$table}' WHERE date = \"{$date}\"");
+			while (($row = $retval->fetchArray()) != null){
+				if($row["season"] < 10 && $row["season"][0] != "0") {
+					$row["season"] = "0".$row["season"];
+				}
+				if($row["episode"] < 10 && $row["episode"][0] != "0") {
+					$row["episode"] = "0".$row["episode"];
+				}
+				$data[$episode_tick] = json_encode(array(	"status" => "okay",
+										"show" => $show_data["name"],
+										"show-id" => $show_data["id"],
+										"season" => $row["season"],
+										"episode" => $row["episode"],
+										"title" => $row["title"]
+										));
+				$episode_tick+=1;
+			}
+		}
+		return $data;
+	}
+	
+	public function generateCalendarDay($date, $id_list, $db, $essen){
+		echo "{";
+		for($i = 0; $i <= 2; $i++){
+			echo '"hidden'.$i.'": { "date":"2000-01-01", "pretty-date": "hidden", "episodes": []},';
+		}
+		$show_tick = 0;
+		$episode_data = $this->getEpisodesFromDay($id_list, $date, $db);
+		if ($show_tick != 0){
+			echo ",";
+		}
+		echo '"'.$date.'":{"date":"'.$date.'",';
+		echo '"pretty-date":"'.$essen->getPrettyDate($date).'",';
+		echo '"episodes":[';
+		$episode_tick = 0;
+		foreach ($episode_data as $episode){
+			if ($episode_tick != 0){
+				echo ",";
+			}
+			echo $episode;
+			$episode_tick += 1;
+		}
+		echo "]}}";
+		$total_episode_count = 0;
+		$show_tick += 1;
+		$episode_tick = 0;
+	}
+	
+	public function generateCalendar($date1, $id_list, $db, $essen, $offset, $offset_backwards, $depth){
+		$date_list = $essen->generateDates($date1, $offset, $offset_backwards, $depth);
 		$episode_tick = 0;
 		$show_tick = 0;
-		$essen = new Essentials();
-		$date_list = $essen->generateDates($date1);
 		echo "{";
 		foreach($date_list as $date){
+			$episode_data = $this->getEpisodesFromDay($id_list, $date, $db);
 			if ($show_tick != 0){
 				echo ",";
 			}
 			echo '"'.$date.'":{"date":"'.$date.'",';
 			echo '"pretty-date":"'.$essen->getPrettyDate($date).'",';
 			echo '"episodes":[';
-			foreach($id_list as $id){
-				$retval = $db->query("SELECT id,name,location FROM 'tv_shows' WHERE id = {$id}");
-				$row = $retval->fetchArray();
-				$table = $row["location"];
-				$show_data = $row;
-				$retval = $db->query("SELECT season,episode,title FROM '{$table}' WHERE date = \"{$date}\"");
-				while (($row = $retval->fetchArray()) != null){
-					if ($episode_tick != 0){
-						echo ",";
-					}
-					if($row["season"] < 10 && $row["season"][0] != "0") {
-						$row["season"] = "0".$row["season"];
-					}
-					if($row["episode"] < 10 && $row["episode"][0] != "0") {
-						$row["episode"] = "0".$row["episode"];
-					}
-					echo json_encode(array(	"status" => "okay",
-											"show" => $show_data["name"],
-											"show-id" => $show_data["id"],
-											"season" => $row["season"],
-											"episode" => $row["episode"],
-											"title" => $row["title"]
-											));
-					$episode_tick+=1;
+			$episode_tick = 0;
+			foreach ($episode_data as $episode){
+				if ($episode_tick != 0){
+					echo ",";
 				}
+				echo $episode;
+				$episode_tick += 1;
 			}
+			echo "]}";
+			$total_episode_count = 0;
 			$show_tick += 1;
 			$episode_tick = 0;
-			echo "]}";
 		}
 		echo "}";
+	}
+		
+	public function generateYearCalendar($date1, $id_list, $db, $essen){
+		echo "{";
+		echo '"pretty-date":"Date goes here.",';
+		echo '"status": "okay","count": '.$total_episode_count;
+		echo "}}";
+	}
+	
+	public function getEpisodes($id_list, $date1, $range) {
+		$db = new SQLite3('database.db');
+		$essen = new Essentials();
+		if ($range == "year"){
+			$this->generateYearCalendar($date1, $id_list, $db, $essen);
+		} else if ($range == "week"){
+			$this->generateCalendar($date1, $id_list, $db, $essen, 7, 0, 1);
+		} else if ($range == "day"){
+			$this->generateCalendarDay($date1, $id_list, $db, $essen);
+		} else {
+			$this->generateCalendar($date1, $id_list, $db, $essen, 7, 7, 5);
+		} 
 	}
 
 	public function getShow($id,$season){

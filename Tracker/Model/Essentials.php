@@ -135,16 +135,16 @@ class Essentials{
 		}
 		return $this->cleanDate($date2);
 	}
-
-	public function generateDates($date1){
+	
+	public function generateDates($date1, $offset, $backwards_offset, $depth){
 		$timestamp = strtotime($date1);
 		$date1 = explode("-", $date1);
-		$dayOffset = date("N", $timestamp)-1+7;
+		$dayOffset = date("N", $timestamp)-1+$backwards_offset;
 		$date1 = $this->getDateOffset($date1, $dayOffset, "back");
-		$date2 = $this->getDateOffset($date1, 7*5, "forward");
+		$date2 = $this->getDateOffset($date1, $offset*$depth, "forward");
 		$date_list = [];
 		$tick = 0;
-		
+				
 		# Add in year support eventually.
 		$tick = 0;
 		$y = $date1[0];
