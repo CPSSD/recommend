@@ -5,7 +5,6 @@ import unittest
 
 # Unit Testing for the Film Crawler.
 class TestCrawler(unittest.TestCase):
-    print("Test")
 
     def test_wikipedia_scrape(self):
         ''' Scraped data should be cleaned '''

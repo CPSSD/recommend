@@ -5,11 +5,16 @@
 	<title>Tracker - Calendar</title>
 	<body>
 	
-		<h1 class="title">Calendar</h1>
 		<?php
 			set_include_path("{$_SERVER['DOCUMENT_ROOT']}");
 			require_once('Tracker/config.php');
 			session_start();
+			require_once('Tracker/View/navbar.php');
+			
+		?>
+	
+		<h1 class="title">Calendar</h1>
+		<?php
 			$date1 = date("Y-m-d");
 			if (isset($_GET["date"])){
 				$date1 = $_GET["date"];
