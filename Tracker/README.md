@@ -1,7 +1,10 @@
-Tracker:
+# Tracker:
 
-Controller: Contains class for controlling what the server grabs from the database
+### Set up IP
 
-Model: Contains 'Film','Tv' and 'Essential' classes. Responsible for getting info from database and returning to the View pages
+* Currently set to 'http://cpssd5-web.computing.dcu.ie/' in config file<br />
+* Set to 'localhost' for local testing<br />
 
-View: Contains html and css to display the info grabbed from the server.
+### Homepage of website: http://cpssd5-web.computing.dcu.ie/Tracker/
+
+
