@@ -104,18 +104,38 @@ class TV extends SQLite3{
 		echo "}";
 	}
 		
-	public function generateYearCalendar($date1, $id_list, $db, $essen){
+	public function generateYearCalendar($year, $id_list, $db, $essen){
 		echo "{";
-		echo '"pretty-date":"Date goes here.",';
-		echo '"status": "okay","count": '.$total_episode_count;
-		echo "}}";
+		$total_episode_count = 0;
+		$date_list = $essen->generateMonthDates($year);
+		$m = "01";
+		$total_episode_count = 0;
+		foreach ($date_list as $date){
+			$cur_m = explode("-", $date)[1];
+			if($cur_m == $m){
+				$episode_data = $this->getEpisodesFromDay($id_list, $date, $db);
+				$total_episode_count += sizeof($episode_data);
+			} else if($cur_m != "01"){
+				echo "\"{$m}\": {";
+				echo '"date":"'.$m.'",';
+				echo '"pretty-date":"'.date('F', strtotime($year."-".$m."-01")).'",';
+				echo '"status": "okay","count": '.$total_episode_count;
+				echo "}";
+				if($m != "12"){
+					echo ",";
+				}
+				$m = $cur_m;
+				$total_episode_count = 0;
+			}
+		}
+		echo "}";
 	}
 	
 	public function getEpisodes($id_list, $date1, $range) {
 		$db = new SQLite3('database.db');
 		$essen = new Essentials();
 		if ($range == "year"){
-			$this->generateYearCalendar($date1, $id_list, $db, $essen);
+			$this->generateYearCalendar(explode("-", $date1)[0], $id_list, $db, $essen);
 		} else if ($range == "week"){
 			$this->generateCalendar($date1, $id_list, $db, $essen, 7, 0, 1);
 		} else if ($range == "day"){
