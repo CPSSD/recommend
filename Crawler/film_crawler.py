@@ -16,9 +16,10 @@ config = file.get_config_data("crawler.config")
 
 # Chooses which database to use.
 # Defaults to sqlite.
-from util import sqlite_connector as db
+from util import sqlite_connector as database
 if config['database_type'] == 'mysql':
-    from util import mysql_connector as db
+    from util import mysql_connector as database
+db = database.Database()
 db.config = config
 
 # Crawls through a 'YEAR_in_film' wikipedia page.

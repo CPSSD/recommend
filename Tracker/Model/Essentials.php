@@ -189,6 +189,7 @@ class Essentials{
 				$startDate = $date1[2];
 			}
 			for ($d = $startDate; $d <= $endDate; $d++){
+				if($d < 10 && $d[0] != "0") {
 					$d = "0".$d;
 				}
 				$date_list[$tick] = "{$y}-{$m}-{$d}";

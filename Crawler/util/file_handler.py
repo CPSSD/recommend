@@ -3,7 +3,7 @@ import util
 file = None
 
 def open_file(file_name, type):
-    print("* Opening %s" % file_name)
+    #print("* Opening %s" % file_name)
     global file
     file = open(file_name, type)
     
