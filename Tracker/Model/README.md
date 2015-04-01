@@ -1,18 +1,16 @@
 Model:
 
-Unit Testing is done using PHPunit. This can be gotten and make excecutable by issueing commands;
+### Unit Testing is done using PHPunit 
+* This can be gotten and make excecutable by issueing commands:<br />
+ _- ➜ wget https://phar.phpunit.de/phpunit.phar_ <br />
+ _- ➜ chmod +x phpunit.phar_ <br />
 
-➜ wget https://phar.phpunit.de/phpunit.phar
+* Run http://cpssd5-web.computing.dcu.ie/Tracker/Model/createTestDB.php to create the database for testing the Server<br />
 
-➜ chmod +x phpunit.phar
+* Film: <br />
+_- phpunit FilmTest.php runs the film tests_ <br />
 
-Run createTestDB.php to create the database for testing the Server.
-
-Paths had to be hardcoded in test files as $_SERVER['DOCUMENT_ROOT']} wouldn't work. 
-
-
-Film: phpunit FilmTest.php runs the film tests
-
-TV: phpunit TVTest.php runs the TV tests
+* TV: <br />
+_- phpunit TVTest.php runs the TV tests_ <br />
 
 
