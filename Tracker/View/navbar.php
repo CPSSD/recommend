@@ -49,15 +49,17 @@ if($query == "films"){
 					    echo "<li><a href=''>Advanced Search Options</a></li>";?>
 				    </ul>
 				</li>
-			        <li><a href="#">User</a>
-				    <ul>
 					<?php 
 					    if (isset($_SESSION['userID'])){
+							echo "<li><a href='#'>{$_SESSION['username']}</a>";
+							echo "<ul>";
 					        echo "<li><a href='logout.php'>Logout</a></li>";
                             echo "<li><a href='recommendations.php?type={$type}&recommendations={$_SESSION['userID']}'>Recommendations</a></li>";
                             echo "<li><a href='calendar.php?q=films'>Personal Calendar</a></li>";
                             echo "<li><a href='viewLikes.php?type=films&userID={$_SESSION['userID']}'>View Likes</a></li>";
 					    }else{
+							echo "<li><a href='#'>User</a>";
+							echo "<ul>";
                             echo "<li><a href='signUp.html'>Sign Up</a></li>";
 					        echo "<li><a href='login.html'>Log In</a></li>";
 					    }
