@@ -21,7 +21,9 @@ db = database.Database()
 def get_root(url):
     util.debug_print(url)
     string = requests.get(url).text
-    string = util.clean_text(string)
+    string = string.replace("\n", " ")
+    string = string.replace("\r", "")
+    string = util.remove_accents(string)
     return xml.fromstring(string)
 
 def get_mirror():
@@ -135,23 +137,24 @@ def update_show_data(show_limit):
     file.open_file("tvdb_problems.txt", "w")
     db.open_database_connection(True, tv.tv_show_schema, config['database_file_name'], "tv_shows", tv.tv_show_vartype)
     for saved_data in series_list:
-        if show_limit == -1 or tick < show_limit:
+        if tick > config['episode_offset']:   
+    #    if show_limit == -1 or tick < show_limit:
             util.debug_print(saved_data)
             series = saved_data['name']
-            try:
-                series_info = get_series(series, saved_data['imdb_url'])
-                if series_info != None:
-                    series_data = get_series_data(series_info['id'])
-                    update_episode_data(saved_data['location'], series_data);
-                    new_data = clean_data(compare_data(saved_data, series_data[0]))
-                    db.write_to_database(new_data, tv.tv_show_layout)
-                    print "%d: Success with" % tick, series
-                else:
-                    print "%d: Error with" % tick, series
-                    file.output("%d: Error: -> %s" % (tick, series))
-            except Exception as e:
-                print "%d: Exception with" % tick, series
-                file.output("%d: Exception: -> %s" % (tick, series))
+            #try:
+            series_info = get_series(series, saved_data['imdb_url'])
+            if series_info != None:
+                series_data = get_series_data(series_info['id'])
+                update_episode_data(saved_data['location'], series_data);
+                new_data = clean_data(compare_data(saved_data, series_data[0]))
+                db.write_to_database(new_data, tv.tv_show_layout)
+                print "%d: Success with" % tick, series
+            else:
+                print "%d: Error with" % tick, series
+                file.output("%d: Error: -> %s" % (tick, series))
+            #except Exception as e:
+            #    print "%d: Exception with" % tick, series
+            #    file.output("%d: Exception: -> %s" % (tick, series))
         tick += 1
         util.debug_print("***************************")
     db.close_database_connection()   
