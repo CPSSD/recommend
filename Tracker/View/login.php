@@ -12,8 +12,16 @@
 						<tr> <td>Password</td><td> <input type="password" name="password"></td> </tr>
 						<tr> <td><input id="button" type="submit" name="submit" value="login"></td> </tr> 
 					</form> 						
-				</table> 
+				</table>
+				<hr />
+				<?php
+					include_once('google_login.php');
+					echo "<p style='text-align:center'>Sign in with Google.</p>";
+					echo "<div class='g-signin2' style='margin-left:60' data-onsuccess='onSignIn'></div>";
+				?>				
 			</fieldset> 
 		</div>
+		<br />
+		<br />
 	</body>
 </html>
