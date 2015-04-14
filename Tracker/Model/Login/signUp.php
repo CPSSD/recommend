@@ -5,18 +5,16 @@ require_once('Tracker/config.php');
 $db = new SQLite3($_SERVER['DOCUMENT_ROOT'].'/Tracker/database.db');
 
 function createUserTable($db){
-	$sql = "CREATE TABLE IF NOT EXISTS users(Id INTEGER PRIMARY KEY,fullname TEXT,username TEXT,email TEXT,password TEXT)";
+	$sql = "CREATE TABLE IF NOT EXISTS users(Id INTEGER PRIMARY KEY,fullname TEXT,username TEXT,email TEXT,password TEXT, google_id TEXT)";
 	$result = $db->query($sql);
 }
-
-
 
 function newUser($db){
 	$fullname = $_POST['name'];
 	$username = $_POST['username'];
 	$email = $_POST['email'];
 	$password = $_POST['password'];
-	$sql = "INSERT INTO users (fullname,username,email,password) VALUES ('{$fullname}','{$username}','{$email}','{$password}')";
+	$sql = "INSERT INTO users (fullname,username,email,password,google_id) VALUES ('{$fullname}','{$username}','{$email}','{$password}','none')";
 	$result = $db->query($sql);
 	  echo "Your registration is complete";
 }

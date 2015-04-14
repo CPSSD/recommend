@@ -16,9 +16,13 @@
 				email: profile.getEmail() 
 			},
 			function(data){
-				alert(data);
-				$("#div").append(data);
+				window.location = data;
 			});
 		console.log("Posted Details to index.php");
+	}
+	
+	function signOut() {
+		var auth2 = gapi.auth2.getAuthInstance();
+		auth2.signOut();
 	}
 </script>
