@@ -9,6 +9,7 @@
 			require_once('Tracker/config.php');
 			require_once('Tracker/View/Util.php');
             $id = $_GET["id"];
+			$uid = 0;
 			$json = file_get_contents("{$GLOBALS["ip"]}Tracker/index.php?type=films&id={$id}"); 
 			$movie = json_decode($json, true);
             if(!$movie){

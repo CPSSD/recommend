@@ -22,8 +22,12 @@ class Controller{
 
 	public function invoke(){
 		if($_GET["type"] == "films"){
+			$uid = -1;
+			if(isset($_GET["uid"])){
+				$uid = $_GET["uid"];
+			}
 			if(isset($_GET["page"]) && isset($_GET["organise"]) && intval($_GET["page"]) >= 0){
-				$this->essen->getList($this->db,$_GET["type"],$_GET["organise"],$_GET["page"],$_GET["order"]); // gets a data of list of 24 films
+				$this->essen->getList($this->db,$_GET["type"],$_GET["organise"],$_GET["page"],$_GET["order"], $uid); // gets a data of list of 24 films
 			}else if (isset($_GET["id"])){
 				$this->essen->get($this->db,$_GET['type'],$_GET["id"],""); // gets all data from 1 film
 			}else if(isset($_GET['search'])){
@@ -62,7 +66,7 @@ class Controller{
 					}
 					$tick = 0;
 					while($row = $retval->fetchArray()){
-						$tracking[$tick] = $row["mediaID"];
+						$tracking[$tick] = $row["mediaId"];
 						$tick++;
 					}
 					if(!isset($tracking)){

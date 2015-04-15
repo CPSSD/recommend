@@ -174,7 +174,6 @@ class TV extends SQLite3{
 		    echo '{"name":"' . $show_data['name'] . '",';
 		    echo '"id":"' . $show_data['id'] . '",';
 		    echo '"rating":"' . $show_data['rating'] . '",';
-            echo '"genre":"' . $show_data['genre'] . '",';
 		    echo '"image":"' . $show_data['image'] . '",';
 		    echo "\"show\":[";
 		    $tick = 0;
@@ -202,10 +201,10 @@ class TV extends SQLite3{
 		$offset = $pageParam * 24;
         if($organise == "1"){
             $organise = "name";
-            $sql = "SELECT name,image,genre,rating,id FROM `{$type}` ORDER BY {$organise} {$order} LIMIT 24 OFFSET {$offset}";
+            $sql = "SELECT name,image,rating,id FROM `{$type}` ORDER BY {$organise} {$order} LIMIT 24 OFFSET {$offset}";
         }else{
             $organise = "rating";
-            $sql = "SELECT name,image,genre,rating,id FROM `{$type}` ORDER BY {$organise} {$order} LIMIT 24 OFFSET {$offset}";
+            $sql = "SELECT name,image,rating,id FROM `{$type}` ORDER BY {$organise} {$order} LIMIT 24 OFFSET {$offset}";
         }
 		
 		$essen = new Essentials();
@@ -218,7 +217,7 @@ class TV extends SQLite3{
 			echo ",";
 		    }
 		    $tick++;
-		    echo json_encode($essen->createArrayFromData($sql, $row));
+		    echo json_encode($essen->createArrayFromData("name,image,rating,id", $row));
 		}
 		echo "]}";
 	}

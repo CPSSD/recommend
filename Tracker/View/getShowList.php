@@ -25,6 +25,7 @@
         
 			<?php
 			echo "<div class='show_container'>";
+			echo "{$GLOBALS["ip"]}Tracker/index.php?type=tv_shows&organise={$organise}&page={$page}&order={$order}";
 			# Displays info for each show.
 			foreach($obj['tv_shows'] as $show){
 				echo "<div class='image'>";

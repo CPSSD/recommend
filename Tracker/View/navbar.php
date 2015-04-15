@@ -50,13 +50,15 @@ if($query == "films"){
 				    </ul>
 				</li>
 					<?php 
-					    if (isset($_SESSION['userID'])){
+					    if (isset($_SESSION['userID'])){	
 							include_once('google_login.php');
+							echo "<div class='g-signin2' style='visibility:hidden;position:absolute;'></div>";
 							echo "<li><a href='#'>{$_SESSION['username']}</a>";
 							echo "<ul>";
-					        echo "<li><a href='logout.php' onClick='signOut'>Logout</a></li>";
+					        echo "<li><a href='logout.php' onClick='signOut()'>Logout</a></li>";
                             echo "<li><a href='recommendations.php?type={$type}&recommendations={$_SESSION['userID']}'>Recommendations</a></li>";
-                            echo "<li><a href='calendar.php?q=films'>Personal Calendar</a></li>";
+                            echo "<li><a href='calendar.php?q=tv'>Personal Calendar</a></li>";
+                            echo "<li><a href='post_to_calendar.php'>Push to Google Calendar</a></li>";
                             echo "<li><a href='viewLikes.php?type=films&userID={$_SESSION['userID']}'>View Likes</a></li>";
 					    }else{
 							echo "<li><a href='#'>User</a>";

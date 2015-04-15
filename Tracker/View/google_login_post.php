@@ -6,7 +6,7 @@
 	$db = new SQLite3($_SERVER['DOCUMENT_ROOT'].'/Tracker/database.db');
 	
 	function login($db, $google_id, $email) {
-		$stmt = $db->prepare("SELECT Id,username FROM `users` WHERE id = 1");
+		$stmt = $db->prepare("SELECT Id,username FROM `users` WHERE google_id = '{$google_id}'");
 		#$stmt->bindValue(':id',$google_id,SQLITE3_TEXT);
 		$result = $stmt->execute();
 		

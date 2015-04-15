@@ -205,12 +205,13 @@ class Film extends SQLite3{
 		} 
 	}
 	
-	public function getFilmList($db,$type,$organise,$page,$order){
+	public function getFilmList($db,$type,$organise,$page,$order,$uid){
         $essen = new Essentials();
         $maxPage = floor($essen->getMaxID($type,$db) / 24);
 		$pageParam = intval($page);
 		$offset = $pageParam * 24;
-        
+		$likeList = $essen->getLikeList($db, $type, $uid);
+		
 		if($organise == "1"){
             $organise = "name";
 			$sql = "SELECT name,date,image,rating,id FROM `{$type}` ORDER BY {$organise} {$order} LIMIT 24 OFFSET {$offset}";
@@ -230,7 +231,8 @@ class Film extends SQLite3{
 			    echo ",";
 		        }
 		        $tick++;
-		        echo json_encode($essen->createArrayFromData($sql, $row));
+				$row['liked'] = in_array($row['id'], $likeList);
+		        echo json_encode($essen->createArrayFromData("name,date,image,rating,id,liked", $row));
 		    }
 		    echo "]}";
         }else{
@@ -255,7 +257,8 @@ class Film extends SQLite3{
 							"genre" => $row["genre"],
 							"synopsis" => $row["synopsis"],
 							"image" => $row["image"],
-							"age" => $row["age"]));
+							"age" => $row["age"],
+							"liked" => $liked));
 			}
 		}else{
             echo "No Film with that ID";
