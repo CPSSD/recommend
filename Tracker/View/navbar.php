@@ -63,7 +63,7 @@ if($query == "films"){
 					    }else{
 							echo "<li><a href='#'>User</a>";
 							echo "<ul>";
-                            echo "<li><a href='signUp.html'>Sign Up</a></li>";
+                            echo "<li><a href='signUp.php'>Sign Up</a></li>";
 					        echo "<li><a href='login.php'>Log In</a></li>";
 					    }
 					?>
