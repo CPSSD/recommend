@@ -38,7 +38,7 @@ div.calendar-week{
 
 div.calendar-day{
 	float:left;
-	Display: inline-block;
+	display: inline-block;
 	width: 13%;
 	margin: 0 auto;
 	margin-left: 0.5%;
@@ -58,7 +58,7 @@ div.calendar-year{
 
 div.calendar-month{
 	float:left;
-	Display: inline-block;
+	display: inline-block;
 	width: 24%;
 	margin: 0 auto;
 	margin-left: 0.5%;
@@ -108,8 +108,8 @@ div.calendar-content-current{
 
 ul.calendar-list{
 	padding: 0;
-	list-style-type = None;
-	text-decoration: None;
+	list-style-type = none;
+	text-decoration: none;
 	margin-left: 0px;
 	margin-top:5px;
 	margin-bottom:5px;
@@ -124,9 +124,9 @@ h1.title{
 }
 
 li {
-	list-style-type: None;
-	text-decoration: None;
-	border-style: None None dotted None;
+	list-style-type: none;
+	text-decoration: none;
+	border-style: none none dotted none;
 	border-width: 1px;
 	border-color: white white rgb(100, 100, 100) white;
 	padding-left: 2%;
@@ -136,7 +136,7 @@ li {
 
 li.empty {
 	margin-top:5%;
-	border-style: None None None None;
+	border-style: none none none none;
 	text-align:center;
 	color:rgb(200, 200, 200);
 }

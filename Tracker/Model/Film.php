@@ -69,13 +69,29 @@ class Film extends SQLite3{
 		echo "]}";
 	}
 
-	public function searchFilms($db,$type,$search){
-        if (strpos($search,'%20') !== false){
-			$sub = explode(' ',$search,2);
-			$sql = "SELECT name,image,id,rating FROM `{$type}` WHERE name LIKE '%{$sub[0]}%' AND name LIKE '%{$sub[1]}%' ORDER BY name DESC LIMIT 24";	
-		}else{
-			$sql = "SELECT name,image,id,rating FROM `{$type}` WHERE name LIKE '%{$search}%' ORDER BY name DESC LIMIT 24";	
+    public function advancedFilmSearch($db,$type,$param,$rating){
+        $params = explode(",",$param);
+        $sql = "SELECT name,image,id,rating FROM `{$type}` WHERE director LIKE '%{$params[0]}%' AND starring LIKE '%{$params[1]}%' AND genre LIKE '%{$params[2]}%' AND rating > {$rating}";
+
+		$retval = $db->query($sql);
+		echo "{\"{$type}\":[";
+ 		$tick = 0;
+ 		while($row = $retval->fetchArray()){
+ 		    if ($tick != 0){
+ 			echo ",";
+ 		    }
+ 		    $tick++;
+		    echo json_encode(array("status" => "okay",
+		                           "name" => $row["name"],
+		                           "rating" => $row["rating"],
+					               "id" => $row["id"],
+					               "image" => $row["image"]));
 		}
+ 		echo "]}";
+    }
+
+	public function searchFilms($db,$type,$search){
+        $sql = "SELECT name,image,id,rating FROM `{$type}` WHERE name LIKE '%{$search}%' ORDER BY name DESC LIMIT 24";
 
 		$retval = $db->query($sql);
 		echo "{\"{$type}\":[";

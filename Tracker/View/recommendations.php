@@ -19,7 +19,7 @@
 		    $util = new Util();
 		?>
 
-        <?php include_once('Tracker/View/navbar.php');?>
+        <?php //include_once('Tracker/View/navbar.php');?>
 			
 			<?php echo "<div class='show_container'>";
 			# Displays info for each movie.

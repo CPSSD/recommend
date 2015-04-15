@@ -1,6 +1,26 @@
 <?php session_start();?>
-<html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link rel="stylesheet" type="text/css" href="css/styleList.css" />
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+	<script type="text/javascript" src="js/jquery-ias.min.js"></script>
+    <script type="text/javascript">
+        //if($(window).scrollTop() == $(document).height() - $(window).height()*0.7){
+            $(document).ready(function() {
+            	// Infinite Ajax Scroll configuration
+                jQuery.ias({
+                    container : '.show_container', // main container where data goes to append
+                    item: '.image', // single items
+                    pagination: '.navigation', // page navigation
+                    next: '.navigation a', // next page selector
+                    loader: '<img src="css/ajax-loader.gif">', // loading gif
+                    triggerPageThreshold: 3 // show load more if scroll more than this
+                });
+            });
+        //}
+    </script>
+</head>
 	<title>Tracker - ShowList</title>
 	<body>
 		<?php
@@ -11,6 +31,8 @@
 			$organise = $_GET["organise"];
 			$page = $_GET["page"];
             $order = $_GET["order"];
+            $nextPage = $page+1;
+            $previousPage = $page-1; 
 			
 			$json = file_get_contents("{$GLOBALS["ip"]}Tracker/index.php?type=tv_shows&organise={$organise}&page={$page}&order={$order}");
 			$obj = json_decode($json, true);
@@ -39,14 +61,10 @@
 					$row++;
 					echo "<br />";
 				}
-			}
-			echo "</div>";
-		?>
-		<div class="navigation">
-		<?php
-			echo "<a href='{$GLOBALS["ip"]}Tracker/View/getShowList.php?organise={$organise}&page=" . $util->checkNextPage('tv_shows',$page-1,$organise) . "'>Previous Page</a> |";
-			echo "<a href='{$GLOBALS["ip"]}Tracker/View/getShowList.php?organise={$organise}&page=" . $util->checkNextPage('tv_shows',$page+1,$organise) . "'> Next Page.</a>";
-		?>
-		</div>
+			}?>
+		    <div class="navigation" style="text-align:center;">
+                <?php echo "<a href='{$GLOBALS["ip"]}Tracker/View/getShowList.php?type={$type}&organise={$organise}&page={$nextPage}&order={$order}'></a>";?>
+		    </div>
+        </div>
 	</body>
 </html>

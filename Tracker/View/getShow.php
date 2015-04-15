@@ -17,10 +17,10 @@
                 $_SESSION["message"] = "No Show with that ID";
 			    $url = "{$GLOBALS['ip']}Tracker/View/displayMessage.php";
 			    header( "Location: $url" );
-            }           
+            }          
 
-			$seasonUp = strval(intval($season)+1); 
-			$seasonDown = strval(intval($season)-1); 
+			$seasonUp = $season+1; 
+			$seasonDown = $season-1; 
 			$util = new Util();
 			$type = "tv_shows";
             $genre = $obj['genre'];

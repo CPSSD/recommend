@@ -23,7 +23,6 @@ class Essentials{
 
 	// function to return all of a particular media a user likes
 	public function userLikes($db,$type,$userID){   
-
         $sql = "SELECT mediaName,mediaTable,mediaImage,mediaID FROM likes WHERE userID={$userID} AND mediaTable LIKE '%{$type}%'";
 		$retval = $db->query($sql);
 		echo "{\"{$type}\":[";
@@ -56,25 +55,24 @@ class Essentials{
 			while($row = $result->fetchArray()){
                 $row = $row['genre'];
                 if($type == "films"){
-	    			$row = substr($row['genre'],8,-2);
-                }		
-    		    $rows = explode("+",$row);
+	    			$temp = substr($row,8,-2);
+                }	
+    		    $rows = explode("+",$temp);
 				foreach($rows as $string){
 					$genre[] = $string;
 				}
 			}
 		}
-
+        //var_dump($genre);
 		//selects the highest valued genre
 		$genre = array_count_values($genre);
 		$max = max($genre);
 		$key = array_search($max, $genre);	
 
-		//$essen = new Essentials();
         if($type == "films"){
-		    $sql = "SELECT id,synopsis,name,date,rating,starring,director,genre,image,age FROM {$type} WHERE genre LIKE '%{$key}%' ORDER BY rating DESC LIMIT 4";
+		    $sql = "SELECT id,name,date,rating,image FROM {$type} WHERE genre LIKE '%{$key}%' ORDER BY rating DESC LIMIT 4";
 		}else {
-            $sql = "SELECT id,name,rating,genre,image FROM {$type} WHERE genre LIKE '%{$key}%' ORDER BY rating DESC LIMIT 4";
+            $sql = "SELECT id,name,rating,image FROM {$type} WHERE genre LIKE '%{$key}%' ORDER BY rating DESC LIMIT 4";
         }
 		$retval = $db->query($sql);
 		echo "{\"{$type}\":[";
@@ -98,6 +96,13 @@ class Essentials{
         }
 	}
 
+    public function advancedSearch($db,$type,$param,$rating){
+        if($type == "films"){
+            $this->film->advancedFilmSearch($db,$type,$param,$rating);
+        }else{
+            $this->tv_show->advancedShowSearch($db,$type,$param,$rating);
+        }
+    }
 
 	public function getMaxID($type,$db){
 		$maxID = "SELECT id FROM `{$type}` WHERE id = (SELECT MAX(id) FROM {$type})";
@@ -118,7 +123,6 @@ class Essentials{
 		foreach ($data as $var_name) {
 			$array[$var_name] = $row[$var_name];
 		}
-		
 		return $array;
 	}
 	

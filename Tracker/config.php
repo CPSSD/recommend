@@ -9,7 +9,7 @@ class Config{
 	}
 }
 
-$config = new Config("http://cpssd5-web.computing.dcu.ie/");
+$config = new Config("http://localhost/");
 $ip = $config->ip;
 $GLOBALS["ip"] = $ip;
 ?>
