@@ -6,7 +6,6 @@ import urllib
 from bs4 import BeautifulSoup
 from util import util
 from util import file_handler as file
-import image_downloader as image
 import tvdb_crawler as tvdb
 
 tv_show_layout = "name, image, location, rating, wiki_url, imdb_url, episode_url, genre, image_location"
@@ -239,10 +238,12 @@ def get_show_list(from_database):
         db.connection.close()
         return show_list
     else:
-        show_list = {}
-        for year in range(config['start_year'], config['end_year']+1):
-            print "* Grabbing shows from %s" % year
-            show_list = (crawl_wikipedia("http://en.wikipedia.org/w/index.php?title=Category:%s_American_television_series_debuts" % year, "", show_list))
+        wiki_list = {"British_television_programme_debuts", "American_television_series_debuts", "Irish_television_series_debuts"}
+        show_list = {} 
+        for wiki_link in wiki_list:
+            for year in range(config['start_year'], config['end_year']+1):
+                print "* Grabbing shows from %s" % year
+                show_list = (crawl_wikipedia("http://en.wikipedia.org/w/index.php?title=Category:%s_%s" % (year, wiki_link), "", show_list))
         return show_list
 
 def update_show_data(show_limit):
@@ -312,6 +313,6 @@ if __name__ == "__main__":
     if (config['download_images'] is 1):
         print "* Grabbing all Images..."
         image.download_all_images(get_show_list(True), "tv", db)
-        
+
     print("* Finished...")
     print("* Exiting Crawler...")

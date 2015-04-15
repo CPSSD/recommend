@@ -128,6 +128,10 @@ div.image{
 	width:223px;
 	height:350px;
 	color:rgb(40, 140, 40);
+	box-shadow: rgba(0, 0, 0, 0.8);
+}
+
+img.liked {
 }
 
 img.cover {
@@ -135,5 +139,4 @@ img.cover {
 	height:250;
 	border-radius:10px;
 	border-style: solid;
-	border-color: rgb(0, 0, 0);
 }

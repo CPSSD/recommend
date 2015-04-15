@@ -10,8 +10,11 @@
 	        $organise = $_GET["organise"];
 	        $page = $_GET["page"];
             $order = $_GET["order"];
-			
-		    $json = file_get_contents("{$GLOBALS["ip"]}Tracker/index.php?type=films&organise={$organise}&page={$page}&order={$order}");
+			$uid = 0;
+			if(isset($_SESSION["userID"])){
+				$uid = $_SESSION["userID"];
+			}
+		    $json = file_get_contents("{$GLOBALS["ip"]}Tracker/index.php?type=films&organise={$organise}&page={$page}&order={$order}&uid={$uid}");
 		    $obj = json_decode($json, true);
             if(!$obj){
                 $_SESSION["message"] = "You're Page Value is too high or too low!!";
@@ -30,9 +33,13 @@
 			<?php echo "<div class='show_container'>";
 			# Displays info for each movie.
 			foreach($obj['films'] as $movie){
+				$img_class = "";
+				if($movie['liked'] == "true"){
+					$img_class = " liked";
+				}
 				echo "<div class='image'>";
 				echo "<a href='{$GLOBALS["ip"]}Tracker/View/getFilm.php?type=films&id=" . $movie['id'] . "'>";
-				echo "<img class='cover' src='" . $movie['image'] . "'/>";
+				echo "<img class='cover{$img_class}' src='" . $movie['image'] . "'/>";
 				echo "<p><b>Name:</b> " . $movie['name'] . "<br />";
 				echo "<b>Date:</b> " . $movie['date'] . "<br />";
 				echo "<b>Rating:</b> " . $movie['rating'] . " stars.</p>";
