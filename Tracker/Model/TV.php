@@ -5,17 +5,8 @@ include_once('Tracker/Model/Essentials.php');
 
 class TV extends SQLite3{
 
-    public function userShowLikes(){
-    
-    }
-
 	public function searchShows($db,$type,$search){
-        if (strpos($search,'%20') !== false){
-			$sub = explode(' ',$search,2);
-			$sql = "SELECT name,image,id,rating FROM `{$type}` WHERE name LIKE '%{$sub[0]}%' AND name LIKE '%{$sub[1]}%' ORDER BY name DESC LIMIT 24";	
-		}else{
-			$sql = "SELECT name,image,id,rating FROM `{$type}` WHERE name LIKE '%{$search}%' ORDER BY name DESC LIMIT 24";	
-		}
+        $sql = "SELECT name,image,id,rating FROM `{$type}` WHERE name LIKE '%{$search}%' ORDER BY name DESC LIMIT 24";
 
 		$retval = $db->query($sql);
 		echo "{\"{$type}\":[";
@@ -33,6 +24,25 @@ class TV extends SQLite3{
 		}
  		echo "]}";
 	}
+
+    public function advancedShowSearch($db,$type,$param,$rating){
+        $sql = "SELECT name,image,id,rating FROM `{$type}` WHERE genre LIKE '%{$param}%' AND rating > {$rating}";
+		$retval = $db->query($sql);
+		echo "{\"{$type}\":[";
+ 		$tick = 0;
+ 		while($row = $retval->fetchArray()){
+ 		    if ($tick != 0){
+ 			echo ",";
+ 		    }
+ 		    $tick++;
+		    echo json_encode(array("status" => "okay",
+		                           "name" => $row["name"],
+		                           "rating" => $row["rating"],
+					               "id" => $row["id"],
+					               "image" => $row["image"]));
+		}
+ 		echo "]}";
+    }
 		
 	public function getEpisodesFromDay($id_list, $date, $db){
 		$data = [];
