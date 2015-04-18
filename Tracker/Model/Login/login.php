@@ -13,26 +13,31 @@ function getNumRows(){
 
 if($_SERVER['REQUEST_METHOD'] == 'POST'){
 	$username = $_POST['username'];
-	$password = $_POST['password'];
+    $password_entered = $_POST['password'];
 	
-	$stmt = $db->prepare('SELECT Id,username FROM `users` WHERE username = :username AND password = :password');
-	$stmt->bindValue(':password',$password,SQLITE3_TEXT);
+	$stmt = $db->prepare('SELECT Id,username,password FROM `users` WHERE username = :username');
 	$stmt->bindValue(':username',$username,SQLITE3_TEXT);
 	$result = $stmt->execute();
 
 	$rows = $result->fetchArray();
 	$id = $rows['Id'];
 	$username = $rows['username'];
+    $password_hash = $rows['password'];
 
 	if($rows){
-		session_start();
-		$_SESSION['userID'] = $id;	
-		$_SESSION['username'] = $username;
-		$url = "{$GLOBALS['ip']}/Tracker/View/getLikes.php?type=films&page=0";
-		header( "Location: $url" );
-
+        if(password_verify($password_entered, $password_hash)){
+		    session_start();
+		    $_SESSION['userID'] = $id;	
+		    $_SESSION['username'] = $username;
+		    $url = "{$GLOBALS['ip']}/Tracker/View/getLikes.php?type=films&page=0";
+		    header( "Location: $url" );
+        }else{
+		    $_SESSION["message"] = "Incorrect password";
+		    $url = "{$GLOBALS['ip']}Tracker/View/displayMessage.php";
+		    header( "Location: $url" );           
+        }
 	}else{
-		$_SESSION["message"] = "Incorrect username or password";
+		$_SESSION["message"] = "Incorrect Username";
 		$url = "{$GLOBALS['ip']}Tracker/View/displayMessage.php";
 		header( "Location: $url" );
 	}

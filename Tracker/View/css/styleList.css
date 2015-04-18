@@ -14,98 +14,25 @@ p{
 	display:table;
 }
 
-nav{
-	display:block;
-	width: 100%; 	
-	margin-top:-50px;
-	height: 40px; 
-	z-index: 99; 
-	position: fixed; 
-	background-color: #366b82;
-}
-
-.navbar	{
-	height: 40px;
-    padding: 0;
-	margin: 0;
-	position: absolute; 
-	border-right: 1px solid #54879d; 
-	}
-
-.navbar li {
-	height: 40px;
-	width: 251px;
-	float: left;
-	text-align: center; 
-	list-style: none; 
-	font: normal bold 12px/1.2em Arial, Verdana, Helvetica;  
-	padding: 0;
-	margin: 0;
-	background-color: #366b82;
-}
-
-.navbar a{							
-	padding: 12px 0;  
-	border-left: 1px solid #54879d; 
-	border-right: 1px solid #1f5065; 
-	text-decoration: none;  
-	color: white; 
-	display: block;
-}
-
-.navbar li:hover, a:hover {
-	background-color: #54879d;
-} 
-
-.navbar li ul 	{
-	display: none;  
-	height:40px;									
-	margin: 0; 
-	padding: 0;		
-}				
-
-.navbar li:hover ul {
-	display: inline-table; 
-}
-
-.navbar li ul li {
-	background-color: #54879d;
-} 
-
-.navbar li ul li a 	{
-	border-left: 1px solid #1f5065; 
-	border-right: 1px solid #1f5065; 
-	border-top: 1px solid #74a3b7; 
-	border-bottom: 1px solid #1f5065; 
-}
-				
-.navbar li ul li a:hover{
-	background-color: #366b82;
-}
-
-.navbar li ul li ul {
-    display:none;
-    float:right;
-    text-align:right;
-}
-
-/*.navbar li ul li ul li a:hover{
-	background-color: #366b82;
-}*/
-
-div.navigation{
-	background-color:rgb(255, 255, 255);
-	padding-top:5px;
+.ias_loader, .ias_trigger {
 	text-align:center;
-	padding-bottom:10px;
-	border-radius:0px 0px 10px 10px;
-	width:280px;
-	margin:0px auto;
-	margin-top:-5px;
-	margin-bottom:20px;
-	border-style:solid;
-	border-width:2px;
-	border-color: rgb(255, 255, 255) rgb(0, 0, 0) rgb(0, 0, 0)  rgb(0, 0, 0);
+	margin: 30px 0 40px;
+}
+
+.ias_trigger a:link,
+.ias_trigger a:visited {
+    padding: 4px 50px;
+    background-color: #f9f9f9;
+    border: solid 1px #ddd;
+    border-radius: 2px;
+    font-family: bold 12px "Open Sans", sans-serif;
+    color: #555;
+    text-decoration: none;
+}
+
+.ias_trigger a:hover,
+.ias_trigger a:active {
+    border-color: #ccc;
 }
 
 div.show_container{

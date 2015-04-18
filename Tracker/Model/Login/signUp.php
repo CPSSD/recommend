@@ -9,12 +9,20 @@ function createUserTable($db){
 	$result = $db->query($sql);
 }
 
+function better_crypt($input, $rounds = 10){
+    $crypt_options = array(
+        'cost' => $rounds
+    );
+    return password_hash($input, PASSWORD_BCRYPT, $crypt_options);
+}
+
 function newUser($db){
 	$fullname = $_POST['name'];
 	$username = $_POST['username'];
 	$email = $_POST['email'];
 	$password = $_POST['password'];
-	$sql = "INSERT INTO users (fullname,username,email,password,google_id) VALUES ('{$fullname}','{$username}','{$email}','{$password}','none')";
+    $password_hash = better_crypt($password); 
+	$sql = "INSERT INTO users (fullname,username,email,password,google_id) VALUES ('{$fullname}','{$username}','{$email}','{$password_hash}','none')";
 	$result = $db->query($sql);
 	  echo "Your registration is complete";
 }
@@ -36,7 +44,7 @@ function signUp($db){
 if(isset($_POST['submit'])){
 	createUserTable($db);
 	if(SignUp($db)){
-		$url = "{$GLOBALS['ip']}Tracker/View/login.html";
+		$url = "{$GLOBALS['ip']}Tracker/View/login.php";
 		header( "Location: $url" );	
 	}else{
 		$_SESSION["message"] = "Username already in use please try another!";

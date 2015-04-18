@@ -1,13 +1,10 @@
 <?php session_start();
-
 set_include_path("{$_SERVER['DOCUMENT_ROOT']}");
 require_once('Tracker/config.php');
 require_once('Tracker/Model/Essentials.php');
 require_once('Tracker/Model/Film.php');
 require_once('Tracker/Model/TV.php');
-
 class Controller{
-
 	public $db;
 	public $essen;
     public $film;
@@ -30,9 +27,11 @@ class Controller{
 				$this->essen->getList($this->db,$_GET["type"],$_GET["organise"],$_GET["page"],$_GET["order"], $uid); // gets a data of list of 24 films
 			}else if (isset($_GET["id"])){
 				$this->essen->get($this->db,$_GET['type'],$_GET["id"],""); // gets all data from 1 film
-			}else if(isset($_GET['search'])){
+			}else if(isset($_GET["rating"]) && isset($_GET["param"])){
+                $this->essen->advancedSearch($this->db,$_GET["type"],$_GET["param"],$_GET["rating"]); 
+            }else if(isset($_GET['search'])){
 				$this->essen->search($this->db,$_GET['type'],$_GET['search']); // returns up to 10 search results on a film search
-			}else if (isset($_GET['userLikes'])){                        
+            }else if (isset($_GET['userLikes'])){                        
 					$this->essen->userLikes($this->db,$_GET['type'],$_GET['userLikes']);// gets all the films a logged in user has liked
 			}else if(isset($_GET['recommendations'])){      
 					$this->essen->recommendations($this->db,$_GET['type'],$_GET['recommendations']); // returns data on recommended films
@@ -42,6 +41,8 @@ class Controller{
 				$this->essen->getList($this->db,$_GET['type'],$_GET["organise"],$_GET["page"],$_GET['order']); // gets a data of list of 24 tv shows
 			}else if(isset($_GET['id']) && isset($_GET["season"])){
 				$this->essen->get($this->db,$_GET['type'],$_GET['id'],$_GET["season"]); // gets all data from 1 show
+            }else if(isset($_GET["rating"]) && isset($_GET["param"])){
+                $this->essen->advancedSearch($this->db,$_GET["type"],$_GET["param"],$_GET["rating"]);
 			}else if(isset($_GET['search'])){
 				$this->essen->search($this->db,$_GET['type'],$_GET['search']); // returns up to 10 search results on a show
 			}else if (isset($_GET['userLikes'])){                        
@@ -82,7 +83,7 @@ class Controller{
 				}
 			}
 		} else {
-			$url = "{$GLOBALS['ip']}Tracker/View/getFilmList.php?type=films&organise=1&page=0";
+			$url = "{$GLOBALS['ip']}Tracker/View/getFilmList.php?type=films&organise=1&page=0&order=ASC";
 			header( "Location: $url" );
 		}
 	}

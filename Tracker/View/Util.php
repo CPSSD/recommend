@@ -17,16 +17,15 @@ class Util{
         return "{$GLOBALS["ip"]}Tracker/View/getShow.php?id={$id}&season={$season}";
     }
 
-	function checkNextPage($type,$page,$organise){
-		$json = file_get_contents("{$GLOBALS["ip"]}Tracker/index.php?type={$type}&organise={$organise}&page={$page}");
-
+	function checkNextPage($type,$page,$organise,$order){
+		$json = file_get_contents("{$GLOBALS["ip"]}Tracker/index.php?type={$type}&organise={$organise}&page={$page}&order={$order}");
 		if(strpos($json,'okay') !== false){
-			return $page;
+			return true;
 		}else{
-			return '0';				
+			return false;				
 		}
 	}
-
+   
 	function checkNextLike($type,$page){
 		$json = file_get_contents("{$GLOBALS["ip"]}Tracker/index.php?type={$type}&page={$page}");
 		if(strpos($json,'okay') !== false){
