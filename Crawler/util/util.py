@@ -9,7 +9,7 @@ import mysql_connector as mysql
 debug = False
 
 # Creates a directory for the database files to be saved in.
-print "* Creating database firectory..."
+print "* Creating database directory..."
 try:
     os.mkdir("database")
 except OSError:

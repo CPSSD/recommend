@@ -91,7 +91,6 @@
 					$show_date = $section['date'];
 					foreach ($section['episodes'] as $episode) {
 				?>
-					var delay = 300;
 					var tick = 0;
 					if("<?php echo $episode['show'] ?>" == show_name){
 						<?php $show_name = $episode['show'] . " S" . $episode['season'] . "E" . $episode['episode']; ?>
@@ -100,7 +99,7 @@
 							function(){
 								if (!inJSON("<?php echo $show_name ?>", "name", json)){
 									console.log("Not in the calendar! - <?php echo $show_name ?>");
-									addToCalendar("<?php echo $show_name ?>", "<?php echo $show_date ?>");
+									addToCalendar("<?php echo $show_name ?>", "<?php echo $show_date ?>", 0);
 								} else 	{
 									console.log("Episode is already in calendar - <?php echo $show_name ?>");
 									if (tick != 0){
@@ -113,8 +112,7 @@
 					}
 				}?>
 			}
-				
-			
+						
 			function eventCheck(show_name, json){
 				console.log("Show: " + show_name + "\n");
 				console.log(json);
@@ -160,7 +158,7 @@
 				
 			}
 			
-			function addToCalendar(name, date){
+			function addToCalendar(name, date, attempt){
 				console.log("Inserting: " + name + " on " + date);
 				var event = {
 					'calendarId': 'primary',
@@ -176,9 +174,15 @@
 				request.execute(function(resp) {
 					console.log(resp);
 					if (resp.code == 503){
-						console.log("Error 503: Time Out.");
+						console.log("Error 503: Time Out. Trying again...");
+						if(attempt >= 5){
+							appendText("Error saving '" + name + "'. Try again later.", "li");
+						} else {
+							addToCalendar(name, date, attempt+1);
+						}
+					} else {
+						appendText(name + " @ " + date + "\n", "li");
 					}
-					appendText(name + " @ " + date + "\n", "li");
 				});
 			}		
 			 
