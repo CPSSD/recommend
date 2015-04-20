@@ -21,10 +21,19 @@ function newUser($db){
 	$username = $_POST['username'];
 	$email = $_POST['email'];
 	$password = $_POST['password'];
-    $password_hash = better_crypt($password); 
+    
+    $hash = md5($password);
+
+    /*$password_hash = better_crypt($password); 
 	$sql = "INSERT INTO users (fullname,username,email,password,google_id) VALUES ('{$fullname}','{$username}','{$email}','{$password_hash}','none')";
-	$result = $db->query($sql);
-	  echo "Your registration is complete";
+	$result = $db->query($sql);*/
+    
+     // use this ******* $sql = $sql = "INSERT INTO users (fullname,username,email,password,google_id) VALUES ('{$fullname}','{$username}','{$email}','{$hash}','none')";
+
+    $sql = $sql = "INSERT INTO users (fullname,username,email,password) VALUES ('{$fullname}','{$username}','{$email}','{$hash}')";
+    $result = $db->query($sql);
+	echo "Your registration is complete";
+
 }
 
 function signUp($db){

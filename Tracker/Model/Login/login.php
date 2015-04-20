@@ -22,14 +22,14 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
 	$rows = $result->fetchArray();
 	$id = $rows['Id'];
 	$username = $rows['username'];
-    $password_hash = $rows['password'];
+    $hash = $rows['password'];
 
 	if($rows){
-        if(password_verify($password_entered, $password_hash)){
+        if($hash == md5($password_entered)){
 		    session_start();
 		    $_SESSION['userID'] = $id;	
 		    $_SESSION['username'] = $username;
-		    $url = "{$GLOBALS['ip']}/Tracker/View/getLikes.php?type=films&page=0";
+		    $url = "{$GLOBALS['ip']}Tracker/View/getFilmList.php?type=films&organise=1&page=0&order=ASC";
 		    header( "Location: $url" );
         }else{
 		    $_SESSION["message"] = "Incorrect password";
