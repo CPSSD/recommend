@@ -16,5 +16,14 @@
     - Google Calendar API integrated (bugs still present)
 	- Continuous Scrolling finished
 
-###### Fri April 17th
+###### Sat April 18th
+    - Bug Fixes
+	- Google Calendar Optimisations
+
+###### Sun April 19th
+    - Got Crawler running on VM
+
+###### Mon April 20th
     - New website design started. (Material Design)
+	- Tv Crawler now checks the last time the page was updated before scraping
+	- Mobile views are mostly done.
