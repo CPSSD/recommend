@@ -4,7 +4,7 @@ set_include_path("{$_SERVER['DOCUMENT_ROOT']}");
 ?>
 
 <html>
-<link rel="stylesheet" type="text/css" href="css/message.css" />
+<link rel="stylesheet" type="text/css" href="css/material.css" />
 	<title>Tracker - Message</title>
 	<body>
 	<?php

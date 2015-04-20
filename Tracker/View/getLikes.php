@@ -1,6 +1,6 @@
 <?php session_start();?>
 <html>
-<link rel="stylesheet" type="text/css" href="css/likeStyle.css" />
+<link rel="stylesheet" type="text/css" href="css/material.css" />
 	<title>Tracker - GetLikes</title>
 	<body>
 	<?php

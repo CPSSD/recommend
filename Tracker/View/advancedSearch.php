@@ -1,6 +1,6 @@
 <?php session_start();?>
 <html>
-<link rel="stylesheet" type="text/css" href="css/message.css" />
+<link rel="stylesheet" type="text/css" href="css/material.css" />
     <title>Advanced Search</title>
     <body>
         <?php include_once("navbar.php");?>

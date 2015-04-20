@@ -1,6 +1,6 @@
 <html>
 	<head>
-	<link rel="stylesheet" type="text/css" href="css/style.css" />
+	<link rel="stylesheet" type="text/css" href="css/material.css" />
 
 		<script onload="" type="text/javascript">
 			var CLIENT_ID = '933303928886-3n6mtpsic6fbdvjet9hod9cpb1sbmin1.apps.googleusercontent.com';
@@ -202,7 +202,7 @@
 	<?php
 		require_once('Tracker/View/navbar.php');
 	?>
-		<div class="google-calendar-content">
+		<div class="show_container" style="width:400px;padding:5px 10px;text-align:center">
 		<div class="google-calendar-button" id="authorize-div">
 			<span>Authorize access to calendar</span>
 			<!--Button for the user to click to initiate auth sequence -->
