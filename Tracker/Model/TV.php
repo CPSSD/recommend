@@ -170,6 +170,22 @@ class TV extends SQLite3{
 		} 
 	}
 
+    public function getMaxSeason($db,$table){
+		$sql = "SELECT max(season) FROM {$table}";
+		$result = $db->query($sql);
+		$maxSeason = $result->fetchArray();
+		$maxSeason = intval($maxSeason["max(season)"]);
+		return $maxSeason;
+    }
+
+    public function getMaxEpisode($db,$table){
+        $sql = "SELECT max(id) FROM {$table}";
+        $result = $db->query($sql);
+        $maxEpisode = $result->fetchArray();
+        $maxEpisode = intval($maxEpisode["max(id)"]);
+        return $maxEpisode;
+    }
+
 	public function getShow($db,$type,$id,$season){
         $essen = new Essentials();
         if($essen->getMaxID($type,$db) >= $id && $id > 0){
@@ -177,33 +193,41 @@ class TV extends SQLite3{
 		    $row = $retval->fetchArray();
 		    $table = $row["location"];
 		    $show_data = $row;
-
 		    $sql2 = "SELECT * FROM {$table} WHERE season = {$season}";
 		    $result = $db->query($sql2);
-		
+            $maxSeason = $this->getMaxSeason($db,$table);
+            $maxEpisode = $this->getMaxEpisode($db,$table);
+		    
 		    echo '{"name":"' . $show_data['name'] . '",';
 		    echo '"id":"' . $show_data['id'] . '",';
 		    echo '"rating":"' . $show_data['rating'] . '",';
+		    echo '"image":"' . $show_data['image'] . '",'; 
             echo '"genre":"' . $show_data['genre'] . '",';
-		    echo '"image":"' . $show_data['image'] . '",';
-		    echo "\"show\":[";
-		    $tick = 0;
-		    $initial_air_date = null;
-		    while($row = $result->fetchArray()){
-		        if ($tick != 0){
-				    echo ",";
-		        } else {
-				    $initial_air_date = $row['date'];
-			    }
-		        $tick++;
-		        echo json_encode(array("status" => "okay",
-		                               "tile" => $row["title"],
-		                               "season" => $row["season"],
-		                               "episode" => $row["episode"],
-					       "date" => $row["date"]));
-		    }
-		    echo "], ";
-		    echo '"date":"' . $initial_air_date . '"}';
+            echo '"synopsis":"' . $show_data['synopsis'] . '",';
+            echo '"total_seasons":"' . $maxSeason . '",';
+            echo '"total_episodes":"' . $maxEpisode . '"';
+            if($season){
+		        echo ",\"show\":[";
+		        $tick = 0;
+		        $initial_air_date = null;
+		        while($row = $result->fetchArray()){
+		            if ($tick != 0){
+				        echo ",";
+		            } else {
+				        $initial_air_date = $row['date'];
+			        }
+		            $tick++;
+		            echo json_encode(array("status" => "okay",
+		                                   "title" => $row["title"],
+		                                   "season" => $row["season"],
+		                                   "episode" => $row["episode"],
+					                       "date" => $row["date"]));
+		        }
+		        echo "], ";
+		        echo '"date":"' . $initial_air_date . '"}';
+            }else{
+                echo "}";
+            }
         }
 	}
 
@@ -212,10 +236,10 @@ class TV extends SQLite3{
 		$offset = $pageParam * 24;
         if($organise == "1"){
             $organise = "name";
-            $sql = "SELECT name,image,genre,rating,id FROM `{$type}` ORDER BY {$organise} {$order} LIMIT 24 OFFSET {$offset}";
+            $sql = "SELECT name,image,rating,id FROM `{$type}` ORDER BY {$organise} {$order} LIMIT 24 OFFSET {$offset}";
         }else{
             $organise = "rating";
-            $sql = "SELECT name,image,genre,rating,id FROM `{$type}` ORDER BY {$organise} {$order} LIMIT 24 OFFSET {$offset}";
+            $sql = "SELECT name,image,rating,id FROM `{$type}` ORDER BY {$organise} {$order} LIMIT 24 OFFSET {$offset}";
         }
 		
 		$essen = new Essentials();
@@ -228,7 +252,7 @@ class TV extends SQLite3{
 			echo ",";
 		    }
 		    $tick++;
-		    echo json_encode($essen->createArrayFromData($sql, $row));
+		    echo json_encode($essen->createArrayFromData("name,image,rating,id", $row));
 		}
 		echo "]}";
 	}

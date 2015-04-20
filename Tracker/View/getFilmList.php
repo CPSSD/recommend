@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<link rel="stylesheet" type="text/css" href="css/styleList.css" />
+<link rel="stylesheet" type="text/css" href="css/material.css" />
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 	<script type="text/javascript" src="js/jquery-ias.min.js"></script>
     <script type="text/javascript">
@@ -31,9 +31,12 @@
 	        $organise = $_GET["organise"];
 	        $page = $_GET["page"];
             $order = $_GET["order"];
+			$uid = 0;
+			if(isset($_SESSION["userID"])){
+				$uid = $_SESSION["userID"];
+			}
+		    $json = file_get_contents("{$GLOBALS["ip"]}Tracker/index.php?type=films&organise={$organise}&page={$page}&order={$order}&uid={$uid}");
             $nextPage = $page+1;
-			
-		    $json = file_get_contents("{$GLOBALS["ip"]}Tracker/index.php?type=films&organise={$organise}&page={$page}&order={$order}");
 		    $obj = json_decode($json, true);
             /*if(!$obj){
                 $_SESSION["message"] = "You're Page Value is too high or too low!!";
@@ -68,7 +71,6 @@
 					    echo "<br>";
 				    }
 			}?>
-
             <div class="ias_trigger">
                 <a href="#">Load more Items</a>
             </div>

@@ -1,6 +1,5 @@
-<?php session_start();?>
 <html>
-<link rel="stylesheet" type="text/css" href="css/styleList.css" />
+<link rel="stylesheet" type="text/css" href="css/material.css" />
 	<title>Tracker - Search Results</title>
 	<body>
 	<?php 

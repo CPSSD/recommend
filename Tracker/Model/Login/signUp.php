@@ -5,7 +5,7 @@ require_once('Tracker/config.php');
 $db = new SQLite3($_SERVER['DOCUMENT_ROOT'].'/Tracker/database.db');
 
 function createUserTable($db){
-	$sql = "CREATE TABLE IF NOT EXISTS users(Id INTEGER PRIMARY KEY,fullname TEXT,username TEXT,email TEXT,password TEXT)";
+	$sql = "CREATE TABLE IF NOT EXISTS users(Id INTEGER PRIMARY KEY,fullname TEXT,username TEXT,email TEXT,password TEXT, google_id TEXT)";
 	$result = $db->query($sql);
 }
 
@@ -21,10 +21,18 @@ function newUser($db){
 	$username = $_POST['username'];
 	$email = $_POST['email'];
 	$password = $_POST['password'];
-    $password_hash = better_crypt($password); 
-	$sql = "INSERT INTO users (fullname,username,email,password) VALUES ('{$fullname}','{$username}','{$email}','{$password_hash}')";
-	$result = $db->query($sql);
-	  echo "Your registration is complete";
+    
+    $hash = md5($password);
+
+    /*$password_hash = better_crypt($password); 
+	$sql = "INSERT INTO users (fullname,username,email,password,google_id) VALUES ('{$fullname}','{$username}','{$email}','{$password_hash}','none')";
+	$result = $db->query($sql);*/
+    
+     // use this ******* $sql = $sql = "INSERT INTO users (fullname,username,email,password,google_id) VALUES ('{$fullname}','{$username}','{$email}','{$hash}','none')";
+
+    $sql = $sql = "INSERT INTO users (fullname,username,email,password) VALUES ('{$fullname}','{$username}','{$email}','{$hash}')";
+    $result = $db->query($sql);
+	echo "Your registration is complete";
 }
 
 function signUp($db){
@@ -44,7 +52,7 @@ function signUp($db){
 if(isset($_POST['submit'])){
 	createUserTable($db);
 	if(SignUp($db)){
-		$url = "{$GLOBALS['ip']}Tracker/View/login.html";
+		$url = "{$GLOBALS['ip']}Tracker/View/login.php";
 		header( "Location: $url" );	
 	}else{
 		$_SESSION["message"] = "Username already in use please try another!";

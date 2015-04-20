@@ -114,10 +114,7 @@ class Essentials{
 
 	public function createArrayFromData($sql, $row){
 		$array = array();
-		
-		$data = explode("SELECT ", $sql)[1];
-		$data = explode(" FROM", $data)[0];
-		$data = explode(",", $data);
+		$data = explode(",", $sql);
 		
 		$array["status"] = "okay";
 		foreach ($data as $var_name) {
@@ -240,14 +237,27 @@ class Essentials{
 		
 		return $date_list;
 	}
+	
+	public function getLikeList($db, $type, $uid){
+		$sql = "SELECT mediaID, mediaName FROM likes WHERE userID = '{$uid}' AND mediaTable = '{$type}'";
+		$result = $db->query($sql);
+		$likeList = [];
+		$tick = 0;
+		while($row = $result->fetchArray()){
+			$likeList[$tick] = $row['mediaID'];
+			$tick ++;
+		}
+		return $likeList;
+	}
 
 	public function getList($db,$type,$organise,$page,$order){
+		$uid = 1;
 		//$maxPage = floor($this->getMaxID($type,$db) / 24);
 
 		if ($type == "films"){
-			$this->film->getFilmList($db,$type,$organise,$page,$order);
+			$this->film->getFilmList($db,$type,$organise,$page,$order,$uid);
 		}else{
-			$this->tv_show->getShowList($db,$type,$organise,$page,$order);
+			$this->tv_show->getShowList($db,$type,$organise,$page,$order,$uid);
 		}
 	}
 

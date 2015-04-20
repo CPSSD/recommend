@@ -1,0 +1,131 @@
+body {
+	background-color: #81C784;
+	font-family: "Open Sans", sans-serif;
+	margin: 0;
+	padding: 0;
+}
+
+a {
+	text-decoration:None;
+	color: rgb(0,0,0);
+}
+
+p{
+	line-height: 110%;
+	display:table;
+}
+
+
+.ias_loader, .ias_trigger {
+	text-align:center;
+	margin: 30px 0 40px;
+}
+
+.ias_trigger a:link, .ias_trigger a:visited {
+    padding: 4px 50px;
+    background-color: #f9f9f9;
+    border: solid 1px #ddd;
+    border-radius: 2px;
+    font-family: bold 12px "Open Sans", sans-serif;
+    color: #555;
+    text-decoration: none;
+}
+
+.ias_trigger a:hover, .ias_trigger a:active {
+    border-color: #ccc;
+}
+
+div.show_container{
+	background-color:#E8F5E9;
+	width:900px;
+    min-height: 50px;
+	box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.4);
+	margin: 0 auto;
+	padding-left:22px;
+	padding-top:20px;
+    padding-bottom:20px;
+	margin-top:40px;
+	border-color: rgb(0, 0, 0);
+    height:initial;
+}
+
+table{
+    margin: 0 auto;
+    width:400px;
+    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+tr{
+    width:100px;
+}
+
+table, th, td {
+    border: 1px solid #BDBDBD;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 5px;
+}
+
+div.info{
+    border:solid 1px;
+    padding-left:20px;
+    padding-right:20px;
+    padding-bottom:10px;
+    text-align:center;
+    background-color:white;
+    border-color:#000000;
+    width: 500px;
+	box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.6);
+    margin-left: 250px;
+    margin-bottom: 50px;
+    margin-right:50px;
+}
+
+div.info p{
+    text-align:center;
+}
+
+p.show_info{
+    color: black;
+    text-align: center;
+    border-radius: 2px;
+    padding: 0;
+    margin: 0;
+    height:25px;
+    font-size: 12px;
+    margin-bottom: 15px;
+    margin-left:3px;
+    background-color: #FFFFFF;
+    width: 88px;
+    float: left;
+    display: inline-block;
+    border-style: solid;
+    border-color: #FFFFFF;
+    z-index: 1;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.6);
+}
+
+div.show_info {
+    height: 20px;
+    margin: 0 auto;
+    width: 206px;
+    margin-top:10px;
+}
+
+div.image{
+	display:inline-block;
+	width:223px;
+	height:350px;
+	box-shadow: rgba(0, 0, 0, 0.8);
+}
+
+img.liked {
+}
+
+img.cover {
+	width:200;
+	height:250;
+	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+}
