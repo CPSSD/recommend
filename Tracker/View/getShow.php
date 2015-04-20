@@ -12,12 +12,12 @@
 			$json = file_get_contents("{$GLOBALS["ip"]}Tracker/index.php?type=tv_shows&id={$id}&season={$season}");
 			$obj = json_decode($json, true);
             $db = new SQLite3($_SERVER['DOCUMENT_ROOT'].'/Tracker/database.db');
-
-            if(!$obj){
+            //echo $json;
+            /*if(!$obj){
                 $_SESSION["message"] = "No Show with that ID";
 			    $url = "{$GLOBALS['ip']}Tracker/View/displayMessage.php";
 			    header( "Location: $url" );
-            }          
+            }    */      
 
 			$seasonUp = $season+1; 
 			$seasonDown = $season-1; 
@@ -27,34 +27,61 @@
             $genre = str_replace("+",", ",$genre);
             include_once("Tracker/View/navbar.php");
 
-			echo "<div class='navigation'>";
+			/*echo "<div class='navigation'>";
                 if($util->checkNextSeason($seasonDown,$id)){
                     echo "<a href=".$util->nextSeason($seasonDown,$id).">Previous Season |</a>";
                 }
                 if($util->checkNextSeason($seasonUp,$id)){
                     echo "<a href=".$util->nextSeason($seasonUp,$id)."> Next Season</a>";
                 }
-			echo "</div>";
+			echo "</div>";*/
 		?>
 		
 			<div class='show_container'>
-					<div class='image' style='text-align:left'>
-					<?php echo "<img class='cover' src='" . $obj['image'] . "'/>";
-					echo "<p><b>Rating:</b> " . $obj['rating'] . " stars.</p>";
-					echo "<p><b>Genre:</b> " . $genre . ".</p>";
-					echo "</div>";
-					echo "<div style='width:500px;float:right;'>";
-					
-					echo "<h3 class='title'><em> Name: </em><u>" . $obj['name'] . "</u></h2>";
-					foreach($obj['show'] as $show){
-						echo "<div class='episode'>";
-							echo "<p><em>Episode " .$show['episode']. ":</em> " .$show['tile']. ". " .$show['date']. "<br></p>";
-						echo"</div>";
-					}?>
-					</div>
+					<div class='image' style='float:left'>
+					    <?php echo "<img class='cover' src='" . $obj['image'] . "'>";?>
+                            <div class='show_info'>
+                                <?php echo "<p class='show_info'>".$obj['total_seasons']." Seasons</p>";
+                                      echo "<p class='show_info'>".$obj['total_episodes']." Episodes</p>";
+                                      if($genre){
+                                          echo "<p></p><p class='show_info'>".$genre."</p>";
+                                      }
+                                      if($obj['rating'] != 0){
+                                          echo "<p class='show_info'>".$obj['rating']." stars</p>";
+                                      }
+                                      if($util->checkNextSeason($seasonDown,$id)){
+                                          echo "<p></p><p class='show_info'><b><a href=".$util->nextSeason($seasonDown,$id).">Previous Season</a></b></p>";
+                                      }
+                                      if($util->checkNextSeason($seasonUp,$id)){
+                                          echo "<p class='show_info'><b><a href=".$util->nextSeason($seasonUp,$id)."> Next Season</a></b>";
+                                       }
+                                    ?>         
+                            </div>
+                    </div>
+
+                    <div class='info'>
+                        <?php echo "<h2 class='title'>".$obj['name']."</h2>";
+                              echo "<p style='text-align:center'>" .$obj['synopsis']. "</p>";
+                        ?>
+                        <table style='width=100%;text-align:center'>
+                            <tr>
+                                <th>Season</th>
+                                <th>Episode</th>
+                                <th>Title</th>
+                            </tr>
+                            <?php foreach($obj['show'] as $show){
+                                echo "<tr>";
+                                    echo "<td>".$show['season']."</td>";
+                                    echo "<td>".$show['episode']."</td>";
+                                    echo "<td>".$show['title']."</td>";
+                                echo "</tr>";
+                            }?>
+                        </table>
+                        
+                    </div>
 			</div>	
 
-		<div style='margin-left:14%;float:left'>
+		<!--<div style='margin-left:14%;float:left'>
 			<?php if(!$util->rowExists($db,"track"))
 			{
 				echo "<form action='../Model/track.php?type={$type}&id={$id}' method='post'>";
@@ -85,6 +112,6 @@
                 echo "</form>"; 
             }?>
 			</form>
-		</div>		
+		</div>	-->	
 	</body>
 </html>
