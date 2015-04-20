@@ -18,7 +18,7 @@ def read_config():
     global file
     data = {}
     for line in file:
-        if (not line.startswith("#")) and (not line.startswith("\n")):
+        if (not line.startswith("#")) and (not line.startswith("\r\n")) and (not line.startswith("\n")):
             line = line.split("=")
             section = util.clean_text(line[0])
             value = util.clean_text(line[1])

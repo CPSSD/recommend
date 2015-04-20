@@ -8,6 +8,8 @@ import mysql_connector as mysql
 
 debug = False
 
+months = {'January': 1, 'February': 2, 'March': 3, 'April': 4, 'May': 5, 'June': 6, 'July': 7, 'August': 8, 'September': 9, 'October': 10, 'November': 11, 'December': 12}
+
 # Creates a directory for the database files to be saved in.
 print "* Creating database directory..."
 try:
@@ -15,6 +17,11 @@ try:
 except OSError:
     print("* Database directory already exists.")
 
+# Given in the form day month year
+def parse_date(day, month, year):
+    new_date = "%s-%s-%s" % (year, months[month], day)
+    return new_date
+    
 def convertToSQLite(table_schema, vartype):
     print("Converting to sqlite")
     sqlite.open_database_connection(True, table_schema, "films", "films", vartype)
@@ -77,7 +84,9 @@ def remove_accents(input):
 # Creates a valid table name for the databases based on the input string.
 def create_table_name(name):
     banned_chars = ['\'', '"', '*', ';', '-', '+', '/', '\\', '|', '!', '£', '$', '% ', '^', '&', '(', ')', '[', ']', ':', ';', '?', ',', '.', '`', '@']
-    table_name = name.replace(" ", "_")
+    table_name = name.replace(" ", "_") 
+    if table_name.__contains__("%"):
+        table_name = table_name.replace("%", " ");
     for char in banned_chars:
         table_name = table_name.replace(char, "")
     table_name = "_%s" % table_name

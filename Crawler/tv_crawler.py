@@ -83,57 +83,70 @@ def scrape_imdb(url):
 
 def scrape_wikipedia(url):
 	util.debug_print("Grabbing Data from '%s'" % url)
-	#url = '/wiki/List_of_Banshee_episodes'
 	html = requests.get("http://en.wikipedia.org%s" % url).text
 	bs4 = BeautifulSoup(html)
-
-	name = bs4.find('h1', {'class': 'firstHeading'})
-	if name.i is None:
-		name = name.text.split("List of")[1].split("episodes")[0]
-		name = util.clean_text(name)
-	else:
-		name = util.clean_text(name.i.text)
-
-	episode_tables = bs4.find_all('table', {'class': 'wikitable plainrowheaders'})
-	season_count = 0
-	data = None
-	episode_list_data = [{'name': name}]
-	for episode_table in episode_tables:
-		season_count += 1
-		episode_count = 0
-		episode_list = episode_table.find_all('tr', {'class': 'vevent'})
-		for episode in episode_list:
-			if season_count is 2 and data is None:
-				season_count = 1;
-			episode_count += 1
-			title = episode.find('td', {'class', 'summary'}).text
-			title = title.replace("\"", "")
-			title = util.clean_text(title)
-
-			release_date = episode.find('span', {'class': 'bday dtstart published updated'})
-			if release_date is not None:
-				banned_dates = {"Unaired"}
-				release_date = util.clean_text(release_date.text)
-				for date in banned_dates:
-					if release_date == date:
-						release_date = "-   NA   -"
+	episode_list_data = []
+	
+	date = bs4.find('li', {'id': 'footer-info-lastmod'})
+	if(date != None):
+		date = date.text.split("modified on ")[1]
+		date = date.split(",")[0]
+		date = date.split(" ")
+		date1 = util.parse_date(date[0], date[1], date[2])
+		date2 = config['last_update'].split("-")
+		date2 = util.parse_date(date2[0], date2[1], date2[2])
+		util.debug_print((date1, "  vs  ", date2, " => ", util.compare_dates(date1, date2)))
+		
+	if(date != None):
+		episode_list_data = [{'save': False}]
+		if (util.compare_dates(date1, date2)):
+			name = bs4.find('h1', {'class': 'firstHeading'})
+			if name.i is None:
+				name = name.text.split("List of")[1].split("episodes")[0]
+				name = util.clean_text(name)
 			else:
-				release_date = "-   NA   -"
+				name = util.clean_text(name.i.text)
 
-			if len(episode_list_data) > 2:
-				if not util.compare_dates(release_date, episode_list_data[len(episode_list_data)-1]['date']):
-					print("NOT AN EPISODE | %d \t| %d \t| %s \t | %s" % (season_count, episode_count, release_date, title))
-					break # Prevents all of the next episodes from being added to database as they are web-series/mini-series and not the actual show.
-				else:
-					util.debug_print("| %d \t| %d \t| %s \t | %s" % (season_count, episode_count, release_date, title))
+			episode_tables = bs4.find_all('table', {'class': 'wikitable plainrowheaders'})
+			season_count = 0
+			data = None
+			episode_list_data = [{'name': name, 'save': True}]
+			for episode_table in episode_tables:
+				season_count += 1
+				episode_count = 0
+				episode_list = episode_table.find_all('tr', {'class': 'vevent'})
+				for episode in episode_list:
+					if season_count is 2 and data is None:
+						season_count = 1;
+					episode_count += 1
+					title = episode.find('td', {'class', 'summary'}).text
+					title = title.replace("\"", "")
+					title = util.clean_text(title)
 
-			data = {
-				'season': season_count,
-				'episode': episode_count,
-				'title': title,
-				'date': release_date
-			}
-			episode_list_data.append(data)
+					release_date = episode.find('span', {'class': 'bday dtstart published updated'})
+					if release_date is not None:
+						banned_dates = {"Unaired"}
+						release_date = util.clean_text(release_date.text)
+						for date in banned_dates:
+							if release_date == date:
+								release_date = "-   NA   -"
+					else:
+						release_date = "-   NA   -"
+
+					if len(episode_list_data) > 2:
+						if not util.compare_dates(release_date, episode_list_data[len(episode_list_data)-1]['date']):
+							# print("NOT AN EPISODE | %d \t| %d \t| %s \t | %s" % (season_count, episode_count, release_date, title))
+							break # Prevents all of the next episodes from being added to database as they are web-series/mini-series and not the actual show.
+						else:
+							util.debug_print("| %d \t| %d \t| %s \t | %s" % (season_count, episode_count, release_date, title))
+
+					data = {
+						'season': season_count,
+						'episode': episode_count,
+						'title': title,
+						'date': release_date
+					}
+					episode_list_data.append(data)
 
 	return episode_list_data
 
@@ -303,17 +316,22 @@ def update_show_episodes(index, limit):
 	for show in show_link_data:
 		if tick >= index:
 			episode_list = scrape_wikipedia(show['episode_url'])
-			db.open_database_connection(True, episode_list_schema, config['database_file_name'], util.create_table_name(episode_list[0]['name']), episode_list_vartype)
-			episode_list.remove(episode_list[0])
-			for episode in episode_list:
-				util.debug_print("%d \t | Episode: | %d \t| %d \t| %s \t | %s" % (tick, episode['season'], episode['episode'], episode['date'], episode['title']))
-				db.write_to_database(episode, episode_list_layout)
-			db.close_database_connection()
-			tick += 1
-			if tick >= limit and limit is not -1:
-				break
-			show_tick += 1
-			print("%d: %s added to database." % (show_tick, (show['name'])))
+			if (episode_list[0]['save']):
+				db.open_database_connection(True, episode_list_schema, config['database_file_name'], util.create_table_name(episode_list[0]['name']), episode_list_vartype)
+				episode_list.remove(episode_list[0])
+				for episode in episode_list:
+					util.debug_print("%d \t | Episode: | %d \t| %d \t| %s \t | %s" % (tick, episode['season'], episode['episode'], episode['date'], episode['title']))
+					db.write_to_database(episode, episode_list_layout)
+				db.close_database_connection()
+				print("%d: [  Episodes Updated  ]: %s." % (show_tick, (show['name'])))
+				tick += 1
+				if tick >= limit and limit is not -1:
+					break
+				show_tick += 1
+			else:
+				tick += 1
+				show_tick += 1
+				print("%d: [ Had no new Content ]: %s." % (show_tick, (show['name'])))
 		else:
 			tick += 1
 			util.debug_print("Skipping Episode: %d" % tick)

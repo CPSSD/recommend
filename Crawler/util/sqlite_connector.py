@@ -71,11 +71,14 @@ class Database:
 
     def create_template_tables(self, show_list, schema):
         self.connection = lite.connect('database/%s.db' % Database.config['database_file_name'])
+        print("* Adding tables for all shows...")
         cur = self.connection.cursor()
         for show in show_list:
-            print(show['location'])
-            cur.execute("CREATE TABLE IF NOT EXISTS %s(%s)" % (show['location'], schema))
-            self.connection.commit()
+            try: 
+                cur.execute("CREATE TABLE IF NOT EXISTS %s(%s)" % (show['location'], schema))
+                self.connection.commit() 
+            except:
+                pass
         cur.close()
         self.connection.commit()
         self.connection.close()
