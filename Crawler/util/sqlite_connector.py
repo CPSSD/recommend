@@ -23,6 +23,7 @@ class Database:
             cur.close()
             self.connection.commit()
         else:
+            self.table_name = table
             self.connection = lite.connect('database/%s.db' % database)
             cur = self.connection.cursor()
             cur.execute("SELECT %s FROM %s;" % (table_schema, table))
@@ -72,7 +73,7 @@ class Database:
         self.connection = lite.connect('database/%s.db' % Database.config['database_file_name'])
         cur = self.connection.cursor()
         for show in show_list:
-            print show['location']
+            print(show['location'])
             cur.execute("CREATE TABLE IF NOT EXISTS %s(%s)" % (show['location'], schema))
             self.connection.commit()
         cur.close()

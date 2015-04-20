@@ -74,7 +74,7 @@ def get_series_info(root):
     for attrib, name in zip(attrib_list, name_list):
         try:    
             if name == "image":
-                print "Updating Image."
+                print("Updating Image.")
                 data[name] = "%s/banners/%s" % (main_url, get_attrib(root, attrib, True))
             else:
                 data[name] = get_attrib(root, attrib, True)
@@ -105,7 +105,7 @@ def update_episode_data(database_name, data):
             episode['episode'] = int(episode['episode'])
             episode_db.write_to_database(episode, tv.episode_list_layout)
         except:
-            print "Error with episode in \"%s\"" % data[0]['title']
+            print("Error with episode in \"%s\"" % data[0]['title'])
     episode_db.close_database_connection()        
 
 def compare_data(data_old, data_new):
@@ -118,7 +118,7 @@ def compare_data(data_old, data_new):
         # Images from here are generally better. So always swap.
         if ((data == "image" and data_new["image"] != "http://thetvdb.com/banners/None")):
             data_old[data] = data_new[data]
-    print data_old['image'] 
+    print(data_old['image'])
     return data_old
     
 def clean_data(data):
@@ -135,6 +135,7 @@ def update_show_data(show_limit):
     series_list = tv.get_show_list(True)
     tick = 0
     file.open_file("tvdb_problems.txt", "w")
+    show_limit = config['episode_limit']
     db.open_database_connection(True, tv.tv_show_schema, config['database_file_name'], "tv_shows", tv.tv_show_vartype)
     for saved_data in series_list:
         if tick > config['episode_offset']:   
@@ -148,9 +149,9 @@ def update_show_data(show_limit):
                 update_episode_data(saved_data['location'], series_data);
                 new_data = clean_data(compare_data(saved_data, series_data[0]))
                 db.write_to_database(new_data, tv.tv_show_layout)
-                print "%d: Success with" % tick, series
+                print(("%d: Success with" % tick, series))
             else:
-                print "%d: Error with" % tick, series
+                print(("%d: Error with" % tick, series))
                 file.output("%d: Error: -> %s" % (tick, series))
             #except Exception as e:
             #    print "%d: Exception with" % tick, series
@@ -159,7 +160,7 @@ def update_show_data(show_limit):
         util.debug_print("***************************")
     db.close_database_connection()   
     file.close_file()
-    print "* Finished TVDB Crawl"
+    print("* Finished TVDB Crawl")
 
 if __name__ == "__main__":
     update_show_data(-1)

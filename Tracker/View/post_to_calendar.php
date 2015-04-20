@@ -91,6 +91,7 @@
 					$show_date = $section['date'];
 					foreach ($section['episodes'] as $episode) {
 				?>
+					var delay = 200;
 					var tick = 0;
 					if("<?php echo $episode['show'] ?>" == show_name){
 						<?php $show_name = $episode['show'] . " S" . $episode['season'] . "E" . $episode['episode']; ?>

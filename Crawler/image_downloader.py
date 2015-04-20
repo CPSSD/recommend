@@ -36,9 +36,9 @@ def download_file(url_link, file_name):
             file.write(buffer)
             tick +=1
         file.close()
-        print "    - File Saved: %s" % file_name
+        print("    - File Saved: %s" % file_name)
     except:
-        print "    - Timed out ..."
+        print("    - Timed out ...")
         return False
     return True
     
@@ -53,6 +53,6 @@ def download_all_images(media_list, type, database):
                 update_table(media['location'], "images/%s/%s" % (type, file_name), database)
 
 def update_table(id, file_name, database):
-	print "Updating Table"
+	print("Updating Table")
 	database.update_in_database(file_name, "image_location", "tv_shows", id, "location") 
-	print "Done"
+	print("Done")
