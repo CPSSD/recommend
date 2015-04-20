@@ -1,49 +1,52 @@
 nav{
+    background-color: #2E7D32;
 	display:block;
 	width: 100%; 	
-	margin-top:-50px;
+	margin-top:-40px;
 	height: 40px; 
 	z-index: 99; 
 	position: fixed; 
-	background-color: #366b82;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
 }
 
 .navbar	{
 	height: 40px;
+    width: 100%;
     padding: 0;
 	margin: 0;
 	position: absolute; 
-	border-right: 1px solid #54879d; 
+	border-right: 1px solid #1B5E20; 
 	}
 
 .navbar li {
 	height: 40px;
-	width: 251px;
+	width: 20%;
 	float: left;
 	text-align: center; 
 	list-style: none; 
 	font: normal bold 12px/1.2em Arial, Verdana, Helvetica;  
 	padding: 0;
 	margin: 0;
-	background-color: #366b82;
+	background-color: #2E7D32
 }
 
 .navbar a{							
 	padding: 12px 0;  
-	border-left: 1px solid #54879d; 
-	border-right: 1px solid #1f5065; 
+	border-left: 1px solid #1B5E20; 
+	border-right: 1px solid #1B5E20; 
 	text-decoration: none;  
 	color: white; 
 	display: block;
 }
 
 .navbar li:hover, a:hover {
-	background-color: #54879d;
+	background-color: #43A047;
 } 
 
 .navbar li ul 	{
 	display: none;  
-	height:40px;									
+	height:40px;
+    width: 100%;									
 	margin: 0; 
 	padding: 0;		
 }				
@@ -53,18 +56,19 @@ nav{
 }
 
 .navbar li ul li {
-	background-color: #54879d;
+	background-color: #43A047;
+    width: 100%;
 } 
 
 .navbar li ul li a 	{
-	border-left: 1px solid #1f5065; 
-	border-right: 1px solid #1f5065; 
-	border-top: 1px solid #74a3b7; 
-	border-bottom: 1px solid #1f5065; 
+	border-left: 1px solid #1B5E20; 
+	border-right: 1px solid #1B5E20; 
+	border-top: 1px solid #66BB6A; 
+	border-bottom: 1px solid #1B5E20; 
 }
 				
 .navbar li ul li a:hover{
-	background-color: #366b82;
+	background-color: #2E7D32
 }
 
 .navbar li ul li ul {

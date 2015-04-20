@@ -1,6 +1,7 @@
 <?php
 $query = $_SERVER['QUERY_STRING'];
 $query = substr($query,5,5);
+$type = $_GET["type"];
 if($query == "films"){
     $x = "Film";
     $media = "Films";
@@ -8,12 +9,34 @@ if($query == "films"){
     $x = "Show";
     $media = "Tv Shows";
 }
+$order = $_GET['order'];
+$organise= $_GET['organise'];
+
+if($order == "ASC"){
+    if($organise == 1){
+        $sort = "Name(A-Z)";
+    }else if($organise == 2){
+        $sort = "Release Date(Old - New)";
+    }else{
+        $sort = "Rating(Low - High)";
+    }
+}else{
+    if($organise == 1){
+        $sort = "Name(Z-A)";
+    }else if($organise == 2){
+        $sort = "Release Date(New - Old)";
+    }else{
+        $sort = "Rating(High - Low)";
+    }
+}
+
+
 set_include_path("{$_SERVER['DOCUMENT_ROOT']}");
 require_once('Tracker/config.php');
 
 ?>        
 
-<link rel="stylesheet" type="text/css" href="css/navStyle.css" />
+<link rel="stylesheet" type="text/css" href="css/material_navbar.css" />
         <nav>
             <ul class='navbar'>
                 <li><a href="#"><?php echo $media;?></a>
@@ -22,17 +45,17 @@ require_once('Tracker/config.php');
                         echo "<li><a href='{$GLOBALS["ip"]}Tracker/View/getFilmList.php?type=films&organise=1&page=0&order=ASC'>Films</a></li>";?>
 				    </ul>
 				</li>
-			        <li><a href="#">Sort By</a>
+			        <li><a href="#"><?php echo $sort; ?></a>
 				    <ul>
-				        <?php echo "<li><a href='{$GLOBALS["ip"]}Tracker/View/get{$x}List.php?organise=1&page=0&order=ASC'>By Name(A-Z)</a></li>";
-                            echo "<li><a href='{$GLOBALS["ip"]}Tracker/View/get{$x}List.php?organise=1&page=0&order=DESC'>By Name(Z-A)</a></li>";
+				        <?php echo "<li><a href='{$GLOBALS["ip"]}Tracker/View/get{$x}List.php?type={$type}&organise=1&page=0&order=ASC'>By Name(A-Z)</a></li>";
+                            echo "<li><a href='{$GLOBALS["ip"]}Tracker/View/get{$x}List.php?type={$type}&organise=1&page=0&order=DESC'>By Name(Z-A)</a></li>";
 					        if ($media == "Films")
                             {
-                                echo "<li><a href='{$GLOBALS["ip"]}Tracker/View/get{$x}List.php?organise=2&page=0&order=ASC'>By Release Date(Old-New)</a></li>";
-					            echo "<li><a href='{$GLOBALS["ip"]}Tracker/View/get{$x}List.php?organise=2&page=0&order=DESC'>By Release Date(New-Old)</a></li>";
+                                echo "<li><a href='{$GLOBALS["ip"]}Tracker/View/get{$x}List.php?type={$type}&organise=2&page=0&order=ASC'>By Release Date(Old-New)</a></li>";
+					            echo "<li><a href='{$GLOBALS["ip"]}Tracker/View/get{$x}List.php?type={$type}&organise=2&page=0&order=DESC'>By Release Date(New-Old)</a></li>";
                             }
-					        echo "<li><a href='{$GLOBALS["ip"]}Tracker/View/get{$x}List.php?organise=3&page=0&order=ASC'>By Rating(Low-High)</a></li>";
-					        echo "<li><a href='{$GLOBALS["ip"]}Tracker/View/get{$x}List.php?organise=3&page=0&order=DESC'>By Rating(High-Low)</a></li>";?>
+					        echo "<li><a href='{$GLOBALS["ip"]}Tracker/View/get{$x}List.php?type={$type}&organise=3&page=0&order=ASC'>By Rating(Low-High)</a></li>";
+					        echo "<li><a href='{$GLOBALS["ip"]}Tracker/View/get{$x}List.php?type={$type}&organise=3&page=0&order=DESC'>By Rating(High-Low)</a></li>";?>
 				    </ul>
 				</li>
 				</li>
@@ -71,7 +94,7 @@ require_once('Tracker/config.php');
 					    }else{
 							echo "<li><a href='#'>User</a>";
 							echo "<ul>";
-                            echo "<li><a href='signUp.php'>Sign Up</a></li>";
+                            echo "<li><a href='signUp.html'>Sign Up</a></li>";
 					        echo "<li><a href='login.php'>Log In</a></li>";
 					    }
 					?>
