@@ -5,17 +5,17 @@
 	<body>
 		<?php
 			set_include_path("{$_SERVER['DOCUMENT_ROOT']}");
-			require_once('Tracker/View/Util.php'); 
-			require_once('Tracker/config.php');
+			require_once('View/Util.php'); 
+			require_once('config.php');
 			$id = $_GET["id"];
 			$season = $_GET["season"];
-			$json = file_get_contents("{$GLOBALS["ip"]}Tracker/index.php?type=tv_shows&id={$id}&season={$season}");
+			$json = file_get_contents("{$GLOBALS["ip"]}index.php?type=tv_shows&id={$id}&season={$season}");
 			$obj = json_decode($json, true);
-            $db = new SQLite3($_SERVER['DOCUMENT_ROOT'].'/Tracker/database.db');
+            $db = new SQLite3($_SERVER['DOCUMENT_ROOT'].'/database.db');
             //echo $json;
             /*if(!$obj){
                 $_SESSION["message"] = "No Show with that ID";
-			    $url = "{$GLOBALS['ip']}Tracker/View/displayMessage.php";
+			    $url = "{$GLOBALS['ip']}View/displayMessage.php";
 			    header( "Location: $url" );
             }    */      
 
@@ -25,7 +25,7 @@
 			$type = "tv_shows";
             $genre = $obj['genre'];
             $genre = str_replace("+",", ",$genre);
-            include_once("Tracker/View/navbar.php");
+            include_once("View/navbar.php");
 		?>
 		
 			<div class='show_container'>

@@ -1,10 +1,10 @@
 <?php session_start();
 
 set_include_path("{$_SERVER['DOCUMENT_ROOT']}");
-require_once('Tracker/config.php');
-require_once('Tracker/Model/Essentials.php');
-require_once('Tracker/Model/Film.php');
-require_once('Tracker/Model/TV.php');
+require_once('config.php');
+require_once('Model/Essentials.php');
+require_once('Model/Film.php');
+require_once('Model/TV.php');
 
 class Controller{
 
@@ -78,7 +78,7 @@ class Controller{
 				}
 			}
 		} else {
-			$url = "{$GLOBALS['ip']}Tracker/View/getFilmList.php?type=films&organise=1&page=0";
+			$url = "{$GLOBALS['ip']}View/getFilmList.php?type=films&organise=1&page=0";
 			header( "Location: $url" );
 		}
 	}

@@ -5,8 +5,8 @@
 	<body>
 	<?php
 		set_include_path("{$_SERVER['DOCUMENT_ROOT']}");
-		require_once('Tracker/View/Util.php'); 
-		require_once('Tracker/config.php');
+		require_once('View/Util.php'); 
+		require_once('config.php');
         $page = $_GET["page"];
 		$type = $_GET['type'];
 		if($type == "films"){
@@ -15,14 +15,14 @@
             $media = "tv_shows";
         }
 
-		$json = file_get_contents("{$GLOBALS["ip"]}Tracker/index.php?type={$type}&organise=3&page={$page}&order=DESC");    
+		$json = file_get_contents("{$GLOBALS["ip"]}index.php?type={$type}&organise=3&page={$page}&order=DESC");    
 		$obj = json_decode($json, true);
 		
 		$column = 0;
 		$row = 0;
 		$per_row = 3;
 		$util = new Util();
-        include_once('Tracker/View/navbar.php');	
+        include_once('View/navbar.php');	
 		$tick = 0;
 		echo "<div class='show_container'>";
 			echo "<form method='post' action ='../Model/insertLikes.php?type={$type}&page={$page}'>";
@@ -56,8 +56,8 @@
 		</div>
 		<div class="navigation">
 		<?php
-			echo "<a href='{$GLOBALS["ip"]}Tracker/View/getLikes.php?type=films&page=" . $util->checkNextLike($type,$page-1) . "'>Previous Page</a> |";
-			echo "<a href='{$GLOBALS["ip"]}Tracker/View/getLikes.php?type=films&page=" . $util->checkNextLike($type,$page+1) . "'> Next Page.</a>";
+			echo "<a href='{$GLOBALS["ip"]}View/getLikes.php?type=films&page=" . $util->checkNextLike($type,$page-1) . "'>Previous Page</a> |";
+			echo "<a href='{$GLOBALS["ip"]}View/getLikes.php?type=films&page=" . $util->checkNextLike($type,$page+1) . "'> Next Page.</a>";
 		?>
 	
 		</div>

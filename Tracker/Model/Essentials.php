@@ -1,7 +1,7 @@
 <?php
 set_include_path("{$_SERVER['DOCUMENT_ROOT']}");
-include_once('Tracker/Model/Film.php'); 
-include_once('Tracker/Model/TV.php'); 
+include_once('Model/Film.php'); 
+include_once('Model/TV.php'); 
 
 class Essentials{
 
@@ -38,7 +38,7 @@ class Essentials{
 	}
 
     public function recommendations($db,$type,$userID){
-		$json = file_get_contents("{$GLOBALS["ip"]}Tracker/index.php?type={$type}&userLikes={$userID}");
+		$json = file_get_contents("{$GLOBALS["ip"]}index.php?type={$type}&userLikes={$userID}");
 		$obj = json_decode($json, true);
 
 		//gets all liked films and puts them in an array

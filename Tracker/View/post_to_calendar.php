@@ -57,14 +57,14 @@
 			function processEpisodes(){				
 				<?php
 				set_include_path("{$_SERVER['DOCUMENT_ROOT']}");
-				require_once('Tracker/config.php');
+				require_once('config.php');
 				$date = date("Y-m-d");
 				session_start();
 				if(!isset($_SESSION['userID'])){
 					appendText("You are not logged in...", "li");
 				}
 				$uid = $_SESSION['userID'];
-				$json = file_get_contents("{$GLOBALS["ip"]}Tracker/index.php?type=calendar&date={$date}&media=tv&range=month&uid={$uid}");
+				$json = file_get_contents("{$GLOBALS["ip"]}index.php?type=calendar&date={$date}&media=tv&range=month&uid={$uid}");
 				$data = json_decode($json, true);
 				
 				$episode_list = [];
@@ -200,7 +200,7 @@
 	</head>
 	<body>	
 	<?php
-		require_once('Tracker/View/navbar.php');
+		require_once('View/navbar.php');
 	?>
 		<div class="show_container" style="width:400px;padding:5px 10px;text-align:center">
 		<div class="google-calendar-button" id="authorize-div">

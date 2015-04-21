@@ -2,8 +2,8 @@
 
 
 set_include_path("{$_SERVER['DOCUMENT_ROOT']}");
-$db = new SQLite3($_SERVER['DOCUMENT_ROOT'].'/Tracker/database.db');
-require_once('Tracker/config.php');
+$db = new SQLite3($_SERVER['DOCUMENT_ROOT'].'/database.db');
+require_once('config.php');
 
 function createLikeTable($db){
 	$sql = "CREATE TABLE IF NOT EXISTS likes(userID INTEGER, mediaTable TEXT, mediaName TEXT, mediaID INTEGER, mediaImage TEXT)";

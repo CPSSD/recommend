@@ -9,7 +9,7 @@
 		<?php
 			$date1 = date("Y-m-d");
 			$media = $_GET["q"];
-			$json = file_get_contents("http://localhost:25565/Tracker/index.php?type=calendar&current={$date1}&media={$media}"); 
+			$json = file_get_contents("http://localhost:25565/index.php?type=calendar&current={$date1}&media={$media}"); 
 			$data = json_decode($json, true);
 			$tick = 0;
 			foreach ($data as $section){
@@ -28,11 +28,11 @@
 						echo "<ul class=\"calendar-list\">";
 						if ($media == "tv"){
 							foreach ($section["episodes"] as $episode){
-								echo "<li><a href=\"http://localhost:25565/Tracker/View/getShow.php?id={$episode['show-id']}&season=1\"><div>S{$episode['season']}E{$episode['episode']} - {$episode['show']}</div></a></li>";
+								echo "<li><a href=\"http://localhost:25565/View/getShow.php?id={$episode['show-id']}&season=1\"><div>S{$episode['season']}E{$episode['episode']} - {$episode['show']}</div></a></li>";
 							}
 						} else if($media = "film"){
 							foreach ($section["movies"] as $movie){
-								echo "<li><a href=\"http://localhost:25565/Tracker/View/getFilm.php?id={$movie['id']}\"><div>{$movie['name']}</div></a></li>";
+								echo "<li><a href=\"http://localhost:25565/View/getFilm.php?id={$movie['id']}\"><div>{$movie['name']}</div></a></li>";
 							}
 						}
 						echo '</ul>';

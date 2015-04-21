@@ -26,8 +26,8 @@
         <body>
         <?php
             set_include_path("{$_SERVER['DOCUMENT_ROOT']}");
-	        require_once('Tracker/View/Util.php'); 
-	        require_once('Tracker/config.php');
+	        require_once('View/Util.php'); 
+	        require_once('config.php');
 	        $organise = $_GET["organise"];
 	        $page = $_GET["page"];
             $order = $_GET["order"];
@@ -35,17 +35,17 @@
 			if(isset($_SESSION["userID"])){
 				$uid = $_SESSION["userID"];
 			}
-		    $json = file_get_contents("{$GLOBALS["ip"]}Tracker/index.php?type=films&organise={$organise}&page={$page}&order={$order}&uid={$uid}");
+		    $json = file_get_contents("{$GLOBALS["ip"]}index.php?type=films&organise={$organise}&page={$page}&order={$order}&uid={$uid}");
             $nextPage = $page+1;
 		    $obj = json_decode($json, true);
             /*if(!$obj){
                 $_SESSION["message"] = "You're Page Value is too high or too low!!";
-			    $url = "{$GLOBALS['ip']}Tracker/View/displayMessage.php";
+			    $url = "{$GLOBALS['ip']}View/displayMessage.php";
 			    header( "Location: $url" );
             }*/      
 		?>
 
-        <?php include_once('Tracker/View/navbar.php');?>
+        <?php include_once('View/navbar.php');?>
 			
 			<div class='show_container'>
             <?php
@@ -57,7 +57,7 @@
 			    # Displays info for each movie.
 			    foreach($obj['films'] as $movie){
 				    echo "<div class='image'>";
-				    echo "<a href='{$GLOBALS["ip"]}Tracker/View/getFilm.php?type=films&id=" . $movie['id'] . "'>";
+				    echo "<a href='{$GLOBALS["ip"]}View/getFilm.php?type=films&id=" . $movie['id'] . "'>";
 				   	echo "<div class='cover_title'><p class='cover_title'>". $movie['name'] . "</p></div>";
 					echo "<img class='cover' src='" . $movie['image'] . "'/>";
 					if($movie['rating'] != "Unknown"){
@@ -79,7 +79,7 @@
             </div>
 		
 		    <div class="navigation" >
-			            <?php echo "<a href='{$GLOBALS["ip"]}Tracker/View/getFilmList.php?type={$type}&organise={$organise}&page={$nextPage}&order={$order}'></a>";?>
+			            <?php echo "<a href='{$GLOBALS["ip"]}View/getFilmList.php?type={$type}&organise={$organise}&page={$nextPage}&order={$order}'></a>";?>
             </div>
 	    </div>
 	</body>

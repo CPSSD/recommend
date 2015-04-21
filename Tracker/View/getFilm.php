@@ -6,25 +6,25 @@
 	<body>
 		<?php
 			set_include_path("{$_SERVER['DOCUMENT_ROOT']}");
-			require_once('Tracker/config.php');
-			require_once('Tracker/View/Util.php');
+			require_once('config.php');
+			require_once('View/Util.php');
             $id = $_GET["id"];
 			$uid = 0;
-			$json = file_get_contents("{$GLOBALS["ip"]}Tracker/index.php?type=films&id={$id}"); 
+			$json = file_get_contents("{$GLOBALS["ip"]}index.php?type=films&id={$id}"); 
 			$movie = json_decode($json, true);
             if(!$movie){
                 $_SESSION["message"] = "No Film with that ID";
-			    $url = "{$GLOBALS['ip']}Tracker/View/displayMessage.php";
+			    $url = "{$GLOBALS['ip']}View/displayMessage.php";
 			    header( "Location: $url" );
             }
 			$id = $movie['id'];
-			$db = new SQLite3($_SERVER['DOCUMENT_ROOT'].'/Tracker/database.db'); 
+			$db = new SQLite3($_SERVER['DOCUMENT_ROOT'].'/database.db'); 
 			$util = new Util();
 			
 			$genre = substr($movie['genre'],8,-2);
 			$genre = str_replace("+",", ",$genre);
 			$type = "films";
-            include_once("Tracker/View/navbar.php");
+            include_once("View/navbar.php");
 		?>
 			<div class='show_container'>
 				<div class='image' style='float:left'>

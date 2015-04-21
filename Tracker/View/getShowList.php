@@ -26,15 +26,15 @@
 		<?php
 
 			set_include_path("{$_SERVER['DOCUMENT_ROOT']}");
-			require_once('Tracker/View/Util.php');
-			require_once('Tracker/config.php'); 
+			require_once('View/Util.php');
+			require_once('config.php'); 
 			$organise = $_GET["organise"];
 			$page = $_GET["page"];
             $order = $_GET["order"];
             $nextPage = $page+1;
             $previousPage = $page-1; 
 			
-			$json = file_get_contents("{$GLOBALS["ip"]}Tracker/index.php?type=tv_shows&organise={$organise}&page={$page}&order={$order}");
+			$json = file_get_contents("{$GLOBALS["ip"]}index.php?type=tv_shows&organise={$organise}&page={$page}&order={$order}");
 			$obj = json_decode($json, true);
 			
 			$type = 'tv_shows';
@@ -43,14 +43,14 @@
 			$per_row = 4;	
 			$util = new Util();
 		?>
-        <?php include_once('Tracker/View/navbar.php');?>
+        <?php include_once('View/navbar.php');?>
         
 			<?php
 			echo "<div class='show_container'>";
 			# Displays info for each show.
 			foreach($obj['tv_shows'] as $show){
 				echo "<div class='image'>";
-					echo "<a href='{$GLOBALS["ip"]}Tracker/View/getShow.php?type=tv_shows&id=" . $show['id'] . "&season=1'>";
+					echo "<a href='{$GLOBALS["ip"]}View/getShow.php?type=tv_shows&id=" . $show['id'] . "&season=1'>";
 					echo "<div class='cover_title'><p class='cover_title'>". $show['name'] . "</p></div>";
 					echo "<img class='cover' src='" . $show['image'] . "'/>";
 					if($show['rating'] != "Unknown"){
@@ -66,7 +66,7 @@
 				}
 			}?>
 		    <div class="navigation" style="text-align:center;">
-                <?php echo "<a href='{$GLOBALS["ip"]}Tracker/View/getShowList.php?type={$type}&organise={$organise}&page={$nextPage}&order={$order}'></a>";?>
+                <?php echo "<a href='{$GLOBALS["ip"]}View/getShowList.php?type={$type}&organise={$organise}&page={$nextPage}&order={$order}'></a>";?>
 		    </div>
         </div>
 	</body>

@@ -5,9 +5,9 @@
     <body>
             <?php
                 set_include_path("{$_SERVER['DOCUMENT_ROOT']}");
-                include_once('Tracker/View/navbar.php');
-		        require_once('Tracker/config.php');
-                require_once('Tracker/View/Util.php');
+                include_once('View/navbar.php');
+		        require_once('config.php');
+                require_once('View/Util.php');
                 $type = $_POST["type"];
                 if($type == "films"){
                     $x = "Film";
@@ -21,7 +21,7 @@
                 }else{
                     $rating = $_POST["rating"];         
                 }
-		        $url = "{$GLOBALS["ip"]}Tracker/index.php?type={$type}&param={$params}&rating={$rating}";
+		        $url = "{$GLOBALS["ip"]}index.php?type={$type}&param={$params}&rating={$rating}";
 		        $newURL = str_replace(' ','%20',$url);
 		        $json = file_get_contents($newURL);
                 $column = 0;
@@ -32,7 +32,7 @@
 
 		        if( empty($obj[$type]) ){
 			        $_SESSION["message"] = "No results for your selected search";
-			        $url = "{$GLOBALS['ip']}Tracker/View/displayMessage.php";
+			        $url = "{$GLOBALS['ip']}View/displayMessage.php";
 			        header( "Location: $url" );
 		        }
 
@@ -41,7 +41,7 @@
 			foreach($obj[$type] as $movie){
 				echo "<div class='image'>";
                 echo $movie['id'];
-				echo "<a href='{$GLOBALS["ip"]}Tracker/View/get{$x}.php?type={$type}&id=" . $movie['id'] . "&season=1'>";
+				echo "<a href='{$GLOBALS["ip"]}View/get{$x}.php?type={$type}&id=" . $movie['id'] . "&season=1'>";
 				echo "<img class='cover' src='" . $movie['image'] . "'/>";
 				echo "<p><b>Name:</b> " . $movie['name'] . "<br />";
 				//echo "<b>Date:</b> " . $movie['date'] . "<br />";

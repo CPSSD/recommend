@@ -1,14 +1,14 @@
 <?php
 
 set_include_path("{$_SERVER['DOCUMENT_ROOT']}");
-include_once('Tracker/Model/Essentials.php'); 
-include_once('Tracker/config.php'); 
+include_once('Model/Essentials.php'); 
+include_once('config.php'); 
 
 class Film extends SQLite3{
 	
 	//returns recommended films to the View Pages to be displayed
 	public function filmRecommendations($db,$type,$userID){
-		$json = file_get_contents("{$GLOBALS["ip"]}Tracker/index.php?type=films&recommendations={$userID}");
+		$json = file_get_contents("{$GLOBALS["ip"]}index.php?type=films&recommendations={$userID}");
         var_dump($json);
 		$obj = json_decode($json, true);
 		//gets all liked films and puts them in an array

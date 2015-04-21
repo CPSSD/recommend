@@ -1,7 +1,7 @@
 <?php
 
 set_include_path("{$_SERVER['DOCUMENT_ROOT']}");
-include_once('Tracker/Model/Essentials.php'); 
+include_once('Model/Essentials.php'); 
 
 class TV extends SQLite3{
 
