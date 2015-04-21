@@ -18,6 +18,12 @@
 		    $row = 0;
 		    $per_row = 4;
 		    $util = new Util();
+
+            if(!$obj){
+                $_SESSION["message"] = "You haven't liked anything yet, get liking!!";
+			    $url = "{$GLOBALS['ip']}Tracker/View/displayMessage.php";
+			    header( "Location: $url" );
+            }   
         ?>        
         <div class='show_container'>
         <?php

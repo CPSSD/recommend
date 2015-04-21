@@ -12,7 +12,7 @@ function createLikeTable($db){
 
 function insert($db,$mediaName,$mediaID,$mediaImage){	
 	$stmt = $db->prepare('INSERT INTO likes(userID,mediaTable,mediaName,mediaID,mediaImage) VALUES (:userID, :mediaTable, :mediaName, :mediaID, :mediaImage)');
-	$stmt->bindValue(':mediaTable',$_GET['type'],SQLITE3_TEXT);
+	$stmt->bindValue(':mediaTable',$_POST['type'],SQLITE3_TEXT);
 	$stmt->bindValue(':userID',$_SESSION['userID'],SQLITE3_INTEGER);
 	$stmt->bindValue(':mediaName',$mediaName,SQLITE3_TEXT);
 	$stmt->bindValue(':mediaID',$mediaID,SQLITE3_INTEGER);
@@ -22,7 +22,7 @@ function insert($db,$mediaName,$mediaID,$mediaImage){
 
 function delete($db,$mediaName){
 	$stmt = $db-> prepare('DELETE FROM likes WHERE userID = :userID AND mediaName = :mediaName AND mediaTable = :mediaTable');
-	$stmt->bindValue(':mediaTable',$_GET['type'],SQLITE3_TEXT);
+	$stmt->bindValue(':mediaTable',$_POST['type'],SQLITE3_TEXT);
 	$stmt->bindValue(':userID',$_SESSION['userID'],SQLITE3_INTEGER);
 	$stmt->bindValue(':mediaName',$mediaName,SQLITE3_TEXT);
 	$result = $stmt->execute();
@@ -30,7 +30,7 @@ function delete($db,$mediaName){
 
 function rowExists($db,$mediaName){
 	$stmt = $db->prepare('SELECT userID, mediaName,mediaTable FROM `likes` WHERE userID = :userID AND mediaName = :mediaName AND mediaTable = :mediaTable');
-	$stmt->bindValue(':mediaTable',$_GET['type'],SQLITE3_TEXT);
+	$stmt->bindValue(':mediaTable',$_POST['type'],SQLITE3_TEXT);
 	$stmt->bindValue(':userID',$_SESSION['userID'],SQLITE3_INTEGER);
 	$stmt->bindValue(':mediaName',$mediaName,SQLITE3_TEXT);
 	$result = $stmt->execute();
@@ -40,22 +40,36 @@ function rowExists($db,$mediaName){
 	}else return false;
 }
 
-$type = $_GET['type'];
+$type = $_POST['type'];
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_SESSION['userID'])){
+
+
+//if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_SESSION['userID'])){
 	createLikeTable($db);
-	foreach($_POST['film'] as $media){
+    $name = $_POST['title'];
+    $id = $_POST['id'];
+    $image = $_POST['image'];
+    if(!rowExists($db,$name)){
+        insert($db,$name,$id,$image);
+    }else{
+        delete($db,$name);
+    }
+
+print_r($_POST);
+//}
+
+	/*foreach($_POST['film'] as $media){
         $mediaInfo = explode("&&&",$media);
 		if(!rowExists($db,$mediaInfo[0])){
 			insert($db,$mediaInfo[0],$mediaInfo[1],$mediaInfo[2]);
 		}else{
             delete($db,$mediaInfo[0]);
         }	
-	}
-}
+	}*/
+//}
 
-$url = $_SERVER['HTTP_REFERER'];
-header( "Location: $url" );
+//$url = $_SERVER['HTTP_REFERER'];
+//header( "Location: $url" );
 
 ?>
 
