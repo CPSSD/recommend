@@ -102,6 +102,9 @@ div.likeButton{
 #submit{
     color: white;
     background-color:#2E7D32;
+    border-color: #2E7D32;
+    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.4);
+    
 }
 
 table{

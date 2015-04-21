@@ -1,6 +1,15 @@
 <?php session_start();?>
 <html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link rel="stylesheet" type="text/css" href="css/material.css" />
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+	<script type="text/javascript" src="js/jquery-ias.min.js"></script>
+    <script src="js/submitlikes.js"></script>
+    <script src="js/toTop.js"></script>
+    <script src="js/scroll.js"></script>
+</head>
+
     <title>View Likes</title>
     <body>
 
@@ -19,11 +28,11 @@
 		    $per_row = 4;
 		    $util = new Util();
 
-            if(!$obj){
+            if(!$objShows && !$objFilms){
                 $_SESSION["message"] = "You haven't liked anything yet, get liking!!";
 			    $url = "{$GLOBALS['ip']}Tracker/View/displayMessage.php";
 			    header( "Location: $url" );
-            }   
+            } 
         ?>        
         <div class='show_container'>
         <?php
