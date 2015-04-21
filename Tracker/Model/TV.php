@@ -243,7 +243,6 @@ class TV extends SQLite3{
         }
 		
 		$essen = new Essentials();
-
 		$retval = $db->query($sql);
 		echo "{\"{$type}\":[";
 		$tick = 0;

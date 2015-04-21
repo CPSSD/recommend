@@ -7,10 +7,11 @@ body{
 div.signUp{ 
 	background-color:#E8F5E9;
 	width:30%;
-	box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.4);
+	box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.4);
 	margin: 0 auto;
 	border-color: rgb(0, 0, 0);
-    height:initial;
-
+    position:relative; 
+-webkit-box-shadow: inset 0px 2px 6px rgb(0,0,0,0.4);
+    top:25%;
 } 
 

@@ -19,7 +19,7 @@
 		    $util = new Util();
 		?>
 
-        <?php //include_once('Tracker/View/navbar.php');?>
+        <?php include_once('Tracker/View/navbar.php');?>
 			
 			<?php echo "<div class='show_container'>";
 			# Displays info for each movie.
@@ -43,7 +43,6 @@
 				echo "<a href='{$GLOBALS["ip"]}Tracker/View/getShow.php?type=films&season=1&id=" . $show['id'] . "'>";
 				echo "<img class='cover' src='" . $show['image'] . "'/>";
 				echo "<p><b>Name:</b> " . $show['name'] . "<br />";
-				echo "<b>Date:</b> " . $show['date'] . "<br />";
 				echo "<b>Rating:</b> " . $show['rating'] . " stars.</p>";
 				echo "</a></div>";
 				$column++;
