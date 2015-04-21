@@ -58,10 +58,13 @@
 			    foreach($obj['films'] as $movie){
 				    echo "<div class='image'>";
 				    echo "<a href='{$GLOBALS["ip"]}Tracker/View/getFilm.php?type=films&id=" . $movie['id'] . "'>";
-				    echo "<img class='cover' src='" . $movie['image'] . "'/>";
-				    echo "<p><b>Name:</b> " . $movie['name'] . "<br>";
-				    echo "<b>Date:</b> " . $movie['date'] . "<br>";
-				    echo "<b>Rating:</b> " . $movie['rating'] . " stars.</p>";
+				   	echo "<div class='cover_title'><p class='cover_title'>". $movie['name'] . "</p></div>";
+					echo "<img class='cover' src='" . $movie['image'] . "'/>";
+					if($movie['rating'] != "Unknown"){
+						$movie['rating'] = $movie['rating'] . " stars";
+					}
+					echo "<div class='cover_info'><p class='cover_info'><b>Rating:</b> " . $movie['rating'] . "";
+					echo "<br /><b>Date:</b> " . $movie['date'] . "<br></p></div>";
 				    echo "</a></div>";
 				    $column++;
 				    if($column >= $per_row){

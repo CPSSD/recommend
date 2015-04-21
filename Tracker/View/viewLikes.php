@@ -24,8 +24,8 @@
             foreach($objFilms['films'] as $movie){
 				echo "<div class='image'>";
 				echo "<a href='{$GLOBALS["ip"]}Tracker/View/getFilm.php?type=films&id=" . $movie['mediaID'] . "'>";
+				echo "<div class='cover_title'><p class='cover_title'>". $movie['mediaName'] . "</p></div>";
 				echo "<img class='cover' src='" . $movie['mediaImage'] . "'/>";
-				echo "<p><b>Name:</b> " . $movie['mediaName'] . "<br />";
 				echo "</a></div>";
 				$column++;
 				if($column >= $per_row){
@@ -34,6 +34,7 @@
 					echo "<br />";
 				}
 			}
+			
             foreach($objShows['tv_shows'] as $show){
 				echo "<div class='image'>";
 				echo "<a href='{$GLOBALS["ip"]}Tracker/View/getShow.php?type=films&season=1&id=" . $show['mediaID'] . "'>";

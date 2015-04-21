@@ -27,9 +27,9 @@
 			foreach($obj[$type] as $movie){
 				echo "<div class='image'>";
 				echo "<a href='{$GLOBALS["ip"]}Tracker/View/get{$x}.php?id=" . $movie['id'] . "&season=1'>";
+				echo "<div class='cover_title'><p class='cover_title'>". $movie['name'] . "</p></div>";
 				echo "<img class='cover' src='" . $movie['image'] . "'/>";
-				echo "<p><b>Name:</b> " . $movie['name'] . "</p>";
-				echo "<p><b>Rating:</b> " . $movie['rating'] . " stars.</p>";
+				echo "<div class='cover_info'><p class='cover_info'><b>Rating:</b> " . $movie['rating'] . " stars.</p></div>";
 				echo "</a></div>";
 				$column++;
 				if($column >= $per_row){

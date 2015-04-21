@@ -16,7 +16,7 @@ class Essentials{
 	public function get($db,$type,$id,$season){
 		if($type == "films"){
 			$this->film->getFilm($db,$type,$id);
-		}else{
+		} else {
 			$this->tv_show->getShow($db,$type,$id,$season);
 		}
 	}
@@ -32,7 +32,7 @@ class Essentials{
 			echo ",";
 		    }
 		    $tick++;
-		    echo json_encode($this->createArrayFromData($sql, $row));
+		    echo json_encode($this->createArrayFromData("mediaName,mediaTable,mediaImage,mediaID", $row));
 		}
 		echo "]}";
 	}
@@ -82,7 +82,7 @@ class Essentials{
 			echo ",";
 		    }
 		    $tick++;
-		    echo json_encode($this->createArrayFromData($sql, $row));
+		    echo json_encode($this->createArrayFromData("id,name,date,rating,image", $row));
 		}
 		echo "]}";
     }

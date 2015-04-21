@@ -35,9 +35,12 @@ class Util{
 		}
 	}
 
-	function rowExists($db,$table){
-		$stmt = $db->prepare("SELECT userID, mediaID,mediaTable FROM `{$table}` WHERE userID = :userID AND mediaID = :mediaID AND mediaTable = :mediaTable");
-		$stmt->bindValue(':mediaTable',$_GET['type'],SQLITE3_TEXT);
+	function rowExists($db,$table,$type){
+		if(!isset($_SESSION['userID'])){
+			return false;
+		}
+		$stmt = $db->prepare("SELECT userID,mediaID,mediaTable FROM `{$table}` WHERE userID = :userID AND mediaID = :mediaID AND mediaTable = :mediaTable");
+		$stmt->bindValue(':mediaTable',$type,SQLITE3_TEXT);
 		$stmt->bindValue(':userID',$_SESSION['userID'],SQLITE3_INTEGER);
 		$stmt->bindValue(':mediaID',$_GET['id'],SQLITE3_TEXT);
 		$result = $stmt->execute();

@@ -26,15 +26,6 @@
             $genre = $obj['genre'];
             $genre = str_replace("+",", ",$genre);
             include_once("Tracker/View/navbar.php");
-
-			/*echo "<div class='navigation'>";
-                if($util->checkNextSeason($seasonDown,$id)){
-                    echo "<a href=".$util->nextSeason($seasonDown,$id).">Previous Season |</a>";
-                }
-                if($util->checkNextSeason($seasonUp,$id)){
-                    echo "<a href=".$util->nextSeason($seasonUp,$id)."> Next Season</a>";
-                }
-			echo "</div>";*/
 		?>
 		
 			<div class='show_container'>
@@ -47,15 +38,37 @@
                                           echo "<p class='show_info double_info'>".$genre."</p>";
                                       }
                                       if($obj['rating'] != 0){
-                                          echo "<p class='show_info'>".$obj['rating']." Stars</p>";
+                                          echo "<p class='show_info double_info'>".$obj['rating']." Stars</p>";
                                       }
-                            #          if($util->checkNextSeason($seasonDown,$id)){
-                            #              echo "<br /><p class='show_info'><b><a href=".$util->nextSeason($seasonDown,$id).">Last Season</a></b></p>";
-                            #          }
-                            #          if($util->checkNextSeason($seasonUp,$id)){
-                            #              echo "<p class='show_info'><b><a href=".$util->nextSeason($seasonUp,$id).">Next Season</a></b>";
-                            #           }
-                                    
+									  echo "<br />";
+									  
+									  // Tracking
+									  if(!$util->rowExists($db,"track","tv_shows")){
+											echo "<form action='../Model/track.php?type=tv_shows&id={$id}' method='post'>";
+												echo "<label for='track'><p class='show_info button'>Track</p></label>";
+												echo "<input style='position:absolute;visibility:hidden' id='track' type='submit' name='formSubmit' value='Track' />";
+											echo "</form>";
+										} else {
+											echo "<form action='../Model/track.php?type=tv_shows&id={$id}' method='post'>";
+												echo "<a href'#'><label for='track'><p class='show_info button'>Untrack</p></label></a>";
+												echo "<input style='position:absolute;visibility:hidden' id='track' type='submit' name='formSubmit' value='Untrack' />";
+											echo "</form>";
+										}
+										
+										// Likes
+										if(!$util->rowExists($db,"likes","tv_shows")){
+											// Track
+											echo "<form action='../Model/insertLikes.php?type=tv_shows&id={$id}' method='post'>";
+												echo "<label for='like'><p class='show_info button'>Like</p></label>";
+												echo "<input style='position:absolute;visibility:hidden' id='like' type='submit' name='formSubmit' value='like' />";
+											echo "</form>";  
+										} else {
+											echo "<form action='../Model/insertLikes.php?type=tv_shows&id={$id}' method='post'>";
+												echo "<label for='like'><p class='show_info button'>Unlike</p></label>";
+												echo "<input style='position:absolute;visibility:hidden' id='like' type='submit' name='formSubmit' value='like' />";
+											echo "</form>";  
+										}
+										
 							function generate_table($obj){
 								$s = "";
 								foreach($obj['show'] as $show){
@@ -72,12 +85,35 @@
 									?>         
                             </div>
                     </div>
-
-					<script>
+										
+                    <div class='info'>
+                        <?php 
+							echo "<div class='title'><h2 class='title'>".$obj['name']."</h2></div>";
+                            echo "<div class='summary'><p class='summary''>" .$obj['synopsis']. "</p></div>";
+							  
+                            if($util->checkNextSeason($seasonDown,$id)){
+                                echo "<p class='show_info button'><b><a href=".$util->nextSeason($seasonDown,$id).">Last Season</a></b></p>";
+                            } else {
+							    echo "<p class='show_info button inactive'>Last Season</p>";
+                           }
+                            echo "<a href='#' onclick='change()'><div class='show_table_info button' id='show_hide'><b>Show Season Information...</b></div></a>";
+							if($util->checkNextSeason($seasonUp,$id)){
+                                echo "<p class='show_info button'><b><a href=".$util->nextSeason($seasonUp,$id).">Next Season</a></b></p>";
+                            } else {
+								echo "<p class='show_info button inactive'>Next Season</p>";
+                            }
+						?>
+						<script>
 						var visible = true;
 						
-						change();
-						
+						function init(){
+							if("<?php if ($season == 1){ echo "True"; } else { echo "False"; } ?>" == "True"){
+								console.log("Boop");
+							} else {	
+								console.log("not boop");
+								change();
+							}
+						}
 						function change(){
 							if(visible){
 								hide();
@@ -100,59 +136,13 @@
 							table.innerHTML = " <?php $test = "<tr><th>Episode</th><th>Title</th><th>Release</th></tr>" . generate_table($obj); echo $test; ?>";
 							table.style.height = "100px";
 						}
-					</script>
-							
-                    <div class='info'>
-                        <?php 
-							echo "<a href='#' onclick='change()'><div class='title'><h2 class='title'>".$obj['name']."</h2></div></a>";
-                            echo "<div class='summary'><p class='summary''>" .$obj['synopsis']. "</p></div>";
-							  
-                            if($util->checkNextSeason($seasonDown,$id)){
-                                echo "<p class='show_info'><b><a href=".$util->nextSeason($seasonDown,$id).">Last Season</a></b></p>";
-                            }if($util->checkNextSeason($seasonUp,$id)){
-                                echo "<p class='show_info'><b><a href=".$util->nextSeason($seasonUp,$id).">Next Season</a></b></p>";
-                            }
-                            echo "<a href='#' onclick='change()'><div class='show_table_info' id='show_hide'>Show Season Information...</div></a>";
-							
-						?>
+						</script>
+					
                         <table class='info' id='table'>
                             <?php 
 							?>
                         </table>
                     </div>
-			</div>	
-
-		<!--<div style='margin-left:14%;float:left'>
-			<?php if(!$util->rowExists($db,"track"))
-			{
-				echo "<form action='../Model/track.php?type={$type}&id={$id}' method='post'>";
-    					echo "Would you like to track this film?";
-    					echo "<input type='submit' name='formSubmit' value='Track' />";
-				echo "</form>";
-			}else {
-				echo "<form action='../Model/track.php?type={$type}&id={$id}' method='post'>";
-    					echo "Would you like to untrack this show?";
-    					echo "<input type='submit' name='formSubmit' value='Untrack' />";
-				echo "</form>";
-			}?>
-		</div>
-
-		<div style='float:right;margin-right:180px'>
-			<?php if(!$util->rowExists($db,"likes"))
-            {
-                echo "<form action='../Model/insertLikes.php?type={$type}&id={$id}' method='post'>";
-        	        echo "Like Film to use for Recommendations!";
-        			echo "<input type='checkbox' name='film[]' value='".$obj['name']."&&&".$obj['id']."&&&".$obj['image']."'>";
-                    echo "<input type='submit' value='Submit'>";   
-                echo "</form>";  
-            }else{
-                echo "<form action='../Model/insertLikes.php?type={$type}&id={$id}' method='post'>";
-        	        echo "Don't like it anymore?";
-        			echo "<input type='checkbox' name='film[]' value='".$obj['name']."&&&".$obj['id']."&&&".$obj['image']."'>";
-                    echo "<input type='submit' value='Unlike'>"; 
-                echo "</form>"; 
-            }?>
-			</form>
-		</div>	-->	
-	</body>
+			</div>
+		</body>
 </html>
