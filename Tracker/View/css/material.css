@@ -49,6 +49,52 @@ div.show_container{
     height:initial;
 }
 
+#back-top {
+    position: fixed;
+    bottom: 30px;
+    right: 100px;
+	box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.4);
+}
+#back-top a {
+    width: 64px;
+    display: block;
+    text-align: center;
+    font: 11px/100% Arial, Helvetica, sans-serif;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: #bbb;
+    /* background color transition */
+    -webkit-transition: 1s;
+    -moz-transition: 1s;
+    transition: 1s;
+}
+
+#back-top a:hover {
+    color: #000;
+}
+
+#back-top span {
+    width: 64px;
+    height: 64px;
+    display: block;
+    margin-bottom: 7px;
+    background: #ddd url(top.png) no-repeat center center;
+  /* background color transition */
+    -webkit-transition: 1s;
+    -moz-transition: 1s;
+    transition: 1s;
+}
+#back-top a:hover span {
+    background-color: #fff;
+}
+#back{
+    font-weight: bold;
+    font-size: 22px;
+    padding:10px;
+    border: 2px solid #333;
+    border-radius: 29px;
+}
+
 div.likeButton{
     margin-top:-20px;
 }

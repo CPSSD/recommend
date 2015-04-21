@@ -17,7 +17,7 @@
 		if($rows){
 			$_SESSION['userID'] = $id;	
 			$_SESSION['username'] = $username;
-			echo "{$GLOBALS['ip']}/Tracker/View/getLikes.php?type=films&page=0";
+			echo "{$GLOBALS['ip']}Tracker/View/getFilmList.php?type=films&organise=1&page=0&order=ASC";
 		}else{
 			echo "Something went terribly wrong...";
 			createUser($db, $id, $email);

@@ -23,7 +23,8 @@ class Essentials{
 
 	// function to return all of a particular media a user likes
 	public function userLikes($db,$type,$userID){   
-        $sql = "SELECT mediaName,mediaTable,mediaImage,mediaID FROM likes WHERE userID={$userID} AND mediaTable LIKE '%{$type}%'";
+        $sql = "SELECT mediaName,mediaID,mediaImage,mediaTable,userID FROM `likes` WHERE userID={$userID} AND mediaTable LIKE '%{$type}%' ";
+        //var_dump($sql);
 		$retval = $db->query($sql);
 		echo "{\"{$type}\":[";
 		$tick = 0;
@@ -32,7 +33,8 @@ class Essentials{
 			echo ",";
 		    }
 		    $tick++;
-		    echo json_encode($this->createArrayFromData($sql, $row));
+		    echo json_encode($this->createArrayFromData("mediaName,mediaID,mediaImage,mediaTable,userID", $row));
+            //var_dump($row);
 		}
 		echo "]}";
 	}
@@ -46,7 +48,6 @@ class Essentials{
 		foreach($obj[$type] as $movie){
 			$films[] = $movie['mediaName'];	
 		}
-		//var_dump($films);
 		//gathers the genres of these films
 		$genre = array();
 		foreach($films as $film){
@@ -63,16 +64,17 @@ class Essentials{
 				}
 			}
 		}
-        //var_dump($genre);
 		//selects the highest valued genre
 		$genre = array_count_values($genre);
 		$max = max($genre);
 		$key = array_search($max, $genre);	
 
         if($type == "films"){
-		    $sql = "SELECT id,name,date,rating,image FROM {$type} WHERE genre LIKE '%{$key}%' ORDER BY rating DESC LIMIT 4";
+		    $sql = "SELECT id,name,date,rating,image FROM {$type} WHERE genre LIKE '%{$key}%' ORDER BY rating DESC LIMIT 12";
+            $data = "id,name,date,rating,image";
 		}else {
-            $sql = "SELECT id,name,rating,image FROM {$type} WHERE genre LIKE '%{$key}%' ORDER BY rating DESC LIMIT 4";
+            $sql = "SELECT id,name,rating,image FROM {$type} WHERE genre LIKE '%{$key}%' ORDER BY rating DESC LIMIT 12";
+            $data = "id,name,rating,image";
         }
 		$retval = $db->query($sql);
 		echo "{\"{$type}\":[";
@@ -82,7 +84,7 @@ class Essentials{
 			echo ",";
 		    }
 		    $tick++;
-		    echo json_encode($this->createArrayFromData($sql, $row));
+		    echo json_encode($this->createArrayFromData($data, $row));
 		}
 		echo "]}";
     }

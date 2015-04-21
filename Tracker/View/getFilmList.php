@@ -6,6 +6,7 @@
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 	<script type="text/javascript" src="js/jquery-ias.min.js"></script>
     <script src="js/submitlikes.js"></script>
+    <script src="js/toTop.js"></script>
     <script src="js/scroll.js"></script>
 </head>
 
@@ -51,10 +52,10 @@
 				    echo "<div class='image'>";
 				    echo "<a href='{$GLOBALS["ip"]}Tracker/View/getFilm.php?type=films&id=" . $movie['id'] . "'>";
 				    echo "<img class='cover' src='" . $movie['image'] . "'/>";
-                    echo "<div class='likeButton'>";
-                        if(isset($_SESSION["userID"])){
+                    if(isset($_SESSION["userID"])){
+                        echo "<div class='likeButton'>";
                             if(!$util->rowExists($db,"likes",$movie["id"])){
-                                echo "<form id='like' name='like'>";
+                                echo "<form class='like' id='like' name='like'>";
                                     echo "<input id='title' type='hidden' value='".$movie['name']."'>";
                                     echo "<input id='id' type='hidden' value='".$movie['id']."'>";
                                     echo "<input id='image' type='hidden' value='".$movie['image']."'>";
@@ -62,7 +63,7 @@
                                     echo "<input id='submit' type='submit' value='like'>";
                                 echo "</form>";
                             }else{
-                                echo "<form id='like' name='like'>";
+                                echo "<form class ='like' id='like' name='like'>";
                                     echo "<input id='title' type='hidden' value='".$movie['name']."'>";
                                     echo "<input id='id' type='hidden' value='".$movie['id']."'>";
                                     echo "<input id='image' type='hidden' value='".$movie['image']."'>";
@@ -70,8 +71,8 @@
                                     echo "<input id='submit' type='submit' value='unlike'>";
                                 echo "</form>";
                             }
+                        echo "</div>";
                         }
-                    echo "</div>";
 				    echo "<p><b>Name:</b> " . $movie['name'] . "<br>";
 				    echo "<b>Date:</b> " . $movie['date'] . "<br>";
 				    echo "<b>Rating:</b> " . $movie['rating'] . " stars.</p>";
@@ -87,6 +88,10 @@
 
             <div class="ias_trigger">
                 <a href="#">Load more Items</a>
+            </div>
+
+            <div id="back-top"><!-- scroll top button -->
+                <a href="#top"><span></span>Back to Top</a>
             </div>
 		
 		    <div class="navigation" >
