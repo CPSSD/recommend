@@ -44,40 +44,81 @@
                                 <?php echo "<p class='show_info'>".$obj['total_seasons']." Seasons</p>";
                                       echo "<p class='show_info'>".$obj['total_episodes']." Episodes</p>";
                                       if($genre){
-                                          echo "<p></p><p class='show_info'>".$genre."</p>";
+                                          echo "<p class='show_info double_info'>".$genre."</p>";
                                       }
                                       if($obj['rating'] != 0){
-                                          echo "<p class='show_info'>".$obj['rating']." stars</p>";
+                                          echo "<p class='show_info'>".$obj['rating']." Stars</p>";
                                       }
-                                      if($util->checkNextSeason($seasonDown,$id)){
-                                          echo "<p></p><p class='show_info'><b><a href=".$util->nextSeason($seasonDown,$id).">Previous Season</a></b></p>";
-                                      }
-                                      if($util->checkNextSeason($seasonUp,$id)){
-                                          echo "<p class='show_info'><b><a href=".$util->nextSeason($seasonUp,$id)."> Next Season</a></b>";
-                                       }
-                                    ?>         
+                            #          if($util->checkNextSeason($seasonDown,$id)){
+                            #              echo "<br /><p class='show_info'><b><a href=".$util->nextSeason($seasonDown,$id).">Last Season</a></b></p>";
+                            #          }
+                            #          if($util->checkNextSeason($seasonUp,$id)){
+                            #              echo "<p class='show_info'><b><a href=".$util->nextSeason($seasonUp,$id).">Next Season</a></b>";
+                            #           }
+                                    
+							function generate_table($obj){
+								$s = "";
+								foreach($obj['show'] as $show){
+								   $s = $s . "<tr>";
+										if($show['season'] < 10) { $show['season'] = "0".$show['season']; }
+										if($show['episode'] < 10) { $show['episode'] = "0".$show['episode']; }
+										$s = $s . "<td>S".$show['season']."E".$show['episode']."</td>";
+										$s = $s . "<td>".$show['title']."</td>";
+										$s = $s . "<td>".$show['date']."</td>";
+									$s = $s .  "</tr>";
+								}
+								return $s;
+                            }		
+									?>         
                             </div>
                     </div>
 
+					<script>
+						var visible = true;
+						
+						change();
+						
+						function change(){
+							if(visible){
+								hide();
+							} else {
+								show();
+							}
+							visible = !visible;
+						}
+						
+						function show(){
+							document.getElementById("show_hide").innerHTML = "Hide Season Information";
+							var table = document.getElementById("table");
+							table.innerHTML = " ";//<a href='#' onclick='change()'><tr>Show Season Information...</tr></a>";
+							table.style.height = "10px";
+						}
+						
+						function hide(){
+							document.getElementById("show_hide").innerHTML = "Hide Season Information";
+							var table = document.getElementById("table")
+							table.innerHTML = " <?php $test = "<tr><th>Episode</th><th>Title</th><th>Release</th></tr>" . generate_table($obj); echo $test; ?>";
+							table.style.height = "100px";
+						}
+					</script>
+							
                     <div class='info'>
-                        <?php echo "<h2 class='title'>".$obj['name']."</h2>";
-                              echo "<p style='text-align:center'>" .$obj['synopsis']. "</p>";
-                        ?>
-                        <table style='width=100%;text-align:center'>
-                            <tr>
-                                <th>Season</th>
-                                <th>Episode</th>
-                                <th>Title</th>
-                            </tr>
-                            <?php foreach($obj['show'] as $show){
-                                echo "<tr>";
-                                    echo "<td>".$show['season']."</td>";
-                                    echo "<td>".$show['episode']."</td>";
-                                    echo "<td>".$show['title']."</td>";
-                                echo "</tr>";
-                            }?>
+                        <?php 
+							echo "<a href='#' onclick='change()'><div class='title'><h2 class='title'>".$obj['name']."</h2></div></a>";
+                            echo "<div class='summary'><p class='summary''>" .$obj['synopsis']. "</p></div>";
+							  
+                            if($util->checkNextSeason($seasonDown,$id)){
+                                echo "<p class='show_info'><b><a href=".$util->nextSeason($seasonDown,$id).">Last Season</a></b></p>";
+                            }if($util->checkNextSeason($seasonUp,$id)){
+                                echo "<p class='show_info'><b><a href=".$util->nextSeason($seasonUp,$id).">Next Season</a></b></p>";
+                            }
+                            echo "<a href='#' onclick='change()'><div class='show_table_info' id='show_hide'>Show Season Information...</div></a>";
+							
+						?>
+                        <table class='info' id='table'>
+                            <?php 
+							?>
                         </table>
-                        
                     </div>
 			</div>	
 

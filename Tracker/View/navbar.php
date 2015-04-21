@@ -1,7 +1,10 @@
 <?php
 $query = $_SERVER['QUERY_STRING'];
 $query = substr($query,5,5);
-$type = $_GET["type"];
+$type = 0;
+if(isset($_GET["type"])){
+	$type = $_GET["type"];
+}
 if($query == "films"){
     $x = "Film";
     $media = "Films";
@@ -9,8 +12,14 @@ if($query == "films"){
     $x = "Show";
     $media = "Tv Shows";
 }
-$order = $_GET['order'];
-$organise= $_GET['organise'];
+$order = 0;
+if(isset($_GET["order"])){
+	$order = $_GET["order"];
+}
+$organise = 0;
+if(isset($_GET["organise"])){
+	$organise = $_GET["organise"];
+}
 
 if($order == "ASC"){
     if($organise == 1){
