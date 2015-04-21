@@ -1,12 +1,16 @@
 body{ 
-	background-color:rgb(150, 200, 200);
+	background-color: #81C784;
+    margin:0;
+	padding: 0;
 }
  
-div.Sign-Up{ 
-	background-color: rgb(255,255,255);
-	margin: 150px auto 0 auto;
-	width:280px;
-	text-align:center;
-	padding:9px; 
+div.signUp{ 
+	background-color:#E8F5E9;
+	width:30%;
+	box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.4);
+	margin: 0 auto;
+	border-color: rgb(0, 0, 0);
+    height:initial;
+
 } 
 

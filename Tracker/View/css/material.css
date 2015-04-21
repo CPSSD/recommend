@@ -49,6 +49,15 @@ div.show_container{
     height:initial;
 }
 
+div.likeButton{
+    margin-top:-20px;
+}
+
+#submit{
+    color: white;
+    background-color:#2E7D32;
+}
+
 table{
     margin: 0 auto;
     width:400px;
@@ -105,6 +114,17 @@ p.show_info{
     border-color: #FFFFFF;
     z-index: 1;
     box-shadow: 0 2px 6px rgba(0,0,0,0.6);
+}
+
+div.search{
+    background-color:white;
+    height:200px;
+    display:inline-block;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.6);
+    border-radius: 2px;
+    margin-left:20px;
+    width:400px;
+    text-align:center;
 }
 
 div.show_info {

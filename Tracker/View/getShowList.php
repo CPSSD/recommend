@@ -5,21 +5,8 @@
 <link rel="stylesheet" type="text/css" href="css/material.css" />
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 	<script type="text/javascript" src="js/jquery-ias.min.js"></script>
-    <script type="text/javascript">
-        //if($(window).scrollTop() == $(document).height() - $(window).height()*0.7){
-            $(document).ready(function() {
-            	// Infinite Ajax Scroll configuration
-                jQuery.ias({
-                    container : '.show_container', // main container where data goes to append
-                    item: '.image', // single items
-                    pagination: '.navigation', // page navigation
-                    next: '.navigation a', // next page selector
-                    loader: '<img src="css/ajax-loader.gif">', // loading gif
-                    triggerPageThreshold: 3 // show load more if scroll more than this
-                });
-            });
-        //}
-    </script>
+    <script src="js/submitlikes.js"></script>
+    <script src="js/scroll.js"></script>
 </head>
 	<title>Tracker - ShowList</title>
 	<body>
@@ -36,7 +23,7 @@
 			
 			$json = file_get_contents("{$GLOBALS["ip"]}Tracker/index.php?type=tv_shows&organise={$organise}&page={$page}&order={$order}");
 			$obj = json_decode($json, true);
-			
+			$db = new SQLite3($_SERVER['DOCUMENT_ROOT'].'/Tracker/database.db'); 
 			$type = 'tv_shows';
 			$column = 0;
 			$row = 0;
@@ -52,6 +39,27 @@
 				echo "<div class='image'>";
 				echo "<a href='{$GLOBALS["ip"]}Tracker/View/getShow.php?type=tv_shows&id=" . $show['id'] . "&season=1'>";
 				echo "<img class='cover' src='" . $show['image'] . "'/>";
+                    echo "<div class='likeButton'>";
+                        if(isset($_SESSION["userID"])){
+                            if(!$util->rowExists($db,"likes",$movie["id"])){
+                                echo "<form id='like' name='like'>";
+                                    echo "<input id='title' type='hidden' value='".$movie['name']."'>";
+                                    echo "<input id='id' type='hidden' value='".$movie['id']."'>";
+                                    echo "<input id='image' type='hidden' value='".$movie['image']."'>";
+                                    echo "<input id='type' type='hidden' value='films'>";
+                                    echo "<input id='submit' type='submit' value='like'>";
+                                echo "</form>";
+                            }else{
+                                echo "<form id='like' name='like'>";
+                                    echo "<input id='title' type='hidden' value='".$movie['name']."'>";
+                                    echo "<input id='id' type='hidden' value='".$movie['id']."'>";
+                                    echo "<input id='image' type='hidden' value='".$movie['image']."'>";
+                                    echo "<input id='type' type='hidden' value='films'>";
+                                    echo "<input id='submit' type='submit' value='unlike'>";
+                                echo "</form>";
+                            }
+                        }
+                    echo "</div>";
 				echo "<p><b>Name:</b> " . $show['name'] . "<br/>";
 				echo "<b>Rating:</b> " . $show['rating'] . " stars.</p>";
 				echo "</a></div>";
