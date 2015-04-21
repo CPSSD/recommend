@@ -10,7 +10,7 @@ $(document).ready(function(){
   }*/
 
     /*if(screen.height < 1000){
-        location.href='http://localhost/Tracker/mobile/getFilmListMobile.php';
+        location.href='http://localhost/Tracker/View/mobile/getFilmListMobile.php';
     }*/
 
 
