@@ -20,11 +20,11 @@
 <link rel="canonical" href="http://startbootstrap.com/">
 
 <!-- Fav Icon and Apple Touch Icons -->
-<link rel="icon" href="/assets/img/ico/favicon.ico" type="image/x-icon">
-<link rel="apple-touch-icon" href="/assets/img/ico/touch-icon-iphone.png">
-<link rel="apple-touch-icon" sizes="76x76" href="/assets/img/ico/touch-icon-ipad.png">
-<link rel="apple-touch-icon" sizes="120x120" href="/assets/img/ico/touch-icon-iphone-retina.png">
-<link rel="apple-touch-icon" sizes="152x152" href="/assets/img/ico/touch-icon-ipad-retina.png">
+<link rel="icon" href="/Tracker/View/assets/img/ico/favicon.ico" type="image/x-icon">
+<link rel="apple-touch-icon" href="/Tracker/View/assets/img/ico/touch-icon-iphone.png">
+<link rel="apple-touch-icon" sizes="76x76" href="/Tracker/View/assets/img/ico/touch-icon-ipad.png">
+<link rel="apple-touch-icon" sizes="120x120" href="/Tracker/View/assets/img/ico/touch-icon-iphone-retina.png">
+<link rel="apple-touch-icon" sizes="152x152" href="/Tracker/View/assets/img/ico/touch-icon-ipad-retina.png">
 
 <!-- Open Graph -->
 <meta property="og:title" content="Bootstrap">
@@ -40,10 +40,10 @@
 <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 
 <!-- Bootstrap Core CSS -->
-<link href="Tracker/View/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+<link href="/Tracker/View/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css">
 
 <!-- Start Bootstrap Custom CSS -->
-<link href="Tracker/View/assets/css/startbootstrap.css" rel="stylesheet" type="text/css">
+<link href="/Tracker/View/assets/css/startbootstrap.css" rel="stylesheet" type="text/css">
 
 <!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -118,94 +118,6 @@
 				</div>
 			</div>
 			<?php } ?>
-			
-			
-	
-		<!--
-        <div class="col-lg-4 col-sm-6">
-            <div class="thumbnail">
-                <a href="/template-overviews/creative" class="post-image-link">
-                    <p><img src="/assets/img/templates/creative.jpg" class="img-responsive" alt="Free Bootstrap Creative Theme - Start Bootstrap" /></p>
-
-                </a>
-                <div class="caption">
-                    <h3>Creative</h3>
-                    <p>A one page creative theme.</p>
-                    <a href="/template-overviews/creative" class="btn btn-default">Preview &amp; Download</a>
-                </div>
-            </div>
-        </div>
-        
-        <div class="col-lg-4 col-sm-6">
-            <div class="thumbnail">
-                <a href="/template-overviews/clean-blog" class="post-image-link">
-                    <p><img src="/assets/img/templates/clean-blog.jpg" class="img-responsive" alt="Free Bootstrap Blog Theme - Start Bootstrap" /></p>
-
-                </a>
-                <div class="caption">
-                    <h3>Clean Blog</h3>
-                    <p>A clean blog theme.</p>
-                    <a href="/template-overviews/clean-blog" class="btn btn-default">Preview &amp; Download</a>
-                </div>
-            </div>
-        </div>
-        
-        <div class="col-lg-4 col-sm-6">
-            <div class="thumbnail">
-                <a href="/template-overviews/agency" class="post-image-link">
-                    <p><img src="/assets/img/templates/agency.jpg" class="img-responsive" alt="Free Bootstrap Agency Theme - Start Bootstrap" /></p>
-
-                </a>
-                <div class="caption">
-                    <h3>Agency</h3>
-                    <p>A one page agency theme.</p>
-                    <a href="/template-overviews/agency" class="btn btn-default">Preview &amp; Download</a>
-                </div>
-            </div>
-        </div>
-        
-        <div class="col-lg-4 col-sm-6">
-            <div class="thumbnail">
-                <a href="/template-overviews/freelancer" class="post-image-link">
-                    <p><img src="/assets/img/templates/freelancer.jpg" class="img-responsive" alt="One Page Bootstrap Portfolio Theme" /></p>
-
-                </a>
-                <div class="caption">
-                    <h3>Freelancer</h3>
-                    <p>A one page freelancer theme.</p>
-                    <a href="/template-overviews/freelancer" class="btn btn-default">Preview &amp; Download</a>
-                </div>
-            </div>
-        </div>
-        
-        <div class="col-lg-4 col-sm-6">
-            <div class="thumbnail">
-                <a href="/template-overviews/grayscale" class="post-image-link">
-                    <p><img src="/assets/img/templates/grayscale.jpg" class="img-responsive" alt="" /></p>
-
-                </a>
-                <div class="caption">
-                    <h3>Grayscale</h3>
-                    <p>A multipurpose one page theme.</p>
-                    <a href="/template-overviews/grayscale" class="btn btn-default">Preview &amp; Download</a>
-                </div>
-            </div>
-        </div>
-        
-        <div class="col-lg-4 col-sm-6">
-            <div class="thumbnail">
-                <a href="/template-overviews/sb-admin-2" class="post-image-link">
-                    <p><img src="/assets/img/templates/sb-admin-2.jpg" class="img-responsive" alt="Free Bootstrap Admin Theme - SB Admin 2" /></p>
-
-                </a>
-                <div class="caption">
-                    <h3>SB Admin 2</h3>
-                    <p>A free Bootstrap admin theme.</p>
-                    <a href="/template-overviews/sb-admin-2" class="btn btn-default">Preview &amp; Download</a>
-                </div>
-            </div>
-        </div>
-        -->
     </div>
 
     </div>

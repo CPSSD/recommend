@@ -19,11 +19,11 @@
 <link rel="canonical" href="http://startbootstrap.com/">
 
 <!-- Fav Icon and Apple Touch Icons -->
-<link rel="icon" href="Tracker/View/assets/img/ico/favicon.ico" type="image/x-icon">
-<link rel="apple-touch-icon" href="Tracker/View/assets/img/ico/touch-icon-iphone.png">
-<link rel="apple-touch-icon" sizes="76x76" href="Tracker/View/assets/img/ico/touch-icon-ipad.png">
-<link rel="apple-touch-icon" sizes="120x120" href="Tracker/View/assets/img/ico/touch-icon-iphone-retina.png">
-<link rel="apple-touch-icon" sizes="152x152" href="Tracker/View/assets/img/ico/touch-icon-ipad-retina.png">
+<link rel="icon" href="/Tracker/View/assets/img/ico/favicon.ico" type="image/x-icon">
+<link rel="apple-touch-icon" href="/Tracker/View/assets/img/ico/touch-icon-iphone.png">
+<link rel="apple-touch-icon" sizes="76x76" href="/Tracker/View/assets/img/ico/touch-icon-ipad.png">
+<link rel="apple-touch-icon" sizes="120x120" href="/Tracker/View/assets/img/ico/touch-icon-iphone-retina.png">
+<link rel="apple-touch-icon" sizes="152x152" href="/Tracker/View/assets/img/ico/touch-icon-ipad-retina.png">
 
 <!-- Open Graph -->
 <meta property="og:title" content="Bootstrap">
@@ -39,10 +39,10 @@
 <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 
 <!-- Bootstrap Core CSS -->
-<link href="Tracker/View/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+<link href="/Tracker/View/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css">
 
 <!-- Start Bootstrap Custom CSS -->
-<link href="Tracker/View/assets/css/startbootstrap.css" rel="stylesheet" type="text/css">
+<link href="/Tracker/View/assets/css/startbootstrap.css" rel="stylesheet" type="text/css">
 
 <!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
