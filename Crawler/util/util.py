@@ -40,6 +40,7 @@ def clean_text(input):
     if input is not None:
         input = input.replace("\n", " ")  # Removes all new lines.
         input = input.replace("\"", "'")
+		input = input.replace("\r", " ")
         input = input.lstrip()
         input = input.rstrip()
         input = input.split("[")[0]

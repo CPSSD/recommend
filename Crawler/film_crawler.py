@@ -42,7 +42,7 @@ def crawl_wikipedia(year_start, year_end):
             try:
                 film_tables = bs4.find('span', {'id': year + section}).parent.find_next_siblings('table', {'class': 'wikitable'})
             except:
-                None	
+                None    
         if film_tables is None:
             print("Error getting correct section in " + year)
             exit(0)
@@ -215,7 +215,10 @@ def scrape_imdb(url):
 
     age = bs4.find('span', {'itemprop': 'contentRating'})
     if age != None:
-        age = age['content']
+        try:
+            age = age['content']
+        except:
+            age = age.text
         util.debug_print("\tD. ESRB Rating: " + age)
     else:
         age = "---"
