@@ -33,7 +33,6 @@ function newUser($db){
     $sql = $sql = "INSERT INTO users (fullname,username,email,password) VALUES ('{$fullname}','{$username}','{$email}','{$hash}')";
     $result = $db->query($sql);
 	echo "Your registration is complete";
-
 }
 
 function signUp($db){
