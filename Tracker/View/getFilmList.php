@@ -14,8 +14,8 @@
         <body>
         <?php
             set_include_path("{$_SERVER['DOCUMENT_ROOT']}");
-	        require_once('Tracker/View/Util.php'); 
-	        require_once('Tracker/config.php');
+	        require_once('View/Util.php'); 
+	        require_once('config.php');
 	        $organise = $_GET["organise"];
 	        $page = $_GET["page"];
             $order = $_GET["order"];
@@ -24,17 +24,17 @@
 			if(isset($_SESSION["userID"])){
 				$uid = $_SESSION["userID"];
 			}
-		    $json = file_get_contents("{$GLOBALS["ip"]}Tracker/index.php?type=films&organise={$organise}&page={$page}&order={$order}&uid={$uid}");
+		    $json = file_get_contents("{$GLOBALS["ip"]}index.php?type=films&organise={$organise}&page={$page}&order={$order}&uid={$uid}");
             $nextPage = $page+1;
 		    $obj = json_decode($json, true);
             /*if(!$obj){
                 $_SESSION["message"] = "You're Page Value is too high or too low!!";
-			    $url = "{$GLOBALS['ip']}Tracker/View/displayMessage.php";
+			    $url = "{$GLOBALS['ip']}View/displayMessage.php";
 			    header( "Location: $url" );
             }*/      
 		?>
 
-        <?php include_once('Tracker/View/navbar.php');?>
+        <?php include_once('View/navbar.php');?>
 			
 			<div class='show_container'>
             <?php
@@ -50,17 +50,19 @@
 			    # Displays info for each movie.
 			    foreach($obj['films'] as $movie){
 				    echo "<div class='image'>";
-				    echo "<a href='{$GLOBALS["ip"]}Tracker/View/getFilm.php?type=films&id=" . $movie['id'] . "'>";
-				    echo "<img class='cover' src='" . $movie['image'] . "'/>";
+					
+				    echo "<a href='{$GLOBALS["ip"]}View/getFilm.php?type=films&id=" . $movie['id'] . "'>";
+				   	echo "<div class='cover_title'><p class='cover_title'>". $movie['name'] . "</p></div>";
+					echo "<img class='cover' src='" . $movie['image'] . "'/>";
                     if(isset($_SESSION["userID"])){
                         echo "<div class='likeButton'>";
-                            if(!$util->rowExists($db,"likes",$movie["id"])){
+                            if(!$util->rowExists($db,"likes","films",$movie["id"])){
                                 echo "<form class='like' id='like' name='like'>";
                                     echo "<input id='title' type='hidden' value='".$movie['name']."'>";
                                     echo "<input id='id' type='hidden' value='".$movie['id']."'>";
                                     echo "<input id='image' type='hidden' value='".$movie['image']."'>";
                                     echo "<input id='type' type='hidden' value='films'>";
-                                    echo "<input id='submit' type='submit' value='like'>";
+                                    echo "<input id='submit' type='submit' value='Like'>";
                                 echo "</form>";
                             }else{
                                 echo "<form class ='like' id='like' name='like'>";
@@ -68,14 +70,16 @@
                                     echo "<input id='id' type='hidden' value='".$movie['id']."'>";
                                     echo "<input id='image' type='hidden' value='".$movie['image']."'>";
                                     echo "<input id='type' type='hidden' value='films'>";
-                                    echo "<input id='submit' type='submit' value='unlike'>";
+                                    echo "<input id='submit' type='submit' value='Unlike'>";
                                 echo "</form>";
                             }
                         echo "</div>";
                         }
-				    echo "<p><b>Name:</b> " . $movie['name'] . "<br>";
-				    echo "<b>Date:</b> " . $movie['date'] . "<br>";
-				    echo "<b>Rating:</b> " . $movie['rating'] . " stars.</p>";
+					if($movie['rating'] != "Unknown"){
+						$movie['rating'] = $movie['rating'] . " stars";
+					}
+					echo "<div class='cover_info'><p class='cover_info'><b>Rating:</b> " . $movie['rating'] . "";
+					echo "<br /><b>Date:</b> " . $movie['date'] . "<br></p></div>";
 				    echo "</a></div>";
                     $index++;
 				    $column++;
@@ -95,11 +99,11 @@
             </div>
 		
 		    <div class="navigation" >
-			    <?php echo "<a href='{$GLOBALS["ip"]}Tracker/View/getFilmList.php?type={$type}&organise={$organise}&page={$nextPage}&order={$order}'></a>";
+			    <?php echo "<a href='{$GLOBALS["ip"]}View/getFilmList.php?type={$type}&organise={$organise}&page={$nextPage}&order={$order}'></a>";
                     echo "<script type='text/javascript'>"; 
                         echo "$.getScript('js/submitlikes.js')";
                     echo "</script>";                      
-                ?>                
+                ?>          
             </div>
 	    </div>
 	</body>

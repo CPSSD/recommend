@@ -1,14 +1,14 @@
 <?php
 
 set_include_path("{$_SERVER['DOCUMENT_ROOT']}");
-include_once('Tracker/Model/Essentials.php'); 
-include_once('Tracker/config.php'); 
+include_once('Model/Essentials.php'); 
+include_once('config.php'); 
 
 class Film extends SQLite3{
 	
 	//returns recommended films to the View Pages to be displayed
 	public function filmRecommendations($db,$type,$userID){
-		$json = file_get_contents("{$GLOBALS["ip"]}Tracker/index.php?type=films&recommendations={$userID}");
+		$json = file_get_contents("{$GLOBALS["ip"]}index.php?type=films&recommendations={$userID}");
         var_dump($json);
 		$obj = json_decode($json, true);
 		//gets all liked films and puts them in an array
@@ -230,13 +230,13 @@ class Film extends SQLite3{
 		
 		if($organise == "1"){
             $organise = "name";
-			$sql = "SELECT name,date,image,rating,id FROM `{$type}` ORDER BY {$organise} {$order} LIMIT 24 OFFSET {$offset}";
+			$sql = "SELECT name,date,image,rating,id FROM `{$type}` WHERE date != 'None' ORDER BY {$organise} {$order} LIMIT 24 OFFSET {$offset}";
 		} else if($organise == "2"){
             $organise = "date";
-			$sql = "SELECT name,date,rating,image,id FROM `{$type}` ORDER BY {$organise} {$order} LIMIT 24 OFFSET {$offset}";
+			$sql = "SELECT name,date,rating,image,id FROM `{$type}` WHERE date != 'None' ORDER BY {$organise} {$order} LIMIT 24 OFFSET {$offset}";
 		} else {
             $organise = "rating";
-			$sql = "SELECT name,date,image,rating,id FROM `{$type}` ORDER BY {$organise} {$order} LIMIT 24 OFFSET {$offset}";
+			$sql = "SELECT name,date,image,rating,id FROM `{$type}` WHERE date != 'None' ORDER BY {$organise} {$order} LIMIT 24 OFFSET {$offset}";
 		}
         if($page <= $maxPage){
 		    $retval = $db->query($sql);
@@ -273,8 +273,7 @@ class Film extends SQLite3{
 							"genre" => $row["genre"],
 							"synopsis" => $row["synopsis"],
 							"image" => $row["image"],
-							"age" => $row["age"],
-							"liked" => $liked));
+							"age" => $row["age"]));
 			}
 		}else{
             echo "No Film with that ID";

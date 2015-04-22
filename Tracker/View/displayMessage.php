@@ -9,8 +9,8 @@ set_include_path("{$_SERVER['DOCUMENT_ROOT']}");
 	<body>
 	<?php
 		set_include_path("{$_SERVER['DOCUMENT_ROOT']}");
-		require_once('Tracker/config.php');
-        include_once('Tracker/View/navbar.php');
+		require_once('config.php');
+        include_once('View/navbar.php');
 
 		echo "<div class='show_container'>";
 			if($_SESSION["message"]){

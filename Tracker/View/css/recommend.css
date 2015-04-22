@@ -1,0 +1,27 @@
+body {
+	background-color: rgb(150, 200, 200);
+	font-family: "Open Sans", sans-serif;
+}
+
+div.show_container{
+	background-color:rgb(255, 255, 255);
+	align:center;
+	padding-left:16px;
+	border-radius:20px;
+	padding-top:5px;
+	width:892px;
+	border-style:solid;
+	border-width:2px;
+	margin-left:250px;
+	border-color: rgb(0, 0, 0);
+	position:absolute;
+}
+
+img.cover {
+	align:center;
+	width:300;
+	height:250;
+	border-radius:10px;
+	border-style: solid;
+	border-color: rgb(0, 0, 0);
+}

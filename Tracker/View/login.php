@@ -19,7 +19,7 @@
           <?php
             include_once('google_login.php');
             echo "<p style='text-align:center'>Sign in with Google.</p>"; 
-            echo "<div class='g-signin2' style='margin-left:75px;' data-onsuccess='onSignon'</div>";
+            echo "<div class='g-signin2' style='margin-left:75px;' data-onsuccess='onSignIn'</div>";
           ?>
     </div>
 	</body>

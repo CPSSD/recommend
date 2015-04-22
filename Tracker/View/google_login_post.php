@@ -2,8 +2,9 @@
 	session_start();
 		
 	set_include_path("{$_SERVER['DOCUMENT_ROOT']}");
-	require_once('Tracker/config.php');
-	$db = new SQLite3($_SERVER['DOCUMENT_ROOT'].'/Tracker/database.db');
+
+	require_once('config.php');
+	$db = new SQLite3($_SERVER['DOCUMENT_ROOT'].'/database.db');
 	
 	function login($db, $google_id, $email) {
 		$stmt = $db->prepare("SELECT Id,username FROM `users` WHERE google_id = '{$google_id}'");
@@ -17,7 +18,7 @@
 		if($rows){
 			$_SESSION['userID'] = $id;	
 			$_SESSION['username'] = $username;
-			echo "{$GLOBALS['ip']}Tracker/View/getFilmList.php?type=films&organise=1&page=0&order=ASC";
+			echo "{$GLOBALS['ip']}";
 		}else{
 			echo "Something went terribly wrong...";
 			createUser($db, $id, $email);
@@ -47,3 +48,4 @@
 
 	createUser($db, $_POST['id'], $_POST['email']);
 ?>
+

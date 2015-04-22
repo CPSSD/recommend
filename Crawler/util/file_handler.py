@@ -20,6 +20,7 @@ def read_config():
     for line in file:
         if (not line.startswith("#")) and (not line.startswith("\r\n")) and (not line.startswith("\n")):
             line = line.split("=")
+            print line
             section = util.clean_text(line[0])
             value = util.clean_text(line[1])
             data[section] = value

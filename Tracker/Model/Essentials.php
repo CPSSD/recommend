@@ -1,7 +1,7 @@
 <?php
 set_include_path("{$_SERVER['DOCUMENT_ROOT']}");
-include_once('Tracker/Model/Film.php'); 
-include_once('Tracker/Model/TV.php'); 
+include_once('Model/Film.php'); 
+include_once('Model/TV.php'); 
 
 class Essentials{
 
@@ -16,7 +16,7 @@ class Essentials{
 	public function get($db,$type,$id,$season){
 		if($type == "films"){
 			$this->film->getFilm($db,$type,$id);
-		}else{
+		} else {
 			$this->tv_show->getShow($db,$type,$id,$season);
 		}
 	}
@@ -34,13 +34,12 @@ class Essentials{
 		    }
 		    $tick++;
 		    echo json_encode($this->createArrayFromData("mediaName,mediaID,mediaImage,mediaTable,userID", $row));
-            //var_dump($row);
 		}
 		echo "]}";
 	}
 
     public function recommendations($db,$type,$userID){
-		$json = file_get_contents("{$GLOBALS["ip"]}Tracker/index.php?type={$type}&userLikes={$userID}");
+		$json = file_get_contents("{$GLOBALS["ip"]}index.php?type={$type}&userLikes={$userID}");
 		$obj = json_decode($json, true);
 
 		//gets all liked films and puts them in an array
@@ -84,7 +83,7 @@ class Essentials{
 			echo ",";
 		    }
 		    $tick++;
-		    echo json_encode($this->createArrayFromData($data, $row));
+		    echo json_encode($this->createArrayFromData("id,name,date,rating,image", $row));
 		}
 		echo "]}";
     }

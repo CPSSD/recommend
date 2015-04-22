@@ -5,17 +5,17 @@
 	<body>
 		<?php
 			set_include_path("{$_SERVER['DOCUMENT_ROOT']}");
-			require_once('Tracker/View/Util.php'); 
-			require_once('Tracker/config.php');
+			require_once('View/Util.php'); 
+			require_once('config.php');
 			$id = $_GET["id"];
 			$season = $_GET["season"];
-			$json = file_get_contents("{$GLOBALS["ip"]}Tracker/index.php?type=tv_shows&id={$id}&season={$season}");
+			$json = file_get_contents("{$GLOBALS["ip"]}index.php?type=tv_shows&id={$id}&season={$season}");
 			$obj = json_decode($json, true);
-            $db = new SQLite3($_SERVER['DOCUMENT_ROOT'].'/Tracker/database.db');
+            $db = new SQLite3($_SERVER['DOCUMENT_ROOT'].'/database.db');
             //echo $json;
             /*if(!$obj){
                 $_SESSION["message"] = "No Show with that ID";
-			    $url = "{$GLOBALS['ip']}Tracker/View/displayMessage.php";
+			    $url = "{$GLOBALS['ip']}View/displayMessage.php";
 			    header( "Location: $url" );
             }    */      
 
@@ -25,16 +25,7 @@
 			$type = "tv_shows";
             $genre = $obj['genre'];
             $genre = str_replace("+",", ",$genre);
-            include_once("Tracker/View/navbar.php");
-
-			/*echo "<div class='navigation'>";
-                if($util->checkNextSeason($seasonDown,$id)){
-                    echo "<a href=".$util->nextSeason($seasonDown,$id).">Previous Season |</a>";
-                }
-                if($util->checkNextSeason($seasonUp,$id)){
-                    echo "<a href=".$util->nextSeason($seasonUp,$id)."> Next Season</a>";
-                }
-			echo "</div>";*/
+            include_once("View/navbar.php");
 		?>
 		
 			<div class='show_container'>
@@ -44,74 +35,114 @@
                                 <?php echo "<p class='show_info'>".$obj['total_seasons']." Seasons</p>";
                                       echo "<p class='show_info'>".$obj['total_episodes']." Episodes</p>";
                                       if($genre){
-                                          echo "<p></p><p class='show_info'>".$genre."</p>";
+                                          echo "<p class='show_info double_info'>".$genre."</p>";
                                       }
                                       if($obj['rating'] != 0){
-                                          echo "<p class='show_info'>".$obj['rating']." stars</p>";
+                                          echo "<p class='show_info double_info'>".$obj['rating']." Stars</p>";
                                       }
-                                      if($util->checkNextSeason($seasonDown,$id)){
-                                          echo "<p></p><p class='show_info'><b><a href=".$util->nextSeason($seasonDown,$id).">Previous Season</a></b></p>";
-                                      }
-                                      if($util->checkNextSeason($seasonUp,$id)){
-                                          echo "<p class='show_info'><b><a href=".$util->nextSeason($seasonUp,$id)."> Next Season</a></b>";
-                                       }
-                                    ?>         
+									  echo "<br />";
+									  
+									  // Tracking
+									  if(!$util->rowExists($db,"track","tv_shows",$id)){
+											echo "<form action='../Model/track.php?type=tv_shows&id={$id}' method='post'>";
+												echo "<label for='track'><p class='show_info button'>Track</p></label>";
+												echo "<input style='position:absolute;visibility:hidden' id='track' type='submit' name='formSubmit' value='Track' />";
+											echo "</form>";
+										} else {
+											echo "<form action='../Model/track.php?type=tv_shows&id={$id}' method='post'>";
+												echo "<a href'#'><label for='track'><p class='show_info button'>Untrack</p></label></a>";
+												echo "<input style='position:absolute;visibility:hidden' id='track' type='submit' name='formSubmit' value='Untrack' />";
+											echo "</form>";
+										}
+										
+										// Likes
+										if(!$util->rowExists($db,"likes","tv_shows",$id)){
+											// Track
+											echo "<form action='../Model/insertLikes.php?type=tv_shows&id={$id}' method='post'>";
+												echo "<label for='like'><p class='show_info button'>Like</p></label>";
+												echo "<input style='position:absolute;visibility:hidden' id='like' type='submit' name='formSubmit' value='like' />";
+											echo "</form>";  
+										} else {
+											echo "<form action='../Model/insertLikes.php?type=tv_shows&id={$id}' method='post'>";
+												echo "<label for='like'><p class='show_info button'>Unlike</p></label>";
+												echo "<input style='position:absolute;visibility:hidden' id='like' type='submit' name='formSubmit' value='like' />";
+											echo "</form>";  
+										}
+										
+							function generate_table($obj){
+								$s = "";
+								foreach($obj['show'] as $show){
+								   $s = $s . "<tr>";
+										if($show['season'] < 10) { $show['season'] = "0".$show['season']; }
+										if($show['episode'] < 10) { $show['episode'] = "0".$show['episode']; }
+										$s = $s . "<td>S".$show['season']."E".$show['episode']."</td>";
+										$s = $s . "<td>".$show['title']."</td>";
+										$s = $s . "<td>".$show['date']."</td>";
+									$s = $s .  "</tr>";
+								}
+								return $s;
+                            }		
+									?>         
                             </div>
                     </div>
-
+										
                     <div class='info'>
-                        <?php echo "<h2 class='title'>".$obj['name']."</h2>";
-                              echo "<p style='text-align:center'>" .$obj['synopsis']. "</p>";
-                        ?>
-                        <table style='width=100%;text-align:center'>
-                            <tr>
-                                <th>Season</th>
-                                <th>Episode</th>
-                                <th>Title</th>
-                            </tr>
-                            <?php foreach($obj['show'] as $show){
-                                echo "<tr>";
-                                    echo "<td>".$show['season']."</td>";
-                                    echo "<td>".$show['episode']."</td>";
-                                    echo "<td>".$show['title']."</td>";
-                                echo "</tr>";
-                            }?>
+                        <?php 
+							echo "<div class='title'><h2 class='title'>".$obj['name']."</h2></div>";
+                            echo "<div class='summary'><p class='summary''>" .$obj['synopsis']. "</p></div>";
+							  
+                            if($util->checkNextSeason($seasonDown,$id)){
+                                echo "<p class='show_info button'><b><a href=".$util->nextSeason($seasonDown,$id).">Last Season</a></b></p>";
+                            } else {
+							    echo "<p class='show_info button inactive'>Last Season</p>";
+                           }
+                            echo "<a href='#' onclick='change()'><div class='show_table_info button' id='show_hide'><b>Show Season Information...</b></div></a>";
+							if($util->checkNextSeason($seasonUp,$id)){
+                                echo "<p class='show_info button'><b><a href=".$util->nextSeason($seasonUp,$id).">Next Season</a></b></p>";
+                            } else {
+								echo "<p class='show_info button inactive'>Next Season</p>";
+                            }
+						?>
+						<script>
+						var visible = true;
+						
+						function init(){
+							if("<?php if ($season == 1){ echo "True"; } else { echo "False"; } ?>" == "True"){
+								console.log("Boop");
+							} else {	
+								console.log("not boop");
+								change();
+							}
+						}
+						function change(){
+							if(visible){
+								hide();
+							} else {
+								show();
+							}
+							visible = !visible;
+						}
+						
+						function show(){
+							document.getElementById("show_hide").innerHTML = "Hide Season Information";
+							var table = document.getElementById("table");
+							table.innerHTML = " ";//<a href='#' onclick='change()'><tr>Show Season Information...</tr></a>";
+							table.style.height = "10px";
+						}
+						
+						function hide(){
+							document.getElementById("show_hide").innerHTML = "Hide Season Information";
+							var table = document.getElementById("table")
+							table.innerHTML = " <?php $test = "<tr><th>Episode</th><th>Title</th><th>Release</th></tr>" . generate_table($obj); echo $test; ?>";
+							table.style.height = "100px";
+						}
+						</script>
+					
+                        <table class='info' id='table'>
+                            <?php 
+							?>
                         </table>
-                        
                     </div>
-			</div>	
-
-		<!--<div style='margin-left:14%;float:left'>
-			<?php if(!$util->rowExists($db,"track"))
-			{
-				echo "<form action='../Model/track.php?type={$type}&id={$id}' method='post'>";
-    					echo "Would you like to track this film?";
-    					echo "<input type='submit' name='formSubmit' value='Track' />";
-				echo "</form>";
-			}else {
-				echo "<form action='../Model/track.php?type={$type}&id={$id}' method='post'>";
-    					echo "Would you like to untrack this show?";
-    					echo "<input type='submit' name='formSubmit' value='Untrack' />";
-				echo "</form>";
-			}?>
-		</div>
-
-		<div style='float:right;margin-right:180px'>
-			<?php if(!$util->rowExists($db,"likes"))
-            {
-                echo "<form action='../Model/insertLikes.php?type={$type}&id={$id}' method='post'>";
-        	        echo "Like Film to use for Recommendations!";
-        			echo "<input type='checkbox' name='film[]' value='".$obj['name']."&&&".$obj['id']."&&&".$obj['image']."'>";
-                    echo "<input type='submit' value='Submit'>";   
-                echo "</form>";  
-            }else{
-                echo "<form action='../Model/insertLikes.php?type={$type}&id={$id}' method='post'>";
-        	        echo "Don't like it anymore?";
-        			echo "<input type='checkbox' name='film[]' value='".$obj['name']."&&&".$obj['id']."&&&".$obj['image']."'>";
-                    echo "<input type='submit' value='Unlike'>"; 
-                echo "</form>"; 
-            }?>
-			</form>
-		</div>	-->	
-	</body>
+			</div>
+		</body>
 </html>

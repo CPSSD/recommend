@@ -1,0 +1,94 @@
+div.show_container{
+	background-color:rgb(255, 255, 255);
+	align:center;
+	padding-top:16px;
+	border-radius:20px;
+	width:892px;
+	border-style:solid;
+	border-width:2px;
+	margin: 50px auto 3px;
+	border-color: rgb(0, 0, 0);
+}
+
+table {
+	margin:0 auto;
+}
+
+body {
+	background-color: rgb(150, 200, 200);
+	font-family: "Open Sans", sans-serif;
+}
+
+:checked + label {
+	font-weight: bold;
+	text-shadow:1px 1px 10px red;
+	border-color:red;
+	text-border:1px;
+	color: black;
+}
+
+:checked + label img {
+	border-color:red;
+	border-radius:10px;
+}
+
+div.image{
+	margin:0 auto;
+	width:200;
+	height:320;
+}
+
+div.movie-title{
+	margin: 0 auto;
+	align:center;
+	text-align:center;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
+p.movie-title {
+	text-align:center;
+	padding-bottom:25px;
+}
+
+input[type=checkbox] {
+	position:absolute;
+	visibility:hidden;
+}
+
+input.submit {
+	width:15%;
+	margin-left:42.5%;
+	margin-bottom:20px;
+}
+
+div.submit {
+	width:wrap;
+	margin:0 auto;
+	align:center;
+}
+
+div.navigation{
+	background-color:rgb(255, 255, 255);
+	align:center;
+	padding-top:5px;
+	text-align:center;
+	padding-bottom:10px;
+	border-radius:0px 0px 10px 10px;
+	width:280px;
+	margin:0px auto;
+	margin-top:-5px;
+	margin-bottom:20px;
+	border-style:solid;
+	border-width:2px;
+	border-color: rgb(255, 255, 255) rgb(0, 0, 0) rgb(0, 0, 0)  rgb(0, 0, 0);
+}
+
+img.cover {
+	width:200;
+	height:250;
+	border-radius:10px;
+	border-style: solid;
+	border-color: rgb(0, 0, 0);
+}
+

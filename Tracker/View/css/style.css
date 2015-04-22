@@ -1,0 +1,72 @@
+body {
+	background-color: rgb(150, 200, 200);
+	font-family: "Open Sans", sans-serif;
+}
+
+a {
+	text-decoration:None;
+	color: inherit;
+	Display: inline;
+}
+
+div.navigation{
+	Display:inline;
+	text-align:center;
+	margin-bottom:10px;
+	border-style:solid;
+	border-width:2px;
+	border-color: rgb(0, 0, 0) rgb(0, 0, 0) rgb(255, 255, 255) rgb(0, 0, 0);
+}
+
+div.show_container{
+	background-color:rgb(255, 255, 255);
+	align:center;
+	padding-top:16px;
+	padding-left:16px;
+	border-radius:20px;
+	width:72%;
+	height:390px;
+    margin-top:50px;
+    margin-left:13%;
+	border-style:solid;
+	border-width:2px;
+	border-color: rgb(0, 0, 0);
+}
+
+div.image{
+	align:center;
+	width:223px;
+	height:375px;
+	color:rgb(40, 140, 40);
+}
+
+img.cover {
+	width:300;
+	height:450;
+	border-radius:10px;
+	border-style: solid;
+	border-color: rgb(0, 0, 0);
+}
+
+div.google-calendar-content {
+	background-color:white;
+	box-shadow:0px 2px 6px rgba(0, 0, 0, 0.2);
+	width:400px;
+	margin: 50px auto 0 auto;
+	min-height:100px;
+	text-align: center;
+}
+
+li {
+	text-align: left;
+	margin-left:10px;
+	padding-bottom:10px;
+}
+
+h3 {
+	padding-top:10px;
+}
+
+div.google-calendar-button {
+	display: none;
+}

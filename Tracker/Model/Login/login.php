@@ -1,8 +1,8 @@
 <?php session_start();
 
 set_include_path("{$_SERVER['DOCUMENT_ROOT']}");
-require_once('Tracker/config.php');
-$db = new SQLite3($_SERVER['DOCUMENT_ROOT'].'/Tracker/database.db');
+require_once('config.php');
+$db = new SQLite3($_SERVER['DOCUMENT_ROOT'].'/database.db');
 
 function getNumRows(){
 	$rows = $db->query("SELECT COUNT(*) as count FROM users");
@@ -29,16 +29,16 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
 		    session_start();
 		    $_SESSION['userID'] = $id;	
 		    $_SESSION['username'] = $username;
-		    $url = "{$GLOBALS['ip']}Tracker/View/getFilmList.php?type=films&organise=1&page=0&order=ASC";
+		    $url = "{$GLOBALS['ip']}View/getFilmList.php?type=films&organise=1&page=0&order=ASC";
 		    header( "Location: $url" );
         }else{
 		    $_SESSION["message"] = "Incorrect password";
-		    $url = "{$GLOBALS['ip']}Tracker/View/displayMessage.php";
+		    $url = "{$GLOBALS['ip']}View/displayMessage.php";
 		    header( "Location: $url" );           
         }
 	}else{
 		$_SESSION["message"] = "Incorrect Username";
-		$url = "{$GLOBALS['ip']}Tracker/View/displayMessage.php";
+		$url = "{$GLOBALS['ip']}View/displayMessage.php";
 		header( "Location: $url" );
 	}
 }

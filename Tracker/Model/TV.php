@@ -1,7 +1,7 @@
 <?php
 
 set_include_path("{$_SERVER['DOCUMENT_ROOT']}");
-include_once('Tracker/Model/Essentials.php'); 
+include_once('Model/Essentials.php'); 
 
 class TV extends SQLite3{
 
@@ -239,7 +239,7 @@ class TV extends SQLite3{
             $sql = "SELECT name,image,rating,id FROM `{$type}` ORDER BY {$organise} {$order} LIMIT 24 OFFSET {$offset}";
         }else{
             $organise = "rating";
-            $sql = "SELECT name,image,rating,id FROM `{$type}` ORDER BY {$organise} {$order} LIMIT 24 OFFSET {$offset}";
+            $sql = "SELECT name,image,rating,id FROM `{$type}` WHERE rating != 'Unknown' ORDER BY {$organise} {$order} LIMIT 24 OFFSET {$offset}";
         }
 		
 		$essen = new Essentials();
