@@ -4,24 +4,23 @@
       <title>Login</title> 
     </head> 
 	<body id="body-color"> 
-		<div class="Sign-Up"> 
-			<fieldset style="width:30%"><legend>Log In</legend> 
-				<table border="0"> <tr> 
-					<form method="POST" action="../Model/Login/login.php"> 							
-						<td>Username</td><td> <input type="text" name="username"></td> </tr> 
-						<tr> <td>Password</td><td> <input type="password" name="password"></td> </tr>
-						<tr> <td><input id="button" type="submit" name="submit" value="login"></td> </tr> 
-					</form> 						
-				</table>
-				<hr />
-				<?php
-					include_once('google_login.php');
-					echo "<p style='text-align:center'>Sign in with Google.</p>";
-					echo "<div class='g-signin2' style='margin-left:60' data-onsuccess='onSignIn'></div>";
-				?>				
-			</fieldset> 
-		</div>
-		<br />
-		<br />
+
+      <div class="signUp">
+            <h1>Sign-Up</h1><br>
+          <form method="POST" action="../Model/Login/login.php">
+            <input type="text" name="username" placeholder="Userame">
+            <input type="password" name="password" placeholder="Password">
+            <input type="submit" name="submit" class="login login-submit" value="Log in">
+          </form>
+          <div class="login-help">
+            <a href="signUp.html">SignUp</a>
+          </div>
+          <hr/>
+          <?php
+            include_once('google_login.php');
+            echo "<p style='text-align:center'>Sign in with Google.</p>"; 
+            echo "<div class='g-signin2' style='margin-left:75px;' data-onsuccess='onSignon'</div>";
+          ?>
+    </div>
 	</body>
 </html>

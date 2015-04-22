@@ -103,7 +103,7 @@ div.likeButton{
     color: white;
     background-color:#2E7D32;
     border-color: #2E7D32;
-    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.4);
+    -webkit-box-shadow: inset 0px 2px 6px rgb(0,0,0,0.4);
     
 }
 
