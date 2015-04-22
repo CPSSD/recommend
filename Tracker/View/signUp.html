@@ -1,25 +1,28 @@
 
 <html> 
   <link rel="stylesheet" type="text/css" href="css/signUp.css" />
+<link rel='stylesheet' href='http://codepen.io/assets/libs/fullpage/jquery-ui.css'>
     <head> 
       <title>Sign-Up</title> 
     </head> 
-	<body> 
-		<div class="signUp"> 
-			<fieldset style="width:90%"><legend>Registration Form</legend> 
-				<table border="0"> <tr> 
-					<form method="POST" action="../Model/Login/signUp.php"> 							
-						<td>Name</td><td> <input type="text" name="name"></td> </tr> 
-						<tr> <td>Email</td><td> <input type="text" name="email"></td> </tr> 
-						<tr> <td>UserName</td><td> <input type="text" name="username"></td> </tr> 
-						<tr> <td>Password</td><td> <input type="password" name="password"></td> </tr>
-						<tr> <td>Confirm Password </td><td><input type="password" name="cpass"></td> </tr>
-						<tr> <td><input id="button" type="submit" name="submit" value="Sign-Up"></td> </tr> 
-					</form> 						
-				</table> 
-			</fieldset> 
-		</div>
+	<body id="body-color"> 
+
+      <div class="signUp">
+            <h1>Sign-Up</h1><br>
+          <form method="POST" action="../Model/Login/signUp.php">
+            <input type="text" name="name" placeholder="Name">
+            <input type="text" name="username" placeholder="Userame">
+            <input type="text" name="email" placeholder="email">
+            <input type="password" name="password" placeholder="Password">
+            <input type="submit" name="submit" class="login login-submit" value="Sign-Up">
+          </form>
+
+          <div class="login-help">
+            <a href="login.php">Login</a>
+          </div>
+    </div>
 	</body>
 </html>
+
 
 
