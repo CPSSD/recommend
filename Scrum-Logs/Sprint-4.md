@@ -27,3 +27,10 @@
     - New website design started. (Material Design)
 	- Tv Crawler now checks the last time the page was updated before scraping
 	- Mobile views are mostly done.
+	- Bug Fixes
+
+###### Tue April 21th
+    - New website design finished
+	- Automated Crawling Script added
+	- Sign Out page added (as signing out from navbar caused problems with the continuous scrolling)
+	- Bug Fixes
