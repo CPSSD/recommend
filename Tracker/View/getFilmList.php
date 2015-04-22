@@ -50,9 +50,13 @@
 			    # Displays info for each movie.
 			    foreach($obj['films'] as $movie){
 				    echo "<div class='image'>";
+					$liked = "";
+					if($util->rowExists($db,"likes","films",$movie['id'])){
+						$liked = " liked";
+					}
 					
 				    echo "<a href='{$GLOBALS["ip"]}View/getFilm.php?type=films&id=" . $movie['id'] . "'>";
-				   	echo "<div class='cover_title'><p class='cover_title'>". $movie['name'] . "</p></div>";
+				   	echo "<div class='cover_title'><p class='cover_title{$liked}'>". $movie['name'] . "</p></div>";
 					echo "<img class='cover' src='" . $movie['image'] . "'/>";
                     if(isset($_SESSION["userID"])){
                         echo "<div class='likeButton'>";
@@ -78,7 +82,7 @@
 					if($movie['rating'] != "Unknown"){
 						$movie['rating'] = $movie['rating'] . " stars";
 					}
-					echo "<div class='cover_info'><p class='cover_info'><b>Rating:</b> " . $movie['rating'] . "";
+					echo "<div class='cover_info{$liked}'><p class='cover_info{$liked}'><b>Rating:</b> " . $movie['rating'] . "";
 					echo "<br /><b>Date:</b> " . $movie['date'] . "<br></p></div>";
 				    echo "</a></div>";
                     $index++;

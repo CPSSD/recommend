@@ -302,6 +302,11 @@ h2.title {
 }
 
 img.liked {
+
+}
+
+p.liked {
+	color:blue;
 }
 
 img.cover {

@@ -37,8 +37,12 @@
 			# Displays info for each show.
 			foreach($obj['tv_shows'] as $show){
 				echo "<div class='image'>";
+				$liked = "";
+				if($util->rowExists($db,"track","tv_shows",$show['id'])){
+					$liked = " liked";
+				}
 				echo "<a href='{$GLOBALS["ip"]}View/getShow.php?type=tv_shows&id=" . $show['id'] . "&season=1'>";
-				echo "<div class='cover_title'><p class='cover_title'>". $show['name'] . "</p></div>";
+				echo "<div class='cover_title'><p class='cover_title{$liked}'>". $show['name'] . "</p></div>";
 				echo "<img class='cover' src='" . $show['image'] . "'/>";
                     if(isset($_SESSION["userID"])){
 						echo "<div class='likeButton'>";
@@ -64,7 +68,7 @@
 				if($show['rating'] != "Unknown"){
 					$show['rating'] = $show['rating'] . " stars";
 				}
-				echo "<div class='cover_info'><p class='cover_info'><b>Rating:</b> " . $show['rating'] . "</p></div>";
+				echo "<div class='cover_info'><p class='cover_info{$liked}'><b>Rating:</b> " . $show['rating'] . "</p></div>";
 				echo "</a></div>";
 				$column++;
 				if($column >= $per_row){
