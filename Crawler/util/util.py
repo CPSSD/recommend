@@ -9,7 +9,7 @@ import mysql_connector as mysql
 debug = False
 
 months = {'January': 1, 'February': 2, 'March': 3, 'April': 4, 'May': 5, 'June': 6, 'July': 7, 'August': 8, 'September': 9, 'October': 10, 'November': 11, 'December': 12}
-
+month_list = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 # Creates a directory for the database files to be saved in.
 print "* Creating database directory..."
 try:
@@ -19,7 +19,10 @@ except OSError:
 
 # Given in the form day month year
 def parse_date(day, month, year):
-    new_date = "%s-%s-%s" % (year, months[month], day)
+    try:
+        new_date = "%s-%s-%s" % (year, months[month], day)
+    except:
+        new_date = "%s-%s-%s" % (year, month_list[int(month)], day)
     return new_date
     
 def convertToSQLite(table_schema, vartype):

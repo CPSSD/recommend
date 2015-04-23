@@ -81,6 +81,15 @@ def scrape_imdb(url):
 	# TO BE COMPLETED
 	return data
 
+def get_time_config():
+	config = {}
+	file.open_file('times.config', 'r')
+	config = file.read_config()
+	date = config['tv'].split("-")
+	config['tv'] = util.parse_date(date[0], date[1], date[2])
+	file.close_file()
+	return config
+
 def scrape_wikipedia(url):
 	util.debug_print("Grabbing Data from '%s'" % url)
 	html = requests.get("http://en.wikipedia.org%s" % url).text
@@ -88,12 +97,13 @@ def scrape_wikipedia(url):
 	episode_list_data = []
 	
 	date = bs4.find('li', {'id': 'footer-info-lastmod'})
+	episode_list_data = [{'save': False}]
 	if(date != None):
 		date = date.text.split("modified on ")[1]
 		date = date.split(",")[0]
 		date = date.split(" ")
 		date1 = util.parse_date(date[0], date[1], date[2])
-		date2 = config['last_update'].split("-")
+		date2 = time_config['tv'].split("-")
 		date2 = util.parse_date(date2[0], date2[1], date2[2])
 		util.debug_print((date1, "  vs  ", date2, " => ", util.compare_dates(date1, date2)))
 		
@@ -338,6 +348,8 @@ def update_show_episodes(index, limit):
 
 if __name__ == "__main__":
 	print("* Starting Crawler...")
+	global time_config
+	time_config = get_time_config()
 
 	if (config['update_show_indexes'] is 1):
 		update_show_data(config['show_limit'])
